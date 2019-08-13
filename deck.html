@@ -20,9 +20,14 @@
             let attack = new Image(69, 100)
             attack.src = "sprites/attack.png"
             document.body.appendChild(attack)
+
             let defend = new Image(69, 100)
             defend.src = "sprites/defend.png"
             document.body.appendChild(defend)
+
+            let chadwick = new Image(400, 100)
+            chadwick.src = "sprites/holeyMan.png"
+            document.body.appendChild(chadwick)
 
             //  Global variables
             let playerDeck = new Deck(8, 30, 350, -1, 1)
@@ -127,9 +132,11 @@
                             }
                             if (enemy.collidesWith(card)) {
                                 if (card.color == "red") {
-                                    enemy.health -= 2
-                                    player.offSet.x = 60
-                                    enemy.offSet.x =  20
+                                    if (enemy.health > 0) {
+                                        enemy.health -= 2
+                                        // player.offSet.x = 60
+                                        enemy.offSet.x =  20
+                                    }
                                     playerHand.remove(card)
                                     discardPile.cards.push(card)
                                 } else if (card.color == "blue") {
@@ -161,7 +168,17 @@
                 drawBox(player)
 
                 //  Enemy
-                drawBox(enemy)
+                let enemyPos = new Vector(enemy.position.x - enemy.width / 2 + enemy.offSet.x, enemy.position.y + enemy.offSet.y)
+                c.drawImage(chadwick, 0, 0, 53, 35, enemyPos.x, enemyPos.y, enemy.width * 2, enemy.height)
+                //  Health Bar
+                let healthHeight = 20
+                let healthWidth =  enemy.health * 10
+                let healthPos = new Vector(enemy.position.x, enemy.position.y + enemy.height + 5)
+                drawRect(healthPos.x, healthPos.y, healthWidth, healthHeight, "red")
+                c.strokeRect(healthPos.x, healthPos.y, healthWidth, healthHeight)
+                let healthNumPos = new Vector(healthPos.x + healthWidth / 3, healthPos.y + healthHeight - 2)
+                drawText(enemy.health.toString(), healthNumPos.x, healthNumPos.y, 25, healthHeight, "black", "25px timesNewRoman")
+                // drawBox(enemy)
 
                 //  Draw Deck
                 drawDeck(playerDeck)
@@ -220,6 +237,16 @@
                         drawCard(card)
                     })
                 }
+            }
+            function drawHealth() {
+                //  Health Bar
+                let healthHeight = 20
+                let healthWidth =  enemy.health * 10
+                let healthPos = new Vector(enemy.position.x, enemy.position.y + enemy.height + 5)
+                drawRect(healthPos.x, healthPos.y, healthWidth, healthHeight, "red")
+                c.strokeRect(healthPos.x, healthPos.y, healthWidth, healthHeight)
+                let healthNumPos = new Vector(healthPos.x + healthWidth / 3, healthPos.y + healthHeight - 2)
+                drawText(enemy.health.toString(), healthNumPos.x, healthNumPos.y, 25, healthHeight, "black", "25px timesNewRoman")
             }
             function drawCard(card, color = "white") {
                 if (color == "red") {
