@@ -1,0 +1,24 @@
+{
+    "name": "deckgame",
+    "version": "0.0.0",
+    "repository": "",
+    "author": "Kody King <kody.j.king@gmail.com>",
+    "license": "none",
+    "scripts": {
+        "dev": "yarn install && yarn build",
+        "build": "tsc",
+        "watch": "tsc -w",
+        "webpack": "webpack-dev-server",
+        "watchall": "node watchall.js",
+        "test": "ava --watch --verbose"
+    },
+    "private": true,
+    "devDependencies": {
+        "ava": "^2.2.0",
+        "webpack": "^4.35.3",
+        "webpack-cli": "^3.3.5"
+    },
+    "dependencies": {
+        "express": "^4.17.1"
+    }
+}
