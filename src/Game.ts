@@ -4,11 +4,12 @@ import Box from "./Box";
 import Input from "./Input";
 import Vector from "./Vector";
 import { getImage } from "./common";
+import Card from "./Card";
 
 export default class Game {
-    playerDeck = new Deck( 8, 30, 350, -1, 1 )
-    playerHand = new Deck( 5, 145, 300, 90, 0 )
-    discardPile = new Deck( 0, 600, 350, 1, 1 )
+    deck = new Deck( 8, 30, 350, -1, 1 )
+    hand = new Deck( 5, 145, 300, 90, 0 )
+    discard = new Deck( 0, 600, 350, 1, 1 )
 
     player = new Box( 100, 100, 100, 100, "red" )
     enemy = new Box( 500, 100, 100, 100, "blue" )
@@ -22,53 +23,58 @@ export default class Game {
     }
 
     keyup( e: KeyboardEvent ) {
-        let { playerDeck, playerHand, discardPile, enemy, player, handCap } = this
-        if ( e.key == "Enter" && playerDeck.cards.length > 0 ) {
-            if ( playerHand.cards.length == 0 ) {
-                //  enemies turn
-                if ( enemy.health > 0 ) {
-                    player.health -= 4
-                    enemy.health += 2
-                    enemy.offSet.x = -60
-                    player.offSet.x = -20
-                }
-                if ( playerDeck.cards.length < handCap ) {
-                    playerDeck.cards.forEach( card => {
-                        playerHand.cards.push( card )
-                    } )
-                    playerDeck.cards = discardPile.cards
-                    discardPile.cards = []
-                    while ( playerHand.length < 5 )
-                        playerDeck.transferCard( playerHand )
-                } else {
-                    //  then swap discard into then take remaining hand
-                    for ( let i = 0; i < handCap; i++ )
-                        playerDeck.transferCard( playerHand )
-                }
-            }
+        let { deck, hand } = this
+        if ( e.key == "Enter" )
+            if ( hand.cards.length == 0 && deck.cards.length > 0 )
+                this.endTurn()
+    }
+
+    endTurn() {
+        let { enemy, player } = this
+
+        if ( enemy.health > 0 ) {
+            player.health -= 4
+            enemy.health += 2
+            enemy.offset.x = -60
+            player.offset.x = -20
         }
+
+        this.refillHand()
+    }
+
+    refillHand() {
+        let { deck, hand, discard, handCap } = this
+
+        if ( deck.cards.length < handCap ) {
+            for ( let card of deck.cards )
+                hand.cards.push( card )
+            deck.cards = discard.cards
+            discard.cards = []
+        }
+
+        while ( hand.length < handCap )
+            deck.transferCard( hand )
     }
 
     update() {
         this.render()
 
-        let { playerDeck, playerHand, discardPile, enemy, player } = this
+        let { deck, hand, discard, enemy, player } = this
         let { mouse, buttons: keys, buttons } = Input
 
-        if ( player.offSet.length > 1 )
+        if ( player.offset.length > 1 )
             player.updateToFixed()
 
         enemy.updateToFixed()
-        discardPile.updateToFixed()
-        playerDeck.updateToFixed()
+        discard.updateToFixed()
+        deck.updateToFixed()
 
-        if ( playerHand.cards.length > 0 ) {
-            playerHand.cards.forEach( card => {
-
+        if ( hand.cards.length > 0 ) {
+            for ( let card of hand.cards ) {
                 //  lock in positions
-                let index = playerHand.cards.indexOf( card )
-                let fixedX = playerHand.position.x + index * playerHand.offsetX
-                let fixedY = playerHand.position.y + index * playerHand.offsetY
+                let index = hand.cards.indexOf( card )
+                let fixedX = hand.position.x + index * hand.offsetX
+                let fixedY = hand.position.y + index * hand.offsetY
                 let fixedPos = new Vector( fixedX, fixedY )
 
                 if ( !card.grabbed && fixedPos.subtract( card.position ).length > 5 ) {
@@ -86,18 +92,15 @@ export default class Game {
                 }
 
                 if ( card.grabbed ) {
-                    let difference = card.position.subtract( mouse )
                     card.position.y = mouse.y - card.height / 2
                     card.position.x = mouse.x - card.width / 2
                     if ( player.collidesWith( card ) ) {
                         if ( card.color == "blue" ) {
-                            player.offSet.y = -30
-                            playerHand.remove( card )
-                            let random = ( discardPile.length == 0 ) ? 0 : Math.floor( Math.random() * discardPile.length )
-                            discardPile.insertAt( card, random )
+                            player.offset.y = -30
+                            hand.remove( card )
+                            let random = ( discard.length == 0 ) ? 0 : Math.floor( Math.random() * discard.length )
+                            discard.insertAt( card, random )
                             player.health += 1
-                        } else {
-
                         }
                         card.grabbed = false
                     }
@@ -106,24 +109,19 @@ export default class Game {
                         if ( card.color == "red" ) {
                             if ( enemy.health > 0 ) {
                                 enemy.health -= 2
-                                // player.offSet.x = 60
-                                enemy.offSet.x = 20
+                                enemy.offset.x = 20
                             }
-                            playerHand.remove( card )
-                            discardPile.cards.push( card )
-                        } else if ( card.color == "blue" ) {
-
-                        } else {
-                            // enemy.color = card.color
+                            hand.remove( card )
+                            discard.cards.push( card )
                         }
                         card.grabbed = false
                     }
                 }
-            } )
+            }
         }
 
-        if ( buttons.Mouse0 == false && playerHand.cards.length > 0 ) {
-            playerHand.cards.forEach( card => {
+        if ( buttons.Mouse0 == false && hand.cards.length > 0 ) {
+            hand.cards.forEach( card => {
                 if ( card.grabbed )
                     card.grabbed = false
             } )
@@ -131,7 +129,7 @@ export default class Game {
     }
 
     render() {
-        let { player, enemy, playerDeck, playerHand, discardPile } = this
+        let { player, enemy, deck: playerDeck, hand: playerHand, discard: discardPile } = this
 
         // Canvas.fitWindow()
         Canvas.resize( 700, 500 )
@@ -142,10 +140,10 @@ export default class Game {
         drawBox( player )
 
         //  Enemy
-        let enemyPos = new Vector( enemy.position.x - enemy.width / 2 + enemy.offSet.x, enemy.position.y + enemy.offSet.y )
+        let enemyPos = new Vector( enemy.position.x - enemy.width / 2 + enemy.offset.x, enemy.position.y + enemy.offset.y )
         Canvas.imageSource( 0, 0, 53, 35 )
             .partialImage(
-                getImage( "holeyMan" ),
+                getImage( "chadwick" ),
                 enemyPos.x, enemyPos.y,
                 enemy.width * 2, enemy.height
             )
@@ -163,7 +161,7 @@ export default class Game {
         }
 
         //  Draw Hand
-        playerHand.cards.forEach( card => {
+        for ( let card of playerHand.cards ) {
             let index = playerHand.cards.indexOf( card )
             let fixedX = playerHand.position.x + index * playerHand.offsetX
             let fixedY = playerHand.position.y + index * playerHand.offsetY
@@ -173,7 +171,7 @@ export default class Game {
                 card.position = card.position.add( fixVector.unit.multiply( fixVector.length / 20 ) )
             }
             drawCard( card, card.color )
-        } )
+        }
 
         //  Draw DiscardPile
         drawDeck( discardPile )
@@ -187,16 +185,16 @@ export default class Game {
     }
 }
 
-function drawBox( box ) {
+function drawBox( box: Box ) {
     //  box
     Canvas.rect(
-        box.position.x + box.offSet.x, box.position.y + box.offSet.y,
+        box.position.x + box.offset.x, box.position.y + box.offset.y,
         box.width, box.height
     ).fillStyle( box.color ).fill()
     if ( box.health <= 0 ) {
         Canvas.text(
             "Dead",
-            box.position.x + box.offSet.x, box.position.y + box.offSet.y + box.height / 2,
+            box.position.x + box.offset.x, box.position.y + box.offset.y + box.height / 2,
             box.width
         )
     }
@@ -220,16 +218,15 @@ function drawHealthBar( box: Box ) {
         )
 }
 
-function drawDeck( deck ) {
+function drawDeck( deck: Deck ) {
     //  Draw Deck
     if ( deck.cards.length > 0 ) {
-        deck.cards.forEach( card => {
+        for ( let card of deck.cards )
             drawCard( card )
-        } )
     }
 }
 
-function drawCard( card, color = "white" ) {
+function drawCard( card: Card, color = "white" ) {
     if ( color == "red" ) {
         Canvas.image( getImage( "attack" ), card.position.x, card.position.y, card.width, card.height )
     } else if ( color == "blue" ) {

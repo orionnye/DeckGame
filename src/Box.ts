@@ -3,7 +3,7 @@ import Vector from "./Vector";
 export default class Box {
 
     position: Vector
-    offSet: Vector
+    offset: Vector
     width: number
     height: number
     color: string
@@ -11,7 +11,7 @@ export default class Box {
 
     constructor( x, y, width, height, color = "red" ) {
         this.position = new Vector( x, y )
-        this.offSet = new Vector( 0, 0 )
+        this.offset = new Vector( 0, 0 )
         this.width = width
         this.height = height
         this.color = color
@@ -30,14 +30,14 @@ export default class Box {
     }
 
     updateToFixed() {
-        if ( this.offSet.length > 0 ) {
-            this.offSet
-            if ( this.position.subtract( this.offSet ).length > 2 ) {
-                let fixVector = new Vector( 0, 0 ).subtract( this.offSet )
-                this.offSet = fixVector.unit.multiply( fixVector.length / 2 )
+        if ( this.offset.length > 0 ) {
+            this.offset
+            if ( this.position.subtract( this.offset ).length > 2 ) {
+                let fixVector = new Vector( 0, 0 ).subtract( this.offset )
+                this.offset = fixVector.unit.multiply( fixVector.length / 2 )
             }
-            if ( this.offSet.length < 3 )
-                this.offSet = new Vector( 0, 0 )
+            if ( this.offset.length < 3 )
+                this.offset = new Vector( 0, 0 )
         }
     }
 }
