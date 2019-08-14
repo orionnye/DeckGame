@@ -30,13 +30,14 @@
             document.body.appendChild(chadwick)
 
             //  Global variables
-            let playerDeck = new Deck(8, 30, 350, -1, 1)
             let handCap = 5
-            let playerHand = new Deck(5, 145, 300, 90, 0)
-            let discardPile = new Deck(0, 600, 350, 1, 1)
-            let player = new Box(100, 100, 100, 100, "red")
-            let enemy = new Box(500, 100, 100, 100, "blue")
-            
+            let playerHand = new Deck(5, 145, 225, 90, 0)
+            let playerDeck = new Deck(8, 30, 250, -1, 1)
+            let discardPile = new Deck(0, 600, 250, 1, 1)
+            let player = new Box(100, 50, 100, 100, "red")
+            let enemy = new Box(500, 50, 100, 100, "blue")
+            let melter = new Melter(325, 375)
+
             let mouse = new Vector(0, 0)
             let mouseKeys = new Map()
             let keys = new Map()
@@ -72,6 +73,10 @@
                             for (let i = 0; i < handCap; i++)
                                 playerHand.cards.push(playerDeck.cards.pop())
                         }
+                        playerDeck.cards.push(melter.product)
+                        console.log(melter.product)
+                        melter.base = new Card(melter.position, "grey")
+                        melter.colors = []
                     }
                 }
             })
@@ -87,7 +92,7 @@
                 //  console.log("clicked", e.button)
                 mouseKeys.set(e.button, false)
             })
-
+            //              <<<<<<<<<<<<<Update>>>>>>>>>>
             function update() {
                 if (player.offSet.length > 1) {
                     player.updateToFixed()
@@ -119,33 +124,68 @@
                             card.position.y = mouse.y - card.height / 2
                             card.position.x = mouse.x - card.width / 2
                             if (player.collidesWith(card)) {
-                                if (card.color == "blue") {
-                                    player.offSet.y = -30
-                                    playerHand.remove(card)
-                                    let random = (discardPile.length == 0) ? 0 : Math.floor(Math.random() * discardPile.length)
-                                    discardPile.insertAt(card, random)
-                                    player.health += 1
+                                let blueKey = /(blue)/g
+                                let blueCount = [...card.color.matchAll(blueKey)].length
+                                let redKey = /(red)/g
+                                let redCount = [...card.color.matchAll(redKey)].length
+                                player.offSet.y = -30
+                                playerHand.remove(card)
+                                let random = (discardPile.length == 0) ? 0 : Math.floor(Math.random() * discardPile.length)
+                                discardPile.insertAt(card, random)
+                                player.health += blueCount - redCount
+
+                                if (card.color == "grey") {
+                                    let heal = (Math.random() > 0.5) ? true : false
+                                    if (heal) {
+                                        player.offSet.y = -30
+                                        playerHand.remove(card)
+                                        let random = (discardPile.length == 0) ? 0 : Math.floor(Math.random() * discardPile.length)
+                                        discardPile.insertAt(card, random)
+                                        player.health += 2
+                                    } else {
+                                        player.offSet.y = -30
+                                        playerHand.remove(card)
+                                        let random = (discardPile.length == 0) ? 0 : Math.floor(Math.random() * discardPile.length)
+                                        discardPile.insertAt(card, random)
+                                        player.health -= 2
+                                    }
                                 } else {
 
                                 }
                                 card.grabbed = false
                             }
                             if (enemy.collidesWith(card)) {
-                                if (card.color == "red") {
-                                    if (enemy.health > 0) {
+                                let blueKey = /(blue)/g
+                                let blueCount = [...card.color.matchAll(blueKey)].length
+                                let redKey = /(red)/g
+                                let redCount = [...card.color.matchAll(redKey)].length
+                                enemy.offSet.y = -30
+                                playerHand.remove(card)
+                                let random = (discardPile.length == 0) ? 0 : Math.floor(Math.random() * discardPile.length)
+                                discardPile.insertAt(card, random)
+                                enemy.health += blueCount - redCount
+                                if (card.color == "grey") {
+                                    let heal = (Math.random() > 0.5) ? true : false
+                                    if (heal) {
+                                        enemy.offSet.y = -30
+                                        playerHand.remove(card)
+                                        discardPile.insertAtRandom(card)
+                                        enemy.health += 2
+                                    } else {
+                                        enemy.offSet.y = -30
+                                        playerHand.remove(card)
+                                        discardPile.insertAtRandom(card)
                                         enemy.health -= 2
-                                        // player.offSet.x = 60
-                                        enemy.offSet.x =  20
                                     }
-                                    playerHand.remove(card)
-                                    discardPile.cards.push(card)
-                                } else if (card.color == "blue") {
-                                    
-                                } else {
-                                    // enemy.color = card.color
                                 }
                                 card.grabbed = false
                             }
+                        }
+                        if (melter.contains(card)) {
+                            console.log("MELTED in", card.color)
+                            melter.melt(card)
+                            playerHand.remove(card)
+                            card.color = "grey"
                         }
                     })
                 }
@@ -157,12 +197,15 @@
                     })
                 }
             }
-
+            //                              <<<<<<<<<<<RENDER>>>>>>>>>
             function render() {
                 // setup
                 c.imageSmoothingEnabled = false
                 //  Define Canvas space
                 drawRect(0, 0, canvas.clientWidth, canvas.clientHeight, "grey")
+
+                //  TESTING <<<<<<REMOVE LATER>>>>>>>>
+                drawMelter()
 
                 //  Player
                 drawBox(player)
@@ -255,7 +298,7 @@
                     c.drawImage(defend, card.position.x, card.position.y, card.width, card.height)
                 } else {
                     c.fillStyle = color
-                    c.fillRect(card.position.x, card.position.y, card.width, card.height)
+                    c.fillRect(card.position.x, card.position.y, card.width, card.height, "grey")
                     c.strokeRect(card.position.x, card.position.y, card.width, card.height, "black")
                 }
             }
@@ -263,6 +306,12 @@
                 c.fillStyle = color
                 c.fillRect(x, y, width, height)
             }
+            function drawMelter() {
+                let margin = (melter.height - melter.product.height) / 2
+                drawRect(melter.position.x - melter.product.width, melter.position.y - margin, melter.width, melter.height, "black")
+                drawRect(melter.position.x, melter.position.y, melter.product.width, melter.product.height, "blue")
+            }
+            //                          <<<<<<RELOAD>>>>>>
             function reload() {
                 update()
                 render()
@@ -270,6 +319,5 @@
             }
             reload()
         </script>
-        
     </body>
 </html>
