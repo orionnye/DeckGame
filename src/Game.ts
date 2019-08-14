@@ -158,7 +158,8 @@ export default class Game {
             let lastCard = playerDeck.cards[ playerDeck.cards.length - 1 ]
             let textX = lastCard.position.x
             let textY = lastCard.position.y + lastCard.height / 2
-            Canvas.fillStyle( "black" ).text( playerDeck.cards.length.toString(), textX, textY, lastCard.width )
+            Canvas.fillStyle( "black" )
+                .text( playerDeck.cards.length.toString(), textX, textY, lastCard.width )
         }
 
         //  Draw Hand
@@ -180,16 +181,25 @@ export default class Game {
             let lastCard = discardPile.cards[ discardPile.cards.length - 1 ]
             let textX = discardPile.position.x
             let textY = discardPile.position.y + lastCard.height / 2
-            Canvas.fillStyle( "black" ).text( discardPile.cards.length.toString(), textX, textY, lastCard.width )
+            Canvas.fillStyle( "black" )
+                .text( discardPile.cards.length.toString(), textX, textY, lastCard.width )
         }
     }
 }
 
 function drawBox( box ) {
     //  box
-    Canvas.rect( box.position.x + box.offSet.x, box.position.y + box.offSet.y, box.width, box.height ).fillStyle( box.color ).fill()
-    if ( box.health <= 0 )
-        Canvas.text( "Dead", box.position.x + box.offSet.x, box.position.y + box.offSet.y + box.height / 2, box.width )
+    Canvas.rect(
+        box.position.x + box.offSet.x, box.position.y + box.offSet.y,
+        box.width, box.height
+    ).fillStyle( box.color ).fill()
+    if ( box.health <= 0 ) {
+        Canvas.text(
+            "Dead",
+            box.position.x + box.offSet.x, box.position.y + box.offSet.y + box.height / 2,
+            box.width
+        )
+    }
     drawHealthBar( box )
 }
 
@@ -198,8 +208,16 @@ function drawHealthBar( box: Box ) {
     let healthWidth = box.health * 10
     let healthPos = new Vector( box.position.x, box.position.y + box.height + 5 )
     let healthNumPos = new Vector( healthPos.x + healthWidth / 3, healthPos.y + healthHeight - 2 )
-    Canvas.rect( healthPos.x, healthPos.y, healthWidth, healthHeight ).fillStyle( "red" ).fill().stroke()
-    Canvas.fillStyle( "black" ).text( box.health.toString(), healthNumPos.x, healthNumPos.y, 25, "25px timesNewRoman" )
+    Canvas.rect(
+        healthPos.x, healthPos.y,
+        healthWidth, healthHeight
+    ).fillStyle( "red" ).fill().stroke()
+    Canvas.fillStyle( "black" )
+        .text(
+            box.health.toString(),
+            healthNumPos.x, healthNumPos.y,
+            25, "25px timesNewRoman"
+        )
 }
 
 function drawDeck( deck ) {
