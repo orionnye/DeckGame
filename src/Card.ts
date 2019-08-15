@@ -5,7 +5,6 @@ import Canvas from "./common/Canvas";
 import { getImage } from "./common/common";
 import Input from "./common/Input";
 import Game from "./Game";
-import Sprite from "./Sprite";
 import GameObject from "./GameObject";
 
 export default class Card extends GameObject {
@@ -76,15 +75,14 @@ export default class Card extends GameObject {
     }
 
     draw( color = "white" ) {
-        if ( color == "red" ) {
+        if ( color == "red" )
             Canvas.image( getImage( "attack" ), this.position.x, this.position.y, this.width, this.height )
-        } else if ( color == "blue" ) {
+        else if ( color == "blue" )
             Canvas.image( getImage( "defend" ), this.position.x, this.position.y, this.width, this.height )
-        } else {
+        else
             Canvas.fillStyle( color )
                 .strokeStyle( "black" )
                 .rect( this.position.x, this.position.y, this.width, this.height )
                 .fill().stroke()
-        }
     }
 }
