@@ -1,5 +1,6 @@
-import Vector from "./Vector";
+import Vector from "./common/Vector";
 import Card from "./Card";
+import Canvas from "./common/Canvas";
 
 export default class Deck {
     position: Vector
@@ -25,9 +26,9 @@ export default class Deck {
 
     get length() { return this.cards.length }
 
-    remove( card ) {
+    remove( card: Card ) {
         let index = this.cards.indexOf( card )
-        let store = this.cards[ this.cards.length - 1 ]
+        let store = this.cards[ this.length - 1 ]
         this.cards[ index ] = store
         this.cards.pop()
     }
@@ -42,6 +43,11 @@ export default class Deck {
         this.cards.push( store )
     }
 
+    insertAtRandom( card ) {
+        let random = Math.floor( Math.random() * this.length )
+        this.insertAt( card, random )
+    }
+
     transferCard( destination: Deck ) {
         let card = this.cards.pop()
         if ( card )
@@ -49,7 +55,7 @@ export default class Deck {
     }
 
     updateToFixed() {
-        if ( this.cards.length > 0 ) {
+        if ( this.length > 0 ) {
             this.cards.forEach( card => {
                 //  lock in card positions
                 let index = this.cards.indexOf( card )
@@ -62,6 +68,31 @@ export default class Deck {
                     card.position = card.position.add( fixVector.unit.multiply( fixVector.length / 20 ) )
                 }
             } )
+        }
+    }
+
+    cardPosition( card: Card ) {
+        let index = this.cards.indexOf( card )
+        let x = this.position.x + index * this.offsetX
+        let y = this.position.y + index * this.offsetY
+        return new Vector( x, y )
+    }
+
+    draw( stack: boolean = true ) {
+        for ( let card of this.cards ) {
+            if ( stack )
+                card.draw()
+            else
+                card.draw( card.color )
+        }
+        if ( stack && this.length >= 0 ) {
+            let lastCard = this.cards[ this.length - 1 ]
+            if ( !lastCard )
+                return
+            let textX = lastCard.position.x
+            let textY = lastCard.position.y + lastCard.height / 2
+            Canvas.fillStyle( "black" )
+                .text( this.length.toString(), textX, textY, lastCard.width )
         }
     }
 

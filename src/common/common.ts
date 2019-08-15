@@ -21,3 +21,13 @@ export function getImage( name: string, extension = "png" ) {
     cache[ name ] = img
     return img
 }
+
+export function contains( a, b, x ) {
+    let min = Math.min( a, b )
+    let max = Math.max( a, b )
+    return x > min && x < max
+}
+
+export function overlaps( a0, a1, b0, b1 ) {
+    return contains( a0, a1, b0 ) || contains( a0, a1, b1 )
+}

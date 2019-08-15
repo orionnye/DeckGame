@@ -1,5 +1,5 @@
 import Game from "./Game";
-import Canvas from "./Canvas";
+import Canvas from "./common/Canvas";
 
 let game = new Game()
 
