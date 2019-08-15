@@ -40,12 +40,13 @@ export default class Card extends GameObject {
     update( game: Game ) {
         let { mouse, buttons } = Input
         let { hand, discard, pawns, melter } = game
+        let { position } = this
 
         //  lock in positions
         let fixedPos = hand.cardPosition( this )
-        if ( !this.grabbed && fixedPos.subtract( this.position ).length > 5 ) {
-            let fixVector = fixedPos.subtract( this.position )
-            this.position = this.position.add( fixVector.unit.multiply( fixVector.length / 10 ) )
+        if ( !this.grabbed && fixedPos.subtract( position ).length > 5 ) {
+            let fixVector = fixedPos.subtract( position )
+            this.position = position.add( fixVector.unit.multiply( fixVector.length / 10 ) )
         }
 
         if ( buttons.Mouse0 ) {
@@ -74,14 +75,15 @@ export default class Card extends GameObject {
     }
 
     draw( color = "white" ) {
+        let { position, width, height } = this
         if ( color == "red" )
-            Canvas.image( getImage( "attack" ), this.position.x, this.position.y, this.width, this.height )
+            Canvas.image( getImage( "attack" ), position.x, position.y, width, height )
         else if ( color == "blue" )
-            Canvas.image( getImage( "defend" ), this.position.x, this.position.y, this.width, this.height )
+            Canvas.image( getImage( "defend" ), position.x, position.y, width, height )
         else
             Canvas.fillStyle( color )
                 .strokeStyle( "black" )
-                .rect( this.position.x, this.position.y, this.width, this.height )
+                .rect( position.x, position.y, width, height )
                 .fill().stroke()
     }
 }
