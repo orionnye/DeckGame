@@ -16,7 +16,8 @@
     "devDependencies": {
         "ava": "^2.2.0",
         "webpack": "^4.35.3",
-        "webpack-cli": "^3.3.5"
+        "webpack-cli": "^3.3.5",
+        "webpack-dev-server": "^3.8.0"
     },
     "dependencies": {
         "express": "^4.17.1"
