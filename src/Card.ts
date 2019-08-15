@@ -5,37 +5,26 @@ import Canvas from "./common/Canvas";
 import { getImage } from "./common/common";
 import Input from "./common/Input";
 import Game from "./Game";
+import Sprite from "./Sprite";
+import GameObject from "./GameObject";
 
-export default class Card {
+export default class Card extends GameObject {
 
-    position: Vector
-    width: number
-    height: number
     color: string
     grabbed: boolean
 
     constructor( position: Vector, color = "red" ) {
+        super( position, 69, 100 )
         this.position = position
-        this.width = 69
-        this.height = 100
         this.color = color
         this.grabbed = false
     }
 
-    contains( point: Vector ) {
-        if ( point.x < this.position.x + this.width && point.x > this.position.x ) {
-            if ( point.y < this.position.y + this.height && point.y > this.position.y ) {
-                return true
-            }
-        }
-        return false
-    }
-
     apply( pawn: Pawn, hand: Deck, discard: Deck ) {
-        let blueKey = /(blue)/g
-        let blueCount = [ ...this.color.matchAll( blueKey ) ].length
-        let redKey = /(red)/g
-        let redCount = [ ...this.color.matchAll( redKey ) ].length
+        let countOccurances = ( regex, str ) => [ ...str.matchAll( regex ) ].length
+        let blueCount = countOccurances( /(blue)/g, this.color )
+        let redCount = countOccurances( /(red)/g, this.color )
+
         pawn.offset.y = -30
         hand.remove( this )
         let random = ( discard.length == 0 ) ? 0 : Math.floor( Math.random() * discard.length )
@@ -74,7 +63,7 @@ export default class Card {
             this.position.x = mouse.x - this.width / 2
 
             for ( let pawn of pawns )
-                if ( pawn.collidesWith( this ) )
+                if ( pawn.overlaps( this ) )
                     this.apply( pawn, hand, discard )
 
             if ( melter.contains( this ) ) {

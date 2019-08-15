@@ -1,3 +1,5 @@
+import IBoundingBox from "./IBoundingBox";
+
 export function modulus( n, m ) {
     return ( ( n % m ) + m ) % m
 }

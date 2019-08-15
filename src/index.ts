@@ -3,8 +3,6 @@ import Canvas from "./common/Canvas";
 
 let game = new Game()
 
-
-
 window.onload = () => {
     Canvas.setup()
     function loop() {

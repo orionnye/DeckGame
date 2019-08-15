@@ -2,10 +2,10 @@ import Canvas from "./common/Canvas";
 import Deck from "./Deck";
 import Pawn from "./Pawn";
 import Input from "./common/Input";
-import Vector from "./common/Vector";
 import { getImage } from "./common/common";
 import Card from "./Card";
 import Melter from "./Melter";
+import Sprite from "./Sprite";
 
 export default class Game {
     deck = new Deck( 8, 30, 250, -1, 1 )
@@ -22,6 +22,10 @@ export default class Game {
 
     constructor() {
         window.addEventListener( "keyup", e => this.keyup( e ) )
+
+        this.enemy.sprite = new Sprite( getImage( "chadwick" ) )
+            .setSource( { x: 0, y: 0, w: 53, h: 35 } )
+            .setDimensions( this.enemy.width * 2, this.enemy.height )
     }
 
     get pawns() {
@@ -83,18 +87,14 @@ export default class Game {
         for ( let card of hand.cards )
             card.update( this )
 
-        if ( !buttons.Mouse0 && hand.length > 0 ) {
-            hand.cards.forEach( card => {
-                if ( card.grabbed ) {
-                    card.grabbed = false
-                }
-            } )
-        }
+        if ( !buttons.Mouse0 && hand.length > 0 )
+            for ( let card of hand.cards )
+                card.grabbed = false
 
     }
 
     render() {
-        let { player, enemy, deck, hand, discard } = this
+        let { deck, hand, discard } = this
 
         Canvas.resize( 700, 500 )
         Canvas.context.imageSmoothingEnabled = false
@@ -102,16 +102,8 @@ export default class Game {
 
         this.melter.draw()
 
-        player.draw()
-
-        let enemyPos = new Vector( enemy.position.x - enemy.width / 2 + enemy.offset.x, enemy.position.y + enemy.offset.y )
-        Canvas.imageSource( 0, 0, 53, 35 )
-            .partialImage(
-                getImage( "chadwick" ),
-                enemyPos.x, enemyPos.y,
-                enemy.width * 2, enemy.height
-            )
-        enemy.drawHealthBar()
+        for ( let pawn of this.pawns )
+            pawn.draw()
 
         deck.draw()
         discard.draw()

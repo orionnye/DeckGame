@@ -1,33 +1,19 @@
 import Vector from "./common/Vector";
 import Canvas from "./common/Canvas";
+import GameObject from "./GameObject";
 
-export default class Pawn {
+export default class Pawn extends GameObject {
 
-    position: Vector
     offset: Vector
-    width: number
-    height: number
     color: string
     health: number
 
     constructor( x, y, width, height, color = "red" ) {
-        this.position = new Vector( x, y )
+        super( new Vector( x, y ), width, height )
         this.offset = new Vector( 0, 0 )
-        this.width = width
-        this.height = height
         this.color = color
         this.health = 10
-    }
-
-    collidesWith( other ) {
-        let myCenter = new Vector( this.position.x + this.width / 2, this.position.y + this.height / 2 )
-        let otherCenter = new Vector( other.position.x + other.width / 2, other.position.y + other.height / 2 )
-        let distance = otherCenter.subtract( myCenter ).length
-        if ( distance < this.width ) {
-            return true
-        } else {
-            return false
-        }
+        this.sprite = null
     }
 
     updateToFixed() {
@@ -43,18 +29,28 @@ export default class Pawn {
     }
 
     draw() {
+        if ( this.sprite ) {
+            let { sprite, position, width, height } = this
+            let { x, y } = position
+            sprite.draw( x + width / 2, y + height / 2, true )
+        } else {
+            this.drawBasic()
+        }
+        this.drawHealthBar()
+    }
+
+    drawBasic() {
         Canvas.rect(
             this.position.x + this.offset.x, this.position.y + this.offset.y,
             this.width, this.height
         ).fillStyle( this.color ).fill()
-        if ( this.health <= 0 ) {
-            Canvas.text(
+
+        if ( this.health <= 0 )
+            Canvas.fillStyle( "black" ).text(
                 "Dead",
                 this.position.x + this.offset.x, this.position.y + this.offset.y + this.height / 2,
                 this.width
             )
-        }
-        this.drawHealthBar()
     }
 
     drawHealthBar() {
@@ -62,10 +58,12 @@ export default class Pawn {
         let healthWidth = this.health * 10
         let healthPos = new Vector( this.position.x, this.position.y + this.height + 5 )
         let healthNumPos = new Vector( healthPos.x + healthWidth / 3, healthPos.y + healthHeight - 2 )
+
         Canvas.rect(
             healthPos.x, healthPos.y,
             healthWidth, healthHeight
         ).fillStyle( "red" ).fill().stroke()
+
         Canvas.fillStyle( "black" )
             .text(
                 this.health.toString(),

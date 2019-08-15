@@ -1,19 +1,18 @@
 import Vector from "./common/Vector";
 import Card from "./Card";
 import Canvas from "./common/Canvas";
+import GameObject from "./GameObject";
 
-export default class Deck {
-    position: Vector
-    offsetX: number
-    offsetY: number
+export default class Deck extends GameObject {
+    offset: Vector
     cards: Card[]
 
     constructor( count, x, y, offsetX, offsetY ) {
+        super( new Vector( x, y ), 0, 0 )
+        this.offset = new Vector( offsetX, offsetY )
         let cards: Card[] = []
-        this.offsetX = offsetX
-        this.offsetY = offsetY
         for ( let i = 0; i < count; i++ ) {
-            let deckPos = new Vector( x + this.offsetX * i, y + this.offsetY * i )
+            let deckPos = new Vector( x + offsetX * i, y + offsetY * i )
             // let rainbow = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"]
             let rainbow = [ "red", "red", "blue", "blue", "blue", "red", "red" ]
             let randColor = rainbow[ Math.floor( Math.random() * rainbow.length ) ]
@@ -21,7 +20,6 @@ export default class Deck {
             cards.push( card )
         }
         this.cards = cards
-        this.position = new Vector( x, y )
     }
 
     get length() { return this.cards.length }
@@ -60,8 +58,8 @@ export default class Deck {
                 //  lock in card positions
                 let index = this.cards.indexOf( card )
                 // x + this.offsetX * i
-                let fixedX = this.position.x + index * this.offsetX
-                let fixedY = this.position.y + index * this.offsetY
+                let fixedX = this.position.x + index * this.offset.x
+                let fixedY = this.position.y + index * this.offset.y
                 let fixedPos = new Vector( fixedX, fixedY )
                 if ( fixedPos.subtract( card.position ).length > 1 ) {
                     let fixVector = fixedPos.subtract( card.position )
@@ -73,8 +71,8 @@ export default class Deck {
 
     cardPosition( card: Card ) {
         let index = this.cards.indexOf( card )
-        let x = this.position.x + index * this.offsetX
-        let y = this.position.y + index * this.offsetY
+        let x = this.position.x + index * this.offset.x
+        let y = this.position.y + index * this.offset.y
         return new Vector( x, y )
     }
 
