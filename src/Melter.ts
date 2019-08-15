@@ -1,20 +1,16 @@
 import Vector from "./common/Vector";
 import Card from "./Card";
 import Canvas from "./common/Canvas";
+import GameObject from "./GameObject";
 
-export default class Melter {
-    position: Vector
+export default class Melter extends GameObject {
     colors: string[]
     base: Card
-    width: number
-    height: number
 
     constructor( x: number, y: number ) {
-        this.position = new Vector( x, y )
+        super( new Vector( x, y ), 200, 130 )
         this.colors = []
         this.base = new Card( this.position, "grey" )
-        this.width = 200
-        this.height = 130
     }
 
     get product() {
@@ -28,24 +24,6 @@ export default class Melter {
         } )
         let concoction = new Card( this.base.position, endColor )
         return concoction
-    }
-
-    contains( card: Card ) {
-        let { position, base } = this
-        //  check card for collision
-        let upLeft = position
-        let lowLeft = new Vector( position.x, position.y + base.height )
-        let upRight = new Vector( position.x + base.width, position.y )
-        let lowRight = new Vector( position.x + base.width, position.y + base.height )
-        if ( !card.grabbed ) {
-            if ( card.contains( upLeft ) || card.contains( lowLeft ) ) {
-                return true
-            }
-            if ( card.contains( upRight ) || card.contains( lowRight ) ) {
-                return true
-            }
-        }
-        return false
     }
 
     melt( card: Card ) {

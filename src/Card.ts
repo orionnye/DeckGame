@@ -60,12 +60,12 @@ export default class Card extends GameObject {
         if ( this.grabbed ) {
             this.position.y = mouse.y - this.height / 2
             this.position.x = mouse.x - this.width / 2
-
+        } else {
             for ( let pawn of pawns )
                 if ( pawn.overlaps( this ) )
                     this.apply( pawn, hand, discard )
 
-            if ( melter.contains( this ) ) {
+            if ( melter.overlaps( this ) ) {
                 console.log( "MELTED in", this.color )
                 melter.melt( this )
                 hand.remove( this )
