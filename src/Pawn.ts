@@ -57,8 +57,8 @@ export default class Pawn extends GameObject {
     drawHealthBar() {
         let healthHeight = 20
         let healthWidth = this.health * 10
-        let healthPos = new Vector( this.position.x, this.position.y + this.height + 5 )
-        let healthNumPos = new Vector( healthPos.x + healthWidth / 3, healthPos.y + healthHeight - 2 )
+        let healthPos = this.position.addY( this.height + 5 )
+        let healthNumPos = healthPos.addXY( healthWidth / 3, healthHeight - 2 )
 
         Canvas.rect(
             healthPos.x, healthPos.y,

@@ -58,8 +58,7 @@ export default class Card extends GameObject {
         }
 
         if ( this.grabbed ) {
-            this.position.y = mouse.y - this.height / 2
-            this.position.x = mouse.x - this.width / 2
+            this.position = mouse.subtract( this.dimensions.half )
         } else {
             for ( let pawn of pawns )
                 if ( pawn.overlaps( this ) )

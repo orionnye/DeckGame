@@ -12,7 +12,12 @@ export default class Vector {
     get rightNormal() { return new Vector( this.y, -this.x ) }
     get angle() { return Math.atan2( this.y, this.x ) }
     get negate() { return new Vector( -this.x, -this.y ) }
+    get values() { return [ this.x, this.y ] }
+    get half() { return new Vector( this.x * 0.5, this.y * 0.5 ) }
     add( other: Vector ) { return new Vector( this.x + other.x, this.y + other.y ) }
+    addXY( x: number, y: number ) { return new Vector( this.x + x, this.y + y ) }
+    addX( x: number ) { return new Vector( this.x + x, this.y ) }
+    addY( y: number ) { return new Vector( this.x, this.y + y ) }
     subtract( other: Vector ) { return new Vector( this.x - other.x, this.y - other.y ) }
     dot( other: Vector ) { return this.x * other.x + this.y * other.y }
     cross( other: Vector ) { return this.x * other.y - this.y * other.x }

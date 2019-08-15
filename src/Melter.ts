@@ -32,7 +32,8 @@ export default class Melter extends GameObject {
 
     draw() {
         let margin = ( this.height - this.product.height ) / 2
-        Canvas.rect( this.position.x - this.product.width, this.position.y - margin, this.width, this.height )
+        let pos = this.position.addXY( -this.product.width, -margin )
+        Canvas.rect( pos.x, pos.y, this.width, this.height )
             .fillStyle( "black" ).fill()
         Canvas.rect( this.position.x, this.position.y, this.product.width, this.product.height )
             .fillStyle( "blue" ).fill()

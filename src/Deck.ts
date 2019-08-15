@@ -4,15 +4,15 @@ import Canvas from "./common/Canvas";
 import GameObject from "./GameObject";
 
 export default class Deck extends GameObject {
-    offset: Vector
+    spread: Vector
     cards: Card[]
 
-    constructor( count, x, y, offsetX, offsetY ) {
+    constructor( count, x, y, spreadX, spreadY ) {
         super( new Vector( x, y ), 0, 0 )
-        this.offset = new Vector( offsetX, offsetY )
+        this.spread = new Vector( spreadX, spreadY )
         let cards: Card[] = []
         for ( let i = 0; i < count; i++ ) {
-            let deckPos = new Vector( x + offsetX * i, y + offsetY * i )
+            let deckPos = new Vector( x + spreadX * i, y + spreadY * i )
             // let rainbow = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"]
             let rainbow = [ "red", "red", "blue", "blue", "blue", "red", "red" ]
             let randColor = rainbow[ Math.floor( Math.random() * rainbow.length ) ]
@@ -55,12 +55,7 @@ export default class Deck extends GameObject {
     updateToFixed() {
         if ( this.length > 0 ) {
             this.cards.forEach( card => {
-                //  lock in card positions
-                let index = this.cards.indexOf( card )
-                // x + this.offsetX * i
-                let fixedX = this.position.x + index * this.offset.x
-                let fixedY = this.position.y + index * this.offset.y
-                let fixedPos = new Vector( fixedX, fixedY )
+                let fixedPos = this.cardPosition( card )
                 if ( fixedPos.subtract( card.position ).length > 1 ) {
                     let fixVector = fixedPos.subtract( card.position )
                     card.position = card.position.add( fixVector.unit.multiply( fixVector.length / 20 ) )
@@ -71,9 +66,9 @@ export default class Deck extends GameObject {
 
     cardPosition( card: Card ) {
         let index = this.cards.indexOf( card )
-        let x = this.position.x + index * this.offset.x
-        let y = this.position.y + index * this.offset.y
-        return new Vector( x, y )
+        return this.position.add(
+            this.spread.multiply( index )
+        )
     }
 
     draw( stack: boolean = true ) {
