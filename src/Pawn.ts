@@ -32,7 +32,8 @@ export default class Pawn extends GameObject {
         if ( this.sprite ) {
             let { sprite, position, width, height } = this
             let { x, y } = position
-            sprite.draw( x + width / 2, y + height / 2, true )
+            let { x: dx, y: dy } = this.offset
+            sprite.draw( x + width / 2 + dx, y + height / 2 + dy, true )
         } else {
             this.drawBasic()
         }
