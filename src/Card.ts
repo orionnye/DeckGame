@@ -83,8 +83,8 @@ export default class Card extends GameObject {
         else if ( color == "blue" )
             Canvas.image( getImage( "CardHP1" ), this.position.x, this.position.y, this.width, this.height )
         else if ( color == "blueblue" )
-            Canvas.image( getImage( "KarmaCard" ), this.position.x, this.position.y, this.width, this.height )
+            Canvas.image( getImage( "CardKarma" ), this.position.x, this.position.y, this.width, this.height )
         else
-            Canvas.image( getImage( "VolatileCard" ), this.position.x, this.position.y, this.width, this.height )
+            Canvas.image( getImage( "CardVolatile" ), this.position.x, this.position.y, this.width, this.height )
     }
 }
