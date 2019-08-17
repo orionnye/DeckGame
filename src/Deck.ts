@@ -14,7 +14,7 @@ export default class Deck extends GameObject {
         for ( let i = 0; i < count; i++ ) {
             let deckPos = new Vector( x + spreadX * i, y + spreadY * i )
             // let rainbow = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"]
-            let rainbow = [ "red", "blue"]
+            let rainbow = [ "red", "blue" ]
             let randColor = rainbow[ Math.floor( Math.random() * rainbow.length ) ]
             let card = new Card( deckPos, randColor )
             cards.push( card )
@@ -53,15 +53,13 @@ export default class Deck extends GameObject {
     }
 
     updateToFixed() {
-        if ( this.length > 0 ) {
-            this.cards.forEach( card => {
-                let fixedPos = this.cardPosition( card )
-                if ( fixedPos.subtract( card.position ).length > 1 ) {
-                    let fixVector = fixedPos.subtract( card.position )
-                    card.position = card.position.add( fixVector.unit.multiply( fixVector.length / 20 ) )
-                }
-            } )
-        }
+        this.cards.forEach( card => {
+            let fixedPos = this.cardPosition( card )
+            if ( fixedPos.subtract( card.position ).length > 1 ) {
+                let fixVector = fixedPos.subtract( card.position )
+                card.position = card.position.add( fixVector.unit.multiply( fixVector.length / 10 ) )
+            }
+        } )
     }
 
     cardPosition( card: Card ) {

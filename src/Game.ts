@@ -85,6 +85,8 @@ export default class Game {
             player.updateToFixed()
 
         enemy.updateToFixed()
+
+        hand.updateToFixed()
         discard.updateToFixed()
         deck.updateToFixed()
 
