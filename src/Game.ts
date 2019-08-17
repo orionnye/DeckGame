@@ -23,11 +23,11 @@ export default class Game {
     constructor() {
         window.addEventListener( "keyup", e => this.keyup( e ) )
 
-        this.player.sprite = new Sprite( getImage( "Egor" ) )
-        .setSource( { x: 0, y: 0, w: 69, h: 69 } )
-        .setDimensions( this.player.width, this.player.height)
+        this.player.sprite = new Sprite( getImage( "PawnEgor" ) )
+            .setSource( { x: 0, y: 0, w: 69, h: 69 } )
+            .setDimensions( this.player.width, this.player.height )
 
-        this.enemy.sprite = new Sprite( getImage( "chadwick" ) )
+        this.enemy.sprite = new Sprite( getImage( "PawnChadwick" ) )
             .setSource( { x: 0, y: 0, w: 53, h: 35 } )
             .setDimensions( this.enemy.width * 2, this.enemy.height )
     }
