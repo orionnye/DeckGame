@@ -27,9 +27,9 @@ export default class Game {
             .setSource( { x: 0, y: 0, w: 69, h: 69 } )
             .setDimensions( this.player.width, this.player.height )
 
-        this.enemy.sprite = new Sprite( getImage( "PawnChadwick" ) )
-            .setSource( { x: 0, y: 0, w: 53, h: 35 } )
-            .setDimensions( this.enemy.width * 2, this.enemy.height )
+        this.enemy.sprite = new Sprite( getImage( "PawnChadwick2" ) )
+            .setSource( { x: 0, y: 0, w: 60, h: 64 } )
+            .setDimensions( this.enemy.width * 0.8, this.enemy.height * 0.8 )
     }
 
     get pawns() {
