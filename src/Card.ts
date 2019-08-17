@@ -75,13 +75,14 @@ export default class Card extends GameObject {
 
     draw( color = "white" ) {
         if ( color == "red" )
-            Canvas.image( getImage( "attack" ), this.position.x, this.position.y, this.width, this.height )
+            Canvas.image( getImage( "CardATK1" ), this.position.x, this.position.y, this.width, this.height )
+        else if ( color == "redred" )
+            Canvas.image( getImage( "CardATK2" ), this.position.x, this.position.y, this.width, this.height )
         else if ( color == "blue" )
-            Canvas.image( getImage( "defend" ), this.position.x, this.position.y, this.width, this.height )
+            Canvas.image( getImage( "CardHP1" ), this.position.x, this.position.y, this.width, this.height )
+        else if ( color == "blueblue" )
+            Canvas.image( getImage( "KarmaCard" ), this.position.x, this.position.y, this.width, this.height )
         else
-            Canvas.fillStyle( color )
-                .strokeStyle( "black" )
-                .rect( this.position.x, this.position.y, this.width, this.height )
-                .fill().stroke()
+            Canvas.image( getImage( "VolatileCard" ), this.position.x, this.position.y, this.width, this.height )
     }
 }

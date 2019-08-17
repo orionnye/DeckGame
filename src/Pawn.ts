@@ -8,11 +8,11 @@ export default class Pawn extends GameObject {
     color: string
     health: number
 
-    constructor( x, y, width, height, color = "red" ) {
+    constructor( x, y, width, height, color = "red", health = 10 ) {
         super( new Vector( x, y ), width, height )
         this.offset = new Vector( 0, 0 )
         this.color = color
-        this.health = 10
+        this.health = health
         this.sprite = null
     }
 

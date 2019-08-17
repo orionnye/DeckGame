@@ -14,7 +14,7 @@ export default class Deck extends GameObject {
         for ( let i = 0; i < count; i++ ) {
             let deckPos = new Vector( x + spreadX * i, y + spreadY * i )
             // let rainbow = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"]
-            let rainbow = [ "red", "red", "blue", "blue", "blue", "red", "red" ]
+            let rainbow = [ "red", "blue"]
             let randColor = rainbow[ Math.floor( Math.random() * rainbow.length ) ]
             let card = new Card( deckPos, randColor )
             cards.push( card )
