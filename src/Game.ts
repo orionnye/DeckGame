@@ -8,12 +8,12 @@ import Melter from "./Melter";
 import Sprite from "./Sprite";
 
 export default class Game {
-    deck = new Deck( 8, 30, 250, -1, 1 )
-    hand = new Deck( 5, 145, 225, 90, 0 )
+    deck = new Deck( 20, 30, 250, -1, 1 )
+    hand = new Deck( 5, 145, 250, 90, 0 )
     discard = new Deck( 0, 600, 250, 1, 1 )
 
-    player = new Pawn( 100, 50, 125, 125, "red" )
-    enemy = new Pawn( 500, 50, 100, 100, "blue", 5 )
+    player = new Pawn( 100, 50, 175, 175, "red" )
+    enemy = new Pawn( 500, 50, 150, 150, "blue", 5 )
 
     melter = new Melter( 325, 375 )
 
@@ -105,6 +105,9 @@ export default class Game {
         Canvas.resize( 700, 500 )
         Canvas.context.imageSmoothingEnabled = false
         Canvas.background( "grey" )
+        let backgroundY = 150
+        Canvas.image( getImage( "Ground" ), 0, backgroundY - 5, Canvas.canvas.clientWidth, 200 )
+        Canvas.image( getImage( "BackGroundMid" ), 0, 0, Canvas.canvas.clientWidth, backgroundY )
 
         this.melter.draw()
 

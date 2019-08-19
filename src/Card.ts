@@ -69,6 +69,8 @@ export default class Card extends GameObject {
     draw( color = "white" ) {
         let { position, width, height } = this
         let { x, y } = position
+        let margin = width / 12
+
         if ( color == "red" )
             Canvas.image( getImage( "CardATK1" ), x, y, width, height )
         else if ( color == "redred" )
@@ -79,5 +81,7 @@ export default class Card extends GameObject {
             Canvas.image( getImage( "CardKarma" ), x, y, width, height )
         else
             Canvas.image( getImage( "CardVolatile" ), x, y, width, height )
+        //Text IDEALLY would print the card description contained on the card
+        Canvas.text(color, x + margin, y + height - margin, width - margin * 2, "20px LCD");
     }
 }
