@@ -69,7 +69,7 @@ export default class Pawn extends GameObject {
             .text(
                 this.health.toString(),
                 healthNumPos.x, healthNumPos.y,
-                25, "25px timesNewRoman"
+                25, "25px pixel"
             )
     }
 

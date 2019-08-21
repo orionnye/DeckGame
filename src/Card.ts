@@ -82,6 +82,6 @@ export default class Card extends GameObject {
         else
             Canvas.image( getImage( "CardVolatile" ), x, y, width, height )
         //Text IDEALLY would print the card description contained on the card
-        Canvas.text(color, x + margin, y + height - margin, width - margin * 2, "20px LCD");
+        Canvas.text( color, x + margin, y + height - margin, width - margin * 2, "20px pixel" );
     }
 }

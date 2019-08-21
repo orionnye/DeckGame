@@ -114,7 +114,7 @@ export default class Canvas {
         return Canvas
     }
 
-    static text( text, x, y, width, font = "50px timesNewRoman" ) {
+    static text( text, x, y, width, font = "50px pixel" ) {
         let c = Canvas.context
         c.font = font
         c.fillText( text, x, y, width )
