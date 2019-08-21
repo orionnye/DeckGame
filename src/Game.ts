@@ -104,10 +104,10 @@ export default class Game {
 
         Canvas.resize( 700, 500 )
         Canvas.context.imageSmoothingEnabled = false
-        Canvas.background( "rgb(30, 20, 20)")
+        Canvas.background( "rgb(30, 20, 20)" )
         let backgroundY = 150
-        Canvas.rect(0, backgroundY, Canvas.canvas.clientWidth, Canvas.canvas.clientHeight)
-        Canvas.fillStyle("rgb(100, 100, 100")
+        Canvas.rect( 0, backgroundY, Canvas.canvas.clientWidth, Canvas.canvas.clientHeight )
+        Canvas.fillStyle( "rgb(100, 100, 100" )
         Canvas.fill()
         Canvas.image( getImage( "Ground" ), 0, backgroundY - 5, Canvas.canvas.clientWidth, 200 )
         Canvas.image( getImage( "BackGroundMid" ), 0, 0, Canvas.canvas.clientWidth, backgroundY )

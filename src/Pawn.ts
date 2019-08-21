@@ -1,4 +1,4 @@
-import Vector from "./common/Vector";
+import Vector, { vector } from "./common/Vector";
 import Canvas from "./common/Canvas";
 import GameObject from "./GameObject";
 
@@ -9,8 +9,8 @@ export default class Pawn extends GameObject {
     health: number
 
     constructor( x, y, width, height, color = "red", health = 10 ) {
-        super( new Vector( x, y ), width, height )
-        this.offset = new Vector( 0, 0 )
+        super( vector( x, y ), width, height )
+        this.offset = vector( 0, 0 )
         this.color = color
         this.health = health
         this.sprite = null
@@ -20,11 +20,11 @@ export default class Pawn extends GameObject {
         if ( this.offset.length > 0 ) {
             this.offset
             if ( this.position.subtract( this.offset ).length > 2 ) {
-                let fixVector = new Vector( 0, 0 ).subtract( this.offset )
+                let fixVector = vector( 0, 0 ).subtract( this.offset )
                 this.offset = fixVector.unit.multiply( fixVector.length / 2 )
             }
             if ( this.offset.length < 3 )
-                this.offset = new Vector( 0, 0 )
+                this.offset = vector( 0, 0 )
         }
     }
 
@@ -41,9 +41,9 @@ export default class Pawn extends GameObject {
     }
 
     drawBasic() {
-        Canvas.rect(
-            this.position.x + this.offset.x, this.position.y + this.offset.y,
-            this.width, this.height
+        Canvas.vrect(
+            this.position.add( this.offset ),
+            this.dimensions
         ).fillStyle( this.color ).fill()
 
         if ( this.health <= 0 )

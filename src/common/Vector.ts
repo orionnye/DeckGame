@@ -1,3 +1,4 @@
+export function vector( x, y ) { return new Vector( x, y ) }
 export default class Vector {
     x: number
     y: number

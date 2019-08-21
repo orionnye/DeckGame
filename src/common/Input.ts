@@ -1,9 +1,9 @@
-import Vector from "./Vector";
+import Vector, { vector } from "./Vector";
 import Canvas from "./Canvas";
 
 window.addEventListener( "mousemove", e => {
     let rect = Canvas.canvas.getBoundingClientRect()
-    Input.mouse = new Vector(
+    Input.mouse = vector(
         e.x - rect.left,
         e.y - rect.top
     )

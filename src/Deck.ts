@@ -1,4 +1,4 @@
-import Vector from "./common/Vector";
+import Vector, { vector } from "./common/Vector";
 import Card from "./Card";
 import Canvas from "./common/Canvas";
 import GameObject from "./GameObject";
@@ -8,11 +8,11 @@ export default class Deck extends GameObject {
     cards: Card[]
 
     constructor( count, x, y, spreadX, spreadY ) {
-        super( new Vector( x, y ), 0, 0 )
-        this.spread = new Vector( spreadX, spreadY )
+        super( vector( x, y ), 0, 0 )
+        this.spread = vector( spreadX, spreadY )
         let cards: Card[] = []
         for ( let i = 0; i < count; i++ ) {
-            let deckPos = new Vector( x + spreadX * i, y + spreadY * i )
+            let deckPos = vector( x + spreadX * i, y + spreadY * i )
             // let rainbow = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"]
             let rainbow = [ "red", "blue" ]
             let randColor = rainbow[ Math.floor( Math.random() * rainbow.length ) ]
