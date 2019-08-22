@@ -25,9 +25,7 @@ export function getImage( name: string, extension = "png" ) {
 }
 
 export function contains( a, b, x ) {
-    let min = Math.min( a, b )
-    let max = Math.max( a, b )
-    return x > min && x < max
+    return x > Math.min( a, b ) && x < Math.max( a, b )
 }
 
 export function overlaps( a0, a1, b0, b1 ) {

@@ -15,6 +15,7 @@ export default class Vector {
     get negate() { return new Vector( -this.x, -this.y ) }
     get values() { return [ this.x, this.y ] }
     get half() { return new Vector( this.x * 0.5, this.y * 0.5 ) }
+    get copy() { return new Vector( this.x, this.y ) }
     add( other: Vector ) { return new Vector( this.x + other.x, this.y + other.y ) }
     addXY( x: number, y: number ) { return new Vector( this.x + x, this.y + y ) }
     addX( x: number ) { return new Vector( this.x + x, this.y ) }

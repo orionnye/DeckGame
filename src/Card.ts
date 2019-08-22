@@ -14,7 +14,7 @@ export default class Card extends GameObject {
 
     constructor( position: Vector, color = "red" ) {
         super( position, 69, 100 )
-        this.position = position
+        this.position = position.copy
         this.color = color
         this.grabbed = false
     }
@@ -39,7 +39,6 @@ export default class Card extends GameObject {
 
     update( game: Game ) {
         let { mouse, buttons } = Input
-        let { hand, discard, pawns, melter } = game
 
         if ( buttons.Mouse0 ) {
             if ( this.contains( mouse ) && !game.grabbing ) {
@@ -47,22 +46,28 @@ export default class Card extends GameObject {
                 this.grabbed = true
             }
         } else {
+            if ( this.grabbed )
+                this.onDrop( game )
             game.grabbing = false
+            this.grabbed = false
         }
 
-        if ( this.grabbed ) {
+        if ( this.grabbed )
             this.position = mouse.subtract( this.dimensions.half )
-        } else {
-            for ( let pawn of pawns )
-                if ( pawn.overlaps( this ) )
-                    this.apply( pawn, hand, discard )
 
-            if ( melter.overlaps( this ) ) {
-                console.log( "MELTED in", this.color )
-                melter.melt( this )
-                hand.remove( this )
-                this.color = "grey"
-            }
+    }
+
+    onDrop( game: Game ) {
+        let { hand, discard, pawns, melter } = game
+        for ( let pawn of pawns )
+            if ( pawn.overlaps( this ) )
+                this.apply( pawn, hand, discard )
+
+        if ( melter.overlaps( this ) ) {
+            console.log( "MELTED in", this.color )
+            melter.melt( this )
+            hand.remove( this )
+            this.color = "grey"
         }
     }
 

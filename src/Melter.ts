@@ -8,7 +8,8 @@ export default class Melter extends GameObject {
     base: Card
 
     constructor( x: number, y: number ) {
-        super( vector( x, y ), 200, 130 )
+        // super( vector( x, y ), 200, 130 )
+        super( vector( x, y ), 69, 100 )
         this.colors = []
         this.base = new Card( this.position, "grey" )
     }
@@ -31,9 +32,8 @@ export default class Melter extends GameObject {
     }
 
     draw() {
-        let margin = ( this.height - this.product.height ) / 2
-        let pos = this.position.addXY( -this.product.width, -margin )
-        Canvas.vrect( pos, this.dimensions )
+        let margin = vector( 100, 30 )
+        Canvas.vrect( this.position.subtract( margin.half ), this.dimensions.add( margin ) )
             .fillStyle( "black" ).fill()
         Canvas.vrect( this.position, this.product.dimensions )
             .fillStyle( "blue" ).fill()
