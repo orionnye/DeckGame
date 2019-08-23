@@ -8,6 +8,7 @@ import Melter from "./Melter";
 import Sprite from "./Sprite";
 
 export default class Game {
+    enemyCount = 1
     deck = new Deck( 20, 30, 250, -1, 1 )
     hand = new Deck( 5, 145, 250, 90, 0 )
     discard = new Deck( 0, 600, 250, 1, 1 )
@@ -51,6 +52,12 @@ export default class Game {
             enemy.health += 2
             enemy.offset.x = -60
             player.offset.x = -20
+        } else {
+            this.enemyCount += 1
+            enemy.health = 5 * this.enemyCount
+            enemy.sprite = new Sprite( getImage( "BoneDragon" ) )
+            .setSource( { x: 0, y: 0, w: 60, h: 64 } )
+            .setDimensions( this.enemy.width * 0.8, this.enemy.height * 0.8 )
         }
 
         this.refillHand()
@@ -111,6 +118,9 @@ export default class Game {
         Canvas.fill()
         Canvas.image( getImage( "Ground" ), 0, backgroundY - 5, Canvas.canvas.clientWidth, 200 )
         Canvas.image( getImage( "BackGroundMid" ), 0, 0, Canvas.canvas.clientWidth, backgroundY )
+        Canvas.fillStyle( "rgb(255, 0, 0)")
+        //Level Count
+        Canvas.text( "level" + this.enemyCount, Canvas.canvas.clientWidth / 2 - 45, 30, 100, "40px pixel" );
 
         this.melter.draw()
 
