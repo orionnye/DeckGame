@@ -13,7 +13,7 @@ export default class Game {
     hand = new Deck( 5, 145, 250, 90, 0 )
     discard = new Deck( 0, 600, 250, 1, 1 )
 
-    player = new Pawn( 100, 50, 175, 175, "red" )
+    player = new Pawn( 100, 50, 175, 175, "red", 0 )
     enemy = new Pawn( 500, 50, 150, 150, "blue", 5 )
 
     melter = new Melter( 325, 375 )
@@ -48,13 +48,15 @@ export default class Game {
         let { enemy, player, melter, deck } = this
 
         if ( enemy.health > 0 ) {
-            player.health -= 2
-            enemy.health += 2
+            player.health -= enemy.damage
+            enemy.health += enemy.heal
             enemy.offset.x = -60
             player.offset.x = -20
         } else {
             this.enemyCount += 1
-            enemy.health = 5 * this.enemyCount
+            enemy.heal = this.enemyCount
+            enemy.damage = this.enemyCount
+            enemy.health = 3 * this.enemyCount
             enemy.sprite = new Sprite( getImage( "BoneDragon" ) )
             .setSource( { x: 0, y: 0, w: 60, h: 64 } )
             .setDimensions( this.enemy.width * 0.8, this.enemy.height * 0.8 )
@@ -118,17 +120,24 @@ export default class Game {
         Canvas.fill()
         Canvas.image( getImage( "Ground" ), 0, backgroundY - 5, Canvas.canvas.clientWidth, 200 )
         Canvas.image( getImage( "BackGroundMid" ), 0, 0, Canvas.canvas.clientWidth, backgroundY )
-        Canvas.fillStyle( "rgb(255, 0, 0)")
         //Level Count
+        Canvas.fillStyle( "rgb(255, 0, 0)")
         Canvas.text( "level" + this.enemyCount, Canvas.canvas.clientWidth / 2 - 45, 30, 100, "40px pixel" );
-
+        
         this.melter.draw()
-
+        
         for ( let pawn of this.pawns )
             pawn.draw()
-
+        
         deck.draw()
         discard.draw()
         hand.draw( false )
+        if (this.player.health <= 0 ) {
+            Canvas.fillStyle( "rgb(100, 0, 0)")
+            let deathMessageWidth = 700
+            let deathMessageX = Canvas.canvas.clientWidth / 2 - deathMessageWidth / 2
+            let deathMessageY = Canvas.canvas.clientHeight / 2 - 30
+            Canvas.text( "You  Died  On  Level " + this.enemyCount, deathMessageX, deathMessageY, deathMessageWidth, "250px pixel" );
+        }
     }
 }
