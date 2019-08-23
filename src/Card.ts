@@ -6,6 +6,8 @@ import { getImage } from "./common/common";
 import Input from "./common/Input";
 import Game from "./Game";
 import GameObject from "./GameObject";
+import CookBook from "./CookBook";
+import CardType from "./CardType";
 
 export default class Card extends GameObject {
 
@@ -19,22 +21,24 @@ export default class Card extends GameObject {
         this.grabbed = false
     }
 
-    apply( pawn: Pawn, hand: Deck, discard: Deck ) {
-        let countOccurances = ( regex, str ) => [ ...str.matchAll( regex ) ].length
-        let blueCount = countOccurances( /(blue)/g, this.color )
-        let redCount = countOccurances( /(red)/g, this.color )
+    get cardType() {
+        let type = CookBook[this.color] as CardType
+        if (type == null) {
+            throw new Error(`card not found: ${this.color}`)
+        }
+        return type
+    }
 
+    apply( pawn: Pawn, hand: Deck, discard: Deck ) {
+        
+        this.cardType.apply(pawn)
+        this.grabbed = false
+        
         pawn.offset.y = -30
+
         hand.remove( this )
         let random = ( discard.length == 0 ) ? 0 : Math.floor( Math.random() * discard.length )
         discard.insertAt( this, random )
-        pawn.health += blueCount - redCount
-
-        if ( this.color == "grey" ) {
-            let heal = ( Math.random() > 0.5 ) ? true : false
-            pawn.health += heal ? 2 : -2
-        }
-        this.grabbed = false
     }
 
     update( game: Game ) {
@@ -75,16 +79,8 @@ export default class Card extends GameObject {
         let { position, dimensions, width, height } = this
         let { x, y } = position
         let margin = width / 12
-        if ( color == "red" )
-            Canvas.vimage( getImage( "CardATK1" ), position, dimensions )
-        else if ( color == "redred" )
-            Canvas.vimage( getImage( "CardATK2" ), position, dimensions )
-        else if ( color == "blue" )
-            Canvas.vimage( getImage( "CardHP1" ), position, dimensions )
-        else if ( color == "blueblue" )
-            Canvas.vimage( getImage( "CardKarma" ), position, dimensions )
-        else
-            Canvas.vimage( getImage( "CardVolatile" ), position, dimensions )
+
+        Canvas.vimage( getImage( this.cardType.image ), position, dimensions )
         //Text IDEALLY would print the card description contained on the card
         Canvas.text( color, x + margin, y + height - margin, width - margin * 2, "20px pixel" );
     }
