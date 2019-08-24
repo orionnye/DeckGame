@@ -13,8 +13,11 @@ export default class Game {
     hand = new Deck( 5, 145, 250, 90, 0 )
     discard = new Deck( 0, 600, 250, 1, 1 )
 
-    player = new Pawn( 100, 50, 175, 175, "red", 0 )
-    enemy = new Pawn( 500, 50, 150, 150, "blue", 5 )
+    player = new Pawn( 100, 50, 175, 175, "red" )
+    enemy = new Pawn( 500, 50, 150, 150, "blue", 3 )
+    // enemySprites = ["PawnChadwick2", "Archlizard", "BoneDragon"]
+    enemySprites = ["PawnChadwick2"]
+    win = false
 
     melter = new Melter( 325, 375 )
 
@@ -27,8 +30,9 @@ export default class Game {
         this.player.sprite = new Sprite( getImage( "PawnEgor" ) )
             .setSource( { x: 0, y: 0, w: 69, h: 69 } )
             .setDimensions( this.player.width, this.player.height )
+        this.player.main = true
 
-        this.enemy.sprite = new Sprite( getImage( "PawnChadwick2" ) )
+        this.enemy.sprite = new Sprite( getImage( this.enemySprites[0] ) )
             .setSource( { x: 0, y: 0, w: 60, h: 64 } )
             .setDimensions( this.enemy.width * 0.8, this.enemy.height * 0.8 )
     }
@@ -45,29 +49,34 @@ export default class Game {
     }
 
     endTurn() {
-        let { enemy, player, melter, deck } = this
+        let { enemy, enemySprites, enemyCount, win, player, melter, deck } = this
 
-        if ( enemy.health > 0 ) {
+        if (enemy.health > 0) {
             player.health -= enemy.damage
             enemy.health += enemy.heal
             enemy.offset.x = -60
             player.offset.x = -20
-        } else {
+        } else
             this.enemyCount += 1
-            enemy.heal = this.enemyCount
-            enemy.damage = this.enemyCount
-            enemy.health = 3 * this.enemyCount
-            enemy.sprite = new Sprite( getImage( "BoneDragon" ) )
-            .setSource( { x: 0, y: 0, w: 60, h: 64 } )
-            .setDimensions( this.enemy.width * 0.8, this.enemy.height * 0.8 )
-        }
-
+        if (enemyCount >= enemySprites.length && this.enemy.health <= 0)
+            this.win = true
+        else if (!win && this.enemy.health <= 0)
+            this.newEncounter()
         this.refillHand()
 
         deck.cards.push( melter.product )
         // console.log( melter.product )
         melter.base = new Card( melter.position, "grey" )
         melter.colors = []
+    }
+    newEncounter() {
+        let {enemyCount, enemy, enemySprites} = this
+        enemy.heal = enemyCount + 1
+        enemy.damage = enemyCount + 1
+        enemy.health = 3 * enemyCount
+        enemy.sprite = new Sprite( getImage( enemySprites[enemyCount] ) )
+        .setSource( { x: 0, y: 0, w: 60, h: 64 } )
+        .setDimensions( enemy.width * 0.8, enemy.height * 0.8 )
     }
 
     refillHand() {
@@ -109,7 +118,7 @@ export default class Game {
     }
 
     render() {
-        let { deck, hand, discard } = this
+        let { deck, enemyCount, hand, discard } = this
 
         Canvas.resize( 700, 500 )
         Canvas.context.imageSmoothingEnabled = false
@@ -122,7 +131,7 @@ export default class Game {
         Canvas.image( getImage( "BackGroundMid" ), 0, 0, Canvas.canvas.clientWidth, backgroundY )
         //Level Count
         Canvas.fillStyle( "rgb(255, 0, 0)")
-        Canvas.text( "level" + this.enemyCount, Canvas.canvas.clientWidth / 2 - 45, 30, 100, "40px pixel" );
+        Canvas.text( "level" + enemyCount, Canvas.canvas.clientWidth / 2 - 45, 30, 100, "40px pixel" );
         
         this.melter.draw()
         
@@ -138,6 +147,13 @@ export default class Game {
             let deathMessageX = Canvas.canvas.clientWidth / 2 - deathMessageWidth / 2
             let deathMessageY = Canvas.canvas.clientHeight / 2 - 30
             Canvas.text( "You  Died  On  Level " + this.enemyCount, deathMessageX, deathMessageY, deathMessageWidth, "250px pixel" );
+        }
+        if (this.win) {
+            Canvas.fillStyle( "rgb(0, 0, 100)")
+            let winMessageWidth = 700
+            let winMessageX = Canvas.canvas.clientWidth / 2 - winMessageWidth / 2
+            let winMessageY = Canvas.canvas.clientHeight / 2
+            Canvas.text( "You Win", winMessageX, winMessageY, winMessageWidth, "400px pixel" );
         }
     }
 }

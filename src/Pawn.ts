@@ -9,6 +9,7 @@ export default class Pawn extends GameObject {
     health: number
     damage: number
     heal: number
+    main: boolean
 
     constructor( x, y, width, height, color = "red", health = 10 ) {
         super( vector( x, y ), width, height )
@@ -18,6 +19,7 @@ export default class Pawn extends GameObject {
         this.sprite = null
         this.damage = 1
         this.heal = 1
+        this.main = false
     }
 
     updateToFixed() {
