@@ -15,8 +15,7 @@ export default class Game {
 
     player = new Pawn( 100, 50, 175, 175, "red" )
     enemy = new Pawn( 500, 50, 150, 150, "blue", 3 )
-    // enemySprites = ["PawnChadwick2", "Archlizard", "BoneDragon"]
-    enemySprites = ["PawnChadwick2"]
+    enemySprites = ["PawnChadwick2", "Archlizard", "BoneDragon"]
     win = false
 
     melter = new Melter( 325, 375 )
