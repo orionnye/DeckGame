@@ -1,21 +1,27 @@
 import Pawn from "./Pawn";
 
+type ApplyFunction = ( pawn: Pawn ) => void
 export default class CardType {
 
-    image: string
+    name!: string
+    imageName: string
     damage: number = 0
-    custom?: (pawn: Pawn) => void
+    onApply?: ApplyFunction
 
-    constructor(image, damage = 0, custom?) {
-        this.image = image
+    constructor( { imageName = "", damage = 0, onApply = pawn => { } } ) {
+        this.imageName = imageName
         this.damage = damage
-        this.custom = custom
+        this.onApply = onApply
     }
     apply( pawn: Pawn ) {
-        if (this.custom != null) {
-            this.custom(pawn)
+        if ( this.onApply != null ) {
+            this.onApply( pawn )
         }
         pawn.health -= this.damage
     }
-    
+
+    get image() {
+        return "Card" + ( this.imageName || this.name )
+    }
+
 }

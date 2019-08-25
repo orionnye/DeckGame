@@ -1,14 +1,22 @@
 import CardType from "./CardType";
+import CardTypes from "./CardTypes";
 
-
-export default {
-    red : new CardType("CardATK1", 1),
-    redred : new CardType("CardATK2", 2),
-    blue : new CardType("CardHP1", -1),
-    blueblue : new CardType("CardHP1", -2),
-    grey : new CardType("CardVolatile", 0, (pawn) => {
-        //random Efect heal or damage
-        let damage = (Math.random() > 0.5) ? 2 : -2
-        pawn.health -= damage
-    }),
+class CookBook {
+    static recipes: { [ name: string ]: CardType } = {}
+    static getKey( ingredients: CardType[] ) {
+        return ingredients.map( c => c.name ).join( ", " )
+    }
+    static addRecipe( product: CardType, ingredients: CardType[] ) {
+        let key = CookBook.getKey( ingredients )
+        CookBook.recipes[ key ] = product
+    }
+    static getProduct( ingredients: CardType[] ) {
+        let key = CookBook.getKey( ingredients )
+        return CookBook.recipes[ key ] || CardTypes.Volatile
+    }
 }
+
+CookBook.addRecipe( CardTypes.Attack2, [ CardTypes.Attack1, CardTypes.Attack1 ] )
+CookBook.addRecipe( CardTypes.Heal2, [ CardTypes.Heal1, CardTypes.Heal1 ] )
+
+export default CookBook

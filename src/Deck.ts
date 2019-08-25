@@ -2,6 +2,7 @@ import Vector, { vector } from "./common/Vector";
 import Card from "./Card";
 import Canvas from "./common/Canvas";
 import GameObject from "./GameObject";
+import CardTypes from "./CardTypes";
 
 export default class Deck extends GameObject {
     spread: Vector
@@ -14,9 +15,9 @@ export default class Deck extends GameObject {
         for ( let i = 0; i < count; i++ ) {
             let deckPos = vector( x + spreadX * i, y + spreadY * i )
             // let rainbow = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"]
-            let rainbow = [ "red", "blue" ]
-            let randColor = rainbow[ Math.floor( Math.random() * rainbow.length ) ]
-            let card = new Card( deckPos, randColor )
+            let types = [ CardTypes.Attack1, CardTypes.Heal1 ]
+            let type = types[ Math.floor( Math.random() * types.length ) ]
+            let card = new Card( deckPos, type )
             cards.push( card )
         }
         this.cards = cards
@@ -74,7 +75,7 @@ export default class Deck extends GameObject {
             if ( stack )
                 card.draw()
             else
-                card.draw( card.color )
+                card.draw()
         }
         if ( stack && this.length >= 0 ) {
             let lastCard = this.cards[ this.length - 1 ]

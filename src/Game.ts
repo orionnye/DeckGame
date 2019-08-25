@@ -6,6 +6,7 @@ import { getImage } from "./common/common";
 import Card from "./Card";
 import Melter from "./Melter";
 import Sprite from "./Sprite";
+import CardTypes from "./CardTypes";
 
 export default class Game {
     enemyCount = 1
@@ -15,7 +16,7 @@ export default class Game {
 
     player = new Pawn( 100, 50, 175, 175, "red" )
     enemy = new Pawn( 500, 50, 150, 150, "blue", 3 )
-    enemySprites = ["PawnChadwick2", "Archlizard", "BoneDragon"]
+    enemySprites = [ "PawnChadwick2", "Archlizard", "BoneDragon" ]
     win = false
 
     melter = new Melter( 325, 375 )
@@ -31,7 +32,7 @@ export default class Game {
             .setDimensions( this.player.width, this.player.height )
         this.player.main = true
 
-        this.enemy.sprite = new Sprite( getImage( this.enemySprites[0] ) )
+        this.enemy.sprite = new Sprite( getImage( this.enemySprites[ 0 ] ) )
             .setSource( { x: 0, y: 0, w: 60, h: 64 } )
             .setDimensions( this.enemy.width * 0.8, this.enemy.height * 0.8 )
     }
@@ -50,32 +51,33 @@ export default class Game {
     endTurn() {
         let { enemy, enemySprites, enemyCount, win, player, melter, deck } = this
 
-        if (enemy.health > 0) {
+        if ( enemy.health > 0 ) {
             player.health -= enemy.damage
             enemy.health += enemy.heal
             enemy.offset.x = -60
             player.offset.x = -20
         } else
             this.enemyCount += 1
-        if (enemyCount >= enemySprites.length && this.enemy.health <= 0)
+        if ( enemyCount >= enemySprites.length && this.enemy.health <= 0 )
             this.win = true
-        else if (!win && this.enemy.health <= 0)
+        else if ( !win && this.enemy.health <= 0 )
             this.newEncounter()
         this.refillHand()
 
-        deck.cards.push( melter.product )
-        // console.log( melter.product )
-        melter.base = new Card( melter.position, "grey" )
-        melter.colors = []
+        let product = melter.product
+        console.log( "Crafted " + product.type.name )
+        deck.cards.push( product )
+        melter.base = new Card( melter.position, CardTypes.Volatile )
+        melter.ingredients = []
     }
     newEncounter() {
-        let {enemyCount, enemy, enemySprites} = this
+        let { enemyCount, enemy, enemySprites } = this
         enemy.heal = enemyCount + 1
         enemy.damage = enemyCount + 1
         enemy.health = 3 * enemyCount
-        enemy.sprite = new Sprite( getImage( enemySprites[enemyCount] ) )
-        .setSource( { x: 0, y: 0, w: 60, h: 64 } )
-        .setDimensions( enemy.width * 0.8, enemy.height * 0.8 )
+        enemy.sprite = new Sprite( getImage( enemySprites[ enemyCount ] ) )
+            .setSource( { x: 0, y: 0, w: 60, h: 64 } )
+            .setDimensions( enemy.width * 0.8, enemy.height * 0.8 )
     }
 
     refillHand() {
@@ -122,33 +124,36 @@ export default class Game {
         Canvas.resize( 700, 500 )
         Canvas.context.imageSmoothingEnabled = false
         Canvas.background( "rgb(30, 20, 20)" )
+
         let backgroundY = 150
         Canvas.rect( 0, backgroundY, Canvas.canvas.clientWidth, Canvas.canvas.clientHeight )
-        Canvas.fillStyle( "rgb(100, 100, 100" )
-        Canvas.fill()
+            .fillStyle( "rgb(100, 100, 100" )
+            .fill()
         Canvas.image( getImage( "Ground" ), 0, backgroundY - 5, Canvas.canvas.clientWidth, 200 )
         Canvas.image( getImage( "BackGroundMid" ), 0, 0, Canvas.canvas.clientWidth, backgroundY )
+
         //Level Count
-        Canvas.fillStyle( "rgb(255, 0, 0)")
-        Canvas.text( "level" + enemyCount, Canvas.canvas.clientWidth / 2 - 45, 30, 100, "40px pixel" );
-        
+        Canvas.fillStyle( "rgb(255, 0, 0)" )
+            .text( "level" + enemyCount, Canvas.canvas.clientWidth / 2 - 45, 30, 100, "40px pixel" );
+
         this.melter.draw()
-        
+
         for ( let pawn of this.pawns )
             pawn.draw()
-        
+
         deck.draw()
         discard.draw()
         hand.draw( false )
-        if (this.player.health <= 0 ) {
-            Canvas.fillStyle( "rgb(100, 0, 0)")
+
+        if ( this.player.health <= 0 ) {
+            Canvas.fillStyle( "rgb(100, 0, 0)" )
             let deathMessageWidth = 700
             let deathMessageX = Canvas.canvas.clientWidth / 2 - deathMessageWidth / 2
             let deathMessageY = Canvas.canvas.clientHeight / 2 - 30
             Canvas.text( "You  Died  On  Level " + this.enemyCount, deathMessageX, deathMessageY, deathMessageWidth, "250px pixel" );
         }
-        if (this.win) {
-            Canvas.fillStyle( "rgb(0, 0, 100)")
+        if ( this.win ) {
+            Canvas.fillStyle( "rgb(0, 0, 100)" )
             let winMessageWidth = 700
             let winMessageX = Canvas.canvas.clientWidth / 2 - winMessageWidth / 2
             let winMessageY = Canvas.canvas.clientHeight / 2

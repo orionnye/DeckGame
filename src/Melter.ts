@@ -2,33 +2,28 @@ import Vector, { vector } from "./common/Vector";
 import Card from "./Card";
 import Canvas from "./common/Canvas";
 import GameObject from "./GameObject";
+import CardType from "./CardType";
+import CardTypes from "./CardTypes";
+import CookBook from "./CookBook";
 
 export default class Melter extends GameObject {
-    colors: string[]
+    ingredients: CardType[]
     base: Card
 
     constructor( x: number, y: number ) {
-        // super( vector( x, y ), 200, 130 )
         super( vector( x, y ), 69, 100 )
-        this.colors = []
-        this.base = new Card( this.position, "grey" )
+        this.ingredients = []
+        this.base = new Card( this.position, CardTypes.Volatile )
     }
 
     get product() {
-        if ( this.colors.length == 0 ) {
-            return this.base
-        }
-        let endColor = ""
-        this.colors.forEach( color => {
-            let compColor = endColor.toString() + color.toString()
-            endColor = compColor
-        } )
-        let concoction = new Card( this.base.position, endColor )
+        let type = CookBook.getProduct( this.ingredients )
+        let concoction = new Card( this.base.position, type )
         return concoction
     }
 
     melt( card: Card ) {
-        this.colors.push( card.color )
+        this.ingredients.push( card.type )
     }
 
     draw() {

@@ -11,29 +11,21 @@ import CardType from "./CardType";
 
 export default class Card extends GameObject {
 
-    color: string
+    type: CardType
     grabbed: boolean
 
-    constructor( position: Vector, color = "red" ) {
+    constructor( position: Vector, type: CardType ) {
         super( position, 69, 100 )
         this.position = position.copy
-        this.color = color
+        this.type = type
         this.grabbed = false
-    }
-
-    get cardType() {
-        let type = CookBook[this.color] as CardType
-        if (type == null) {
-            throw new Error(`card not found: ${this.color}`)
-        }
-        return type
     }
 
     apply( pawn: Pawn, hand: Deck, discard: Deck ) {
-        
-        this.cardType.apply(pawn)
+
+        this.type.apply( pawn )
         this.grabbed = false
-        
+
         pawn.offset.y = -30
 
         hand.remove( this )
@@ -68,20 +60,19 @@ export default class Card extends GameObject {
                 this.apply( pawn, hand, discard )
 
         if ( melter.overlaps( this ) ) {
-            console.log( "MELTED in", this.color )
+            console.log( "MELTED in", this.type.name )
             melter.melt( this )
             hand.remove( this )
-            this.color = "grey"
         }
     }
 
-    draw( color = "white" ) {
+    draw() {
         let { position, dimensions, width, height } = this
         let { x, y } = position
         let margin = width / 12
 
-        Canvas.vimage( getImage( this.cardType.image ), position, dimensions )
+        Canvas.vimage( getImage( this.type.image ), position, dimensions )
         //Text IDEALLY would print the card description contained on the card
-        Canvas.text( color, x + margin, y + height - margin, width - margin * 2, "20px pixel" );
+        Canvas.text( this.type.name, x + margin, y + height - margin, width - margin * 2, "20px pixel" );
     }
 }
