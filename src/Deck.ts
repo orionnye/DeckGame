@@ -14,8 +14,8 @@ export default class Deck extends GameObject {
         let cards: Card[] = []
         for ( let i = 0; i < count; i++ ) {
             let deckPos = vector( x + spreadX * i, y + spreadY * i )
-            // let rainbow = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"]
             let types = [ CardTypes.Attack1, CardTypes.Heal1 ]
+            // let types = [ CardTypes.Attack2 ]
             let type = types[ Math.floor( Math.random() * types.length ) ]
             let card = new Card( deckPos, type )
             cards.push( card )

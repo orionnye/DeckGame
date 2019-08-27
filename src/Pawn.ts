@@ -71,12 +71,11 @@ export default class Pawn extends GameObject {
             healthWidth, healthHeight
         ).fillStyle( "red" ).fill().stroke()
 
-        Canvas.fillStyle( "black" )
+        Canvas.fillStyle( "rgb(255, 255, 255)" )
             .text(
                 this.health.toString(),
                 healthNumPos.x, healthNumPos.y,
                 25, "25px pixel"
             )
     }
-
 }

@@ -9,14 +9,15 @@ import Sprite from "./Sprite";
 import CardTypes from "./CardTypes";
 
 export default class Game {
-    enemyCount = 1
+    enemyCount = 0
     deck = new Deck( 20, 30, 250, -1, 1 )
     hand = new Deck( 5, 145, 250, 90, 0 )
     discard = new Deck( 0, 600, 250, 1, 1 )
 
     player = new Pawn( 100, 50, 175, 175, "red" )
-    enemy = new Pawn( 500, 50, 150, 150, "blue", 3 )
+    enemy = new Pawn( 500, 50, 150, 150, "blue", 2 )
     enemySprites = [ "PawnChadwick2", "Archlizard", "BoneDragon" ]
+
     win = false
 
     melter = new Melter( 325, 375 )
@@ -50,18 +51,22 @@ export default class Game {
 
     endTurn() {
         let { enemy, enemySprites, enemyCount, win, player, melter, deck } = this
-
+        player.health += player.heal
+        //if enemy health is alive
         if ( enemy.health > 0 ) {
             player.health -= enemy.damage
             enemy.health += enemy.heal
             enemy.offset.x = -60
             player.offset.x = -20
-        } else
+        } else if (enemyCount !== enemySprites.length - 1) {
+            //if enemy is dead and !the last enemy
             this.enemyCount += 1
-        if ( enemyCount >= enemySprites.length && this.enemy.health <= 0 )
-            this.win = true
-        else if ( !win && this.enemy.health <= 0 )
             this.newEncounter()
+        }
+        if (enemy.health <= 0 && enemyCount == enemySprites.length - 1)
+            this.win = true
+
+
         this.refillHand()
 
         let product = melter.product
@@ -74,7 +79,7 @@ export default class Game {
         let { enemyCount, enemy, enemySprites } = this
         enemy.heal = enemyCount + 1
         enemy.damage = enemyCount + 1
-        enemy.health = 3 * enemyCount
+        enemy.health =  (enemyCount + 2) * 3
         enemy.sprite = new Sprite( getImage( enemySprites[ enemyCount ] ) )
             .setSource( { x: 0, y: 0, w: 60, h: 64 } )
             .setDimensions( enemy.width * 0.8, enemy.height * 0.8 )
@@ -115,7 +120,6 @@ export default class Game {
         if ( !buttons.Mouse0 && hand.length > 0 )
             for ( let card of hand.cards )
                 card.grabbed = false
-
     }
 
     render() {
@@ -123,7 +127,7 @@ export default class Game {
 
         Canvas.resize( 700, 500 )
         Canvas.context.imageSmoothingEnabled = false
-        Canvas.background( "rgb(30, 20, 20)" )
+        Canvas.background( "rgb(0, 0, 255)" )
 
         let backgroundY = 150
         Canvas.rect( 0, backgroundY, Canvas.canvas.clientWidth, Canvas.canvas.clientHeight )
