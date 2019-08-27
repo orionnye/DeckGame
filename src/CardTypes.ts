@@ -5,6 +5,7 @@ const CardTypes = {
     Attack2: new CardType( { damage: 3 } ),
     Heal1: new CardType( { damage: -1 } ),
     Heal2: new CardType( { imageName: "Heal1", damage: -3 } ),
+    Karma: new CardType( { imageName: "Karma", damage: -3 } ),
     Volatile: new CardType( {
         damage: 0,
         onApply: pawn => {
@@ -13,7 +14,6 @@ const CardTypes = {
             pawn.health -= damage
         }
     } ),
-    Karma: new CardType( { imageName: "Karma", damage: -3 } ),
     Poison: new CardType( {
         imageName: "Poison",
         damage: -1,
