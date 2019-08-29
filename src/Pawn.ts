@@ -7,6 +7,7 @@ export default class Pawn extends GameObject {
     offset: Vector
     color: string
     health: number
+    maxHealth: number
     damage: number
     heal: number
     main: boolean
@@ -16,11 +17,13 @@ export default class Pawn extends GameObject {
         this.offset = vector( 0, 0 )
         this.color = color
         this.health = health
+        this.maxHealth = health
         this.sprite = null
-        this.damage = 1
-        this.heal = 1
+        this.damage = 3
+        this.heal = 2
         this.main = false
     }
+    //ADD ENEMY ACTIONS AND ACTIONLIST TO SPICE THINGS UP A BIT
 
     updateToFixed() {
         if ( this.offset.length > 0 ) {
@@ -62,16 +65,20 @@ export default class Pawn extends GameObject {
 
     drawHealthBar() {
         let healthHeight = 20
-        let healthWidth = this.health * 10
+        let healthChunk = this.width / this.maxHealth
+        let healthWidth = this.health * healthChunk
         let healthPos = this.position.addY( this.height + 5 )
         let healthNumPos = healthPos.addXY( healthWidth / 3, healthHeight - 2 )
 
         Canvas.rect(
             healthPos.x, healthPos.y,
+            this.width, healthHeight
+        ).fillStyle( "black" ).fill().stroke()
+        Canvas.rect(
+            healthPos.x, healthPos.y,
             healthWidth, healthHeight
         ).fillStyle( "red" ).fill().stroke()
-
-        Canvas.fillStyle( "rgb(255, 255, 255)" )
+        Canvas.fillStyle("white")
             .text(
                 this.health.toString(),
                 healthNumPos.x, healthNumPos.y,

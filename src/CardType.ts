@@ -8,7 +8,7 @@ export default class CardType {
     damage: number = 0
     onApply?: ApplyFunction
 
-    constructor( { imageName = "", damage = 0, onApply = pawn => { } } ) {
+    constructor( { imageName = "Blank", damage = 0, onApply = pawn => { } } ) {
         this.imageName = imageName
         this.damage = damage
         this.onApply = onApply

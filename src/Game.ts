@@ -44,14 +44,15 @@ export default class Game {
 
     keyup( e: KeyboardEvent ) {
         let { deck, hand } = this
-        if ( e.key == "Enter" )
+        if ( e.key == "Enter" ) {
             if ( hand.length == 0 && deck.length > 0 )
                 this.endTurn()
+        }
     }
 
     endTurn() {
         let { enemy, enemySprites, enemyCount, win, player, melter, deck } = this
-        player.health += player.heal
+        
         //if enemy health is alive
         if ( enemy.health > 0 ) {
             player.health -= enemy.damage
@@ -65,6 +66,9 @@ export default class Game {
         }
         if (enemy.health <= 0 && enemyCount == enemySprites.length - 1)
             this.win = true
+        
+        //Player Passive Stats
+        player.health += player.heal
 
 
         this.refillHand()
@@ -77,9 +81,11 @@ export default class Game {
     }
     newEncounter() {
         let { enemyCount, enemy, enemySprites } = this
+        let newHealth = (enemyCount + 2) * 3
         enemy.heal = enemyCount + 1
-        enemy.damage = enemyCount + 1
-        enemy.health =  (enemyCount + 2) * 3
+        enemy.damage = enemyCount * 3
+        enemy.health =  newHealth
+        enemy.maxHealth = newHealth
         enemy.sprite = new Sprite( getImage( enemySprites[ enemyCount ] ) )
             .setSource( { x: 0, y: 0, w: 60, h: 64 } )
             .setDimensions( enemy.width * 0.8, enemy.height * 0.8 )
@@ -107,6 +113,14 @@ export default class Game {
 
         if ( player.offset.length > 1 )
             player.updateToFixed()
+        if (enemy.health > enemy.maxHealth)
+            enemy.health = enemy.maxHealth
+        if (enemy.health < 0)
+            enemy.health = 0
+        if (player.health > player.maxHealth)
+            player.health = player.maxHealth
+        if (player.health < 0)
+            player.health = 0
 
         enemy.updateToFixed()
 

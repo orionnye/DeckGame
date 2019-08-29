@@ -3,6 +3,7 @@ import Card from "./Card";
 import Canvas from "./common/Canvas";
 import GameObject from "./GameObject";
 import CardTypes from "./CardTypes";
+import { getImage } from "./common/common";
 
 export default class Deck extends GameObject {
     spread: Vector
@@ -72,8 +73,10 @@ export default class Deck extends GameObject {
 
     draw( stack: boolean = true ) {
         for ( let card of this.cards ) {
-            if ( stack )
-                card.draw()
+            if ( stack ) {
+                let dimensions = new Vector(card.width, card.height)
+                Canvas.vimage( getImage("CardBlank"), card.position, dimensions )
+            }
             else
                 card.draw()
         }

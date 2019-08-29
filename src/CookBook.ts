@@ -20,10 +20,19 @@ class CookBook {
 }
 
 {
-    let { Attack1, Attack2, Heal1, Heal2, Volatile } = CardTypes
+    let { Attack1, Attack2, Attack3, Molotov, Poison, Heal1, Heal2, Karma, Volatile } = CardTypes
     let add = CookBook.addRecipe
+    //Attack
+    add( Attack1, [ Volatile, Volatile ] )
     add( Attack2, [ Attack1, Attack1 ] )
+    add( Attack3, [ Attack1, Attack1, Attack1 ] )
+    add( Poison, [ Volatile, Heal1 ] )
+    add( Molotov, [ Poison, Attack1 ] )
+    //Heals
+    add( Heal1, [ Volatile ] )
     add( Heal2, [ Heal1, Heal1 ] )
+    add( Karma, [ Heal1, Heal1, Heal1 ] )
+    //MISC
     add( Volatile, [ Heal1, Attack1 ] )
 }
 
