@@ -1,7 +1,6 @@
 import Vector, { vector } from "./common/Vector";
 import Sprite from "./Sprite";
 import { boxContains, boxOverlaps } from "./common/BoundingBoxUtils";
-import Game from "./Game";
 export default class GameObject {
 
     position: Vector = vector( 0, 0 )

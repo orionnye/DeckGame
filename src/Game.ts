@@ -2,11 +2,12 @@ import Canvas from "./common/Canvas";
 import Deck from "./Deck";
 import Pawn from "./Pawn";
 import Input from "./common/Input";
-import { getImage } from "./common/common";
 import Card from "./Card";
 import Melter from "./Melter";
 import Sprite from "./Sprite";
 import CardTypes from "./CardTypes";
+import { playAudio, audioInstance } from "./common/audio";
+import { getImage, getAudio } from "./common/assets";
 
 export default class Game {
     enemyCount = 0
@@ -24,6 +25,11 @@ export default class Game {
 
     handCap = 5
     grabbing = false
+
+    ambience = audioInstance(
+        getAudio( "DungeonAmbience" ),
+        { volume: 0.25 }
+    )
 
     constructor() {
         window.addEventListener( "keyup", e => this.keyup( e ) )
@@ -52,21 +58,21 @@ export default class Game {
 
     endTurn() {
         let { enemy, enemySprites, enemyCount, win, player, melter, deck } = this
-        
+
         //if enemy health is alive
         if ( enemy.health > 0 ) {
             player.health -= enemy.damage
             enemy.health += enemy.heal
             enemy.offset.x = -60
             player.offset.x = -20
-        } else if (enemyCount !== enemySprites.length - 1) {
+        } else if ( enemyCount !== enemySprites.length - 1 ) {
             //if enemy is dead and !the last enemy
             this.enemyCount += 1
             this.newEncounter()
         }
-        if (enemy.health <= 0 && enemyCount == enemySprites.length - 1)
+        if ( enemy.health <= 0 && enemyCount == enemySprites.length - 1 )
             this.win = true
-        
+
         //Player Passive Stats
         player.health += player.heal
 
@@ -79,12 +85,13 @@ export default class Game {
         melter.base = new Card( melter.position, CardTypes.Volatile )
         melter.ingredients = []
     }
+
     newEncounter() {
         let { enemyCount, enemy, enemySprites } = this
-        let newHealth = (enemyCount + 2) * 3
+        let newHealth = ( enemyCount + 2 ) * 3
         enemy.heal = enemyCount + 1
         enemy.damage = enemyCount * 3
-        enemy.health =  newHealth
+        enemy.health = newHealth
         enemy.maxHealth = newHealth
         enemy.sprite = new Sprite( getImage( enemySprites[ enemyCount ] ) )
             .setSource( { x: 0, y: 0, w: 60, h: 64 } )
@@ -113,13 +120,13 @@ export default class Game {
 
         if ( player.offset.length > 1 )
             player.updateToFixed()
-        if (enemy.health > enemy.maxHealth)
+        if ( enemy.health > enemy.maxHealth )
             enemy.health = enemy.maxHealth
-        if (enemy.health < 0)
+        if ( enemy.health < 0 )
             enemy.health = 0
-        if (player.health > player.maxHealth)
+        if ( player.health > player.maxHealth )
             player.health = player.maxHealth
-        if (player.health < 0)
+        if ( player.health < 0 )
             player.health = 0
 
         enemy.updateToFixed()
@@ -134,6 +141,9 @@ export default class Game {
         if ( !buttons.Mouse0 && hand.length > 0 )
             for ( let card of hand.cards )
                 card.grabbed = false
+
+        if ( this.ambience.paused )
+            playAudio( this.ambience )
     }
 
     render() {

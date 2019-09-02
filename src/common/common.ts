@@ -1,5 +1,3 @@
-import IBoundingBox from "./IBoundingBox";
-
 export function modulus( n, m ) {
     return ( ( n % m ) + m ) % m
 }
@@ -14,14 +12,15 @@ export function forRectInclusive( x0, y0, x1, y1, action ) {
     forRect( x0, y0, x1 + 1, y1 + 1, action )
 }
 
-const cache = {}
-export function getImage( name: string, extension = "png" ) {
-    if ( cache[ name ] )
-        return cache[ name ]
-    let img = new Image()
-    img.src = "/assets/" + name + "." + extension
-    cache[ name ] = img
-    return img
+export function memoize( func: ( any ) => any ) {
+    let cache = {}
+    return ( arg: any ) => {
+        if ( cache[ arg ] )
+            return cache[ arg ]
+        let value = func( arg )
+        cache[ arg ] = value
+        return value
+    }
 }
 
 export function contains( a, b, x ) {
