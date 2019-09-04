@@ -4,12 +4,12 @@ import Card from "./Card";
 import Melter from "./Melter";
 import CardTypes from "./CardTypes";
 
-import * as g from "geode"
-import Input from "geode/Input";
-import { audioInstance, getAudio, getImage, playAudio } from "geode";
-import Sprite from "geode/Sprite";
-import Canvas from "geode/Canvas";
-import IGame from "geode/IGame";
+import * as geode from "geode/lib"
+import Input from "geode/lib/Input";
+import { audioInstance, getAudio, getImage, playAudio } from "geode/lib";
+import Sprite from "geode/lib/Sprite";
+import Canvas from "geode/lib/Canvas";
+import IGame from "geode/lib/IGame";
 
 export default class Game implements IGame {
     enemyCount = 0
@@ -32,6 +32,7 @@ export default class Game implements IGame {
         getAudio( "DungeonAmbience" ),
         { volume: 0.25 }
     )
+
     tunes = audioInstance(
         getAudio( "DungeonTunes" ),
         { volume: 0.45 }
@@ -73,7 +74,7 @@ export default class Game implements IGame {
         if ( enemy.health > 0 ) {
             player.health -= enemy.damage
             enemy.health += enemy.heal
-            if (enemy.damage == 0) {
+            if ( enemy.damage == 0 ) {
                 enemy.offset.x = -60
                 player.offset.x = -20
             }
@@ -143,7 +144,7 @@ export default class Game implements IGame {
 
         //BackgroundEffect
         let colorCap = 100
-        if (this.backgroundBlue > colorCap) {
+        if ( this.backgroundBlue > colorCap ) {
             this.backgroundBlue -= 10
             this.backgroundRed -= 9
         }
@@ -170,13 +171,13 @@ export default class Game implements IGame {
         if ( this.tunes.paused )
             playAudio( this.tunes )
     }
-    
+
     render() {
         let { deck, enemyCount, hand, discard } = this
-        
+
         Canvas.resize( 700, 500 )
         Canvas.context.imageSmoothingEnabled = false
-        Canvas.background(`rgb(${this.backgroundRed}, ${this.backgroundGreen}, ${this.backgroundBlue})`)
+        Canvas.background( `rgb(${this.backgroundRed}, ${this.backgroundGreen}, ${this.backgroundBlue})` )
 
         let backgroundY = 150
         Canvas.rect( 0, backgroundY, Canvas.canvas.clientWidth, Canvas.canvas.clientHeight )
@@ -189,10 +190,10 @@ export default class Game implements IGame {
         Canvas.fillStyle( "rgb(255, 0, 0)" )
             .text( "level" + enemyCount, Canvas.canvas.clientWidth / 2 - 45, 30, 100, "40px pixel" );
 
-            
+
         for ( let pawn of this.pawns )
             pawn.draw()
-            
+
         deck.draw()
         discard.draw()
         hand.draw( false )
