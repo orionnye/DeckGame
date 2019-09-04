@@ -1,4 +1,5 @@
 import Canvas from "./common/Canvas";
+import Vector from "./common/Vector";
 
 type ImageSource = {
     x: number,
@@ -29,6 +30,34 @@ export default class Sprite {
     setSource( source: ImageSource ) {
         this.source = source
         return this
+    }
+    changeFrame(newX: number, newY: number) {
+        let { source } = this
+        if ( source ) {
+            source.x = newX
+            source.y = newY
+        }
+        else
+            console.error("assign a image source before you change frames")
+    }
+
+    animate( frameDelay: number, frameCount: number ) {
+        let { source } = this
+        if ( source ) {
+            this.changeFrame(source.x + source.w, 0)
+            let newFrameCount = frameCount - 1
+            if (frameCount > 0) {
+                window.setTimeout(() => {
+                    this.animate(frameDelay, newFrameCount)
+                }, frameDelay)
+            } else {
+                this.changeFrame(0, 0)
+            }
+        }
+        else {
+            console.error("Must set source before animating")
+            return
+        }
     }
 
     draw( x = 0, y = 0, center = false ) {

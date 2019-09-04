@@ -15,7 +15,7 @@ export default class Game {
     hand = new Deck( 5, 145, 250, 90, 0 )
     discard = new Deck( 0, 600, 250, 1, 1 )
 
-    player = new Pawn( 100, 50, 175, 175, "red", 100 )
+    player = new Pawn( 100, 50, 208, 158, "red", 100 )
     enemy = new Pawn( 500, 50, 150, 150, "blue", 10 )
     enemySprites = [ "PawnChadwick2", "Archlizard", "BoneDragon" ]
 
@@ -28,11 +28,13 @@ export default class Game {
 
     ambience = audioInstance(
         getAudio( "DungeonAmbience" ),
-        { volume: 0.25 }
+        { volume: 0.0 }
+        //TEMPEROARY FIX
     )
     tunes = audioInstance(
         getAudio( "DungeonTunes" ),
-        { volume: 0.45 }
+        { volume: 0.0 }
+        //TEMPEROARY FIX
     )
 
     backgroundRed = 0
@@ -43,7 +45,7 @@ export default class Game {
         window.addEventListener( "keyup", e => this.keyup( e ) )
 
         this.player.sprite = new Sprite( getImage( "PawnEgor" ) )
-            .setSource( { x: 0, y: 0, w: 69, h: 69 } )
+            .setSource( { x: 0, y: 0, w: 94, h: 69 } )
             .setDimensions( this.player.width, this.player.height )
         this.player.main = true
 
@@ -85,6 +87,8 @@ export default class Game {
 
         //Player Passive Stats
         player.health += player.heal
+        player.sprite!.animate(100, 9)
+        // player.sprite!.changeFrame(94 * 9, 0)
 
 
         this.refillHand()
