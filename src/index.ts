@@ -1,13 +1,4 @@
 import Game from "./Game";
-import Canvas from "./common/Canvas";
+import gameLoop from "geode/gameLoop";
 
-let game = new Game()
-
-window.onload = () => {
-    Canvas.setup()
-    function loop() {
-        game.update()
-        requestAnimationFrame( loop )
-    }
-    loop()
-}
+gameLoop( new Game() )
