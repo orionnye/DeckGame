@@ -71,8 +71,10 @@ export default class Game {
         if ( enemy.health > 0 ) {
             player.health -= enemy.damage
             enemy.health += enemy.heal
-            enemy.offset.x = -60
-            player.offset.x = -20
+            if (enemy.damage == 0) {
+                enemy.offset.x = -60
+                player.offset.x = -20
+            }
         } else if ( enemyCount !== enemySprites.length - 1 ) {
             //if enemy is dead and !the last enemy
             this.enemyCount += 1
@@ -97,7 +99,7 @@ export default class Game {
     newEncounter() {
         let { enemyCount, enemy, enemySprites } = this
         let newHealth = ( enemyCount + 2 ) * 10
-        enemy.heal = enemyCount + 1
+        enemy.heal = enemyCount * 3
         enemy.damage = enemyCount * 10
         enemy.health = newHealth
         enemy.maxHealth = newHealth
