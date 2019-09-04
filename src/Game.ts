@@ -13,12 +13,12 @@ import IGame from "geode/IGame";
 
 export default class Game implements IGame {
     enemyCount = 0
-    deck = new Deck( 20, 30, 250, -1, 1 )
+    deck = new Deck( 10, 30, 250, -1, 1 )
     hand = new Deck( 5, 145, 250, 90, 0 )
     discard = new Deck( 0, 600, 250, 1, 1 )
 
-    player = new Pawn( 100, 50, 175, 175, "red" )
-    enemy = new Pawn( 500, 50, 150, 150, "blue", 2 )
+    player = new Pawn( 100, 50, 175, 175, "red", 100 )
+    enemy = new Pawn( 500, 50, 150, 150, "blue", 10 )
     enemySprites = [ "PawnChadwick2", "Archlizard", "BoneDragon" ]
 
     win = false
@@ -32,6 +32,14 @@ export default class Game implements IGame {
         getAudio( "DungeonAmbience" ),
         { volume: 0.25 }
     )
+    tunes = audioInstance(
+        getAudio( "DungeonTunes" ),
+        { volume: 0.45 }
+    )
+
+    backgroundRed = 0
+    backgroundGreen = 0
+    backgroundBlue = 255
 
     constructor() {
         window.addEventListener( "keyup", e => this.keyup( e ) )
@@ -65,8 +73,10 @@ export default class Game implements IGame {
         if ( enemy.health > 0 ) {
             player.health -= enemy.damage
             enemy.health += enemy.heal
-            enemy.offset.x = -60
-            player.offset.x = -20
+            if (enemy.damage == 0) {
+                enemy.offset.x = -60
+                player.offset.x = -20
+            }
         } else if ( enemyCount !== enemySprites.length - 1 ) {
             //if enemy is dead and !the last enemy
             this.enemyCount += 1
@@ -90,9 +100,9 @@ export default class Game implements IGame {
 
     newEncounter() {
         let { enemyCount, enemy, enemySprites } = this
-        let newHealth = ( enemyCount + 2 ) * 3
-        enemy.heal = enemyCount + 1
-        enemy.damage = enemyCount * 3
+        let newHealth = ( enemyCount + 2 ) * 10
+        enemy.heal = enemyCount * 3
+        enemy.damage = enemyCount * 10
         enemy.health = newHealth
         enemy.maxHealth = newHealth
         enemy.sprite = new Sprite( getImage( enemySprites[ enemyCount ] ) )
@@ -131,6 +141,16 @@ export default class Game implements IGame {
         if ( player.health < 0 )
             player.health = 0
 
+        //BackgroundEffect
+        let colorCap = 100
+        if (this.backgroundBlue > colorCap) {
+            this.backgroundBlue -= 10
+            this.backgroundRed -= 9
+        }
+        else {
+            this.backgroundBlue += 0.1
+            this.backgroundRed += 0.1
+        }
         enemy.updateToFixed()
 
         hand.updateToFixed()
@@ -146,14 +166,17 @@ export default class Game implements IGame {
 
         if ( this.ambience.paused )
             playAudio( this.ambience )
-    }
 
+        if ( this.tunes.paused )
+            playAudio( this.tunes )
+    }
+    
     render() {
         let { deck, enemyCount, hand, discard } = this
-
+        
         Canvas.resize( 700, 500 )
         Canvas.context.imageSmoothingEnabled = false
-        Canvas.background( "rgb(0, 0, 255)" )
+        Canvas.background(`rgb(${this.backgroundRed}, ${this.backgroundGreen}, ${this.backgroundBlue})`)
 
         let backgroundY = 150
         Canvas.rect( 0, backgroundY, Canvas.canvas.clientWidth, Canvas.canvas.clientHeight )
@@ -166,14 +189,14 @@ export default class Game implements IGame {
         Canvas.fillStyle( "rgb(255, 0, 0)" )
             .text( "level" + enemyCount, Canvas.canvas.clientWidth / 2 - 45, 30, 100, "40px pixel" );
 
-        this.melter.draw()
-
+            
         for ( let pawn of this.pawns )
             pawn.draw()
-
+            
         deck.draw()
         discard.draw()
         hand.draw( false )
+        this.melter.draw()
 
         if ( this.player.health <= 0 ) {
             Canvas.fillStyle( "rgb(100, 0, 0)" )
