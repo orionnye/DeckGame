@@ -19,7 +19,7 @@ export default class Pawn extends GameObject {
         this.health = health
         this.maxHealth = health
         this.sprite = null
-        this.damage = 3
+        this.damage = 10
         this.heal = 2
         this.main = false
     }

@@ -1,8 +1,9 @@
 import CardType from "./CardType";
 
 const CardTypes = {
-    Attack1: new CardType( { imageName: "Attack1", damage: 1 } ),
-    Attack2: new CardType( { imageName: "Attack2", damage: 2 } ),
+    //Offensive
+    Attack1: new CardType( { imageName: "Attack", damage: 1 } ),
+    Attack2: new CardType( { imageName: "Attack", damage: 2 } ),
     Attack3: new CardType( { damage: 4 } ),
     Molotov: new CardType( {
         damage: 3,
@@ -16,13 +17,24 @@ const CardTypes = {
         onApply: pawn => {
             pawn.heal -= 1
     }} ),
-    Heal1: new CardType( { imageName: "Heal1", damage: -1 } ),
-    Heal2: new CardType( { imageName: "Heal1", damage: -2 } ),
+    Blood: new CardType( {
+        damage: -1,
+        onApply: pawn => {
+            pawn.damage += 1
+    } }),
+    //Defensive
+    Heal1: new CardType( { imageName: "Heal", damage: -1 } ),
+    Heal2: new CardType( { imageName: "Heal", damage: -2 } ),
     Karma: new CardType( {
         imageName: "Karma",
         damage: 1,
         onApply: pawn => {
             pawn.heal += 1
+    }} ),
+    Dread: new CardType( {
+        imageName: "Dread",
+        onApply: pawn => {
+            pawn.damage -= 1
     }} ),
     Volatile: new CardType( {
         imageName: "Volatile",

@@ -5,6 +5,8 @@ import GameObject from "./GameObject";
 import CardType from "./CardType";
 import CardTypes from "./CardTypes";
 import CookBook from "./CookBook";
+import Sprite from "./Sprite";
+import { getImage } from "./common/assets";
 
 export default class Melter extends GameObject {
     ingredients: CardType[]
@@ -14,6 +16,9 @@ export default class Melter extends GameObject {
         super( vector( x, y ), 69, 100 )
         this.ingredients = []
         this.base = new Card( this.position, CardTypes.Volatile )
+        this.sprite = new Sprite( getImage( "BrewStation" ) )
+        .setSource( { x: 0, y: 0, w: 100, h: 100 } )
+        .setDimensions( 200, 200 )
     }
 
     get product() {
@@ -27,10 +32,14 @@ export default class Melter extends GameObject {
     }
 
     draw() {
-        let margin = vector( 100, 30 )
-        Canvas.vrect( this.position.subtract( margin.half ), this.dimensions.add( margin ) )
-            .fillStyle( "black" ).fill()
-        Canvas.vrect( this.position, this.product.dimensions )
-            .fillStyle( "blue" ).fill()
+        let margin = vector( 32, 45 )
+        // Canvas.vrect( this.position.subtract( margin.half ), this.dimensions.add( margin ) )
+        //     .fillStyle( "black" ).fill()
+        // Canvas.vrect( this.position, this.product.dimensions )
+        //     .fillStyle( "blue" ).fill()
+        if ( this.sprite ) {
+            let { sprite, position, width, height } = this
+            let { x, y } = position
+            sprite.draw(x + margin.x, y + margin.y, true )
     }
 }
