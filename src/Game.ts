@@ -28,12 +28,12 @@ export default class Game {
 
     ambience = audioInstance(
         getAudio( "DungeonAmbience" ),
-        { volume: 0.0 }
+        { volume: 0.30 }
         //TEMPEROARY FIX
     )
     tunes = audioInstance(
         getAudio( "DungeonTunes" ),
-        { volume: 0.0 }
+        { volume: 0.35 }
         //TEMPEROARY FIX
     )
 
@@ -87,8 +87,7 @@ export default class Game {
 
         //Player Passive Stats
         player.health += player.heal
-        player.sprite!.animate(100, 9)
-        // player.sprite!.changeFrame(94 * 9, 0)
+        player.sprite!.animate(100, 1)
 
 
         this.refillHand()

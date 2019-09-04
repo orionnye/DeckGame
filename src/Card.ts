@@ -56,9 +56,14 @@ export default class Card extends GameObject {
 
     onDrop( game: Game ) {
         let { hand, discard, pawns, melter } = game
-        for ( let pawn of pawns )
-            if ( pawn.overlaps( this ) )
+        for ( let pawn of pawns ) {
+            if ( pawn.overlaps( this ) ) {
                 this.apply( pawn, hand, discard )
+                if (pawn !== game.player) {
+                    game.player.sprite!.animate(80, 9)
+                }
+            }
+        }
 
         if ( melter.overlaps( this ) ) {
             console.log( "Melted ", this.type.name )
