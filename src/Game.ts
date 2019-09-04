@@ -1,17 +1,15 @@
+import Canvas from "./common/Canvas";
 import Deck from "./Deck";
 import Pawn from "./Pawn";
+import Input from "./common/Input";
 import Card from "./Card";
 import Melter from "./Melter";
+import Sprite from "./Sprite";
 import CardTypes from "./CardTypes";
+import { playAudio, audioInstance } from "./common/audio";
+import { getImage, getAudio } from "./common/assets";
 
-import * as g from "geode"
-import Input from "geode/Input";
-import { audioInstance, getAudio, getImage, playAudio } from "geode";
-import Sprite from "geode/Sprite";
-import Canvas from "geode/Canvas";
-import IGame from "geode/IGame";
-
-export default class Game implements IGame {
+export default class Game {
     enemyCount = 0
     deck = new Deck( 10, 30, 250, -1, 1 )
     hand = new Deck( 5, 145, 250, 90, 0 )
