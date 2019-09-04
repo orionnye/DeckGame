@@ -2,11 +2,12 @@ import Card from "./Card";
 import CardType from "./CardType";
 import CardTypes from "./CardTypes";
 import CookBook from "./CookBook";
+import Sprite from "./Sprite";
+import { getImage } from "./common/assets";
 
 import GameObject from "geode/GameObject";
 import Canvas from "geode/Canvas";
-import { vector, getImage } from "geode";
-import Sprite from "geode/Sprite";
+import { vector } from "geode";
 
 export default class Melter extends GameObject {
     ingredients: CardType[]
@@ -17,8 +18,8 @@ export default class Melter extends GameObject {
         this.ingredients = []
         this.base = new Card( this.position, CardTypes.Volatile )
         this.sprite = new Sprite( getImage( "BrewStation" ) )
-            .setSource( { x: 0, y: 0, w: 100, h: 100 } )
-            .setDimensions( 200, 200 )
+        .setSource( { x: 0, y: 0, w: 100, h: 100 } )
+        .setDimensions( 200, 200 )
     }
 
     get product() {
@@ -40,7 +41,6 @@ export default class Melter extends GameObject {
         if ( this.sprite ) {
             let { sprite, position, width, height } = this
             let { x, y } = position
-            sprite.draw( x + margin.x, y + margin.y, true )
-        }
+            sprite.draw(x + margin.x, y + margin.y, true )
     }
 }
