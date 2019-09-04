@@ -3,11 +3,11 @@ import Pawn from "./Pawn";
 import Game from "./Game";
 import CardType from "./CardType";
 
-import Input from "geode/lib/Input";
-import GameObject from "geode/lib/GameObject";
-import Vector from "geode/lib/Vector";
-import Canvas from "geode/lib/Canvas";
-import { getImage } from "geode/lib";
+import Input from "geode/Input";
+import GameObject from "geode/GameObject";
+import Vector from "geode/Vector";
+import Canvas from "geode/Canvas";
+import { getImage } from "geode";
 
 export default class Card extends GameObject {
 

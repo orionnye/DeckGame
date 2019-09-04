@@ -1,4 +1,4 @@
 import Game from "./Game";
-import gameLoop from "geode/lib/gameLoop";
+import gameLoop from "geode/gameLoop";
 
 gameLoop( new Game() )
