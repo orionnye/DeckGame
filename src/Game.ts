@@ -50,8 +50,8 @@ export default class Game {
         this.player.main = true
 
         this.enemy.sprite = new Sprite( getImage( this.enemySprites[ 0 ] ) )
-            .setSource( { x: 0, y: 0, w: 60, h: 64 } )
-            .setDimensions( this.enemy.width * 0.8, this.enemy.height * 0.8 )
+            .setSource( { x: 0, y: 0, w: 1000, h: 1000 } )
+            .setDimensions( this.enemy.width * 2, this.enemy.height * 2 )
     }
 
     get pawns() {
@@ -87,7 +87,10 @@ export default class Game {
 
         //Player Passive Stats
         player.health += player.heal
-        player.sprite!.animate(100, 1)
+        //end turn animations
+        enemy.sprite!.animate(100, 6)
+        player.sprite!.animate(200, 1)
+        
 
 
         this.refillHand()
