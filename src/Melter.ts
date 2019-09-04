@@ -17,8 +17,8 @@ export default class Melter extends GameObject {
         this.ingredients = []
         this.base = new Card( this.position, CardTypes.Volatile )
         this.sprite = new Sprite( getImage( "BrewStation" ) )
-        .setSource( { x: 0, y: 0, w: 100, h: 100 } )
-        .setDimensions( 200, 200 )
+            .setSource( { x: 0, y: 0, w: 100, h: 100 } )
+            .setDimensions( 200, 200 )
     }
 
     get product() {
@@ -40,6 +40,7 @@ export default class Melter extends GameObject {
         if ( this.sprite ) {
             let { sprite, position, width, height } = this
             let { x, y } = position
-            sprite.draw(x + margin.x, y + margin.y, true )
+            sprite.draw( x + margin.x, y + margin.y, true )
+        }
     }
 }
