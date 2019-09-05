@@ -1,6 +1,6 @@
-import Vector, { vector } from "./common/Vector";
-import Canvas from "./common/Canvas";
-import GameObject from "./GameObject";
+import Vector, { vector } from "geode/Vector";
+import Canvas from "geode/Canvas";
+import GameObject from "geode/GameObject";
 
 export default class Pawn extends GameObject {
 
@@ -18,7 +18,6 @@ export default class Pawn extends GameObject {
         this.color = color
         this.health = health
         this.maxHealth = health
-        this.sprite = null
         this.damage = 10
         this.heal = 2
         this.main = false
@@ -78,7 +77,7 @@ export default class Pawn extends GameObject {
             healthPos.x, healthPos.y,
             healthWidth, healthHeight
         ).fillStyle( "red" ).fill().stroke()
-        Canvas.fillStyle("white")
+        Canvas.fillStyle( "white" )
             .text(
                 this.health.toString(),
                 healthNumPos.x, healthNumPos.y,

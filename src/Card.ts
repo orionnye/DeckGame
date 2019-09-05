@@ -1,14 +1,14 @@
-import Vector from "./common/Vector";
+import Vector from "geode/Vector";
 import Deck from "./Deck";
 import Pawn from "./Pawn";
-import Canvas from "./common/Canvas";
-import Input from "./common/Input";
+import Canvas from "geode/Canvas";
+import Input from "geode/Input";
 import Game from "./Game";
-import GameObject from "./GameObject";
+import GameObject from "geode/GameObject";
 import CookBook from "./CookBook";
 import CardType from "./CardType";
-import { playAudio } from "./common/audio";
-import { getImage } from "./common/assets";
+import { playAudio } from "geode/audio";
+import { getImage } from "geode/assets";
 
 export default class Card extends GameObject {
 
@@ -59,8 +59,8 @@ export default class Card extends GameObject {
         for ( let pawn of pawns ) {
             if ( pawn.overlaps( this ) ) {
                 this.apply( pawn, hand, discard )
-                if (pawn !== game.player) {
-                    game.player.sprite!.animate(80, 9)
+                if ( pawn !== game.player ) {
+                    game.player.sprite!.animate( 80, 9 )
                 }
             }
         }

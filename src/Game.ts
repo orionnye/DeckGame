@@ -1,13 +1,13 @@
-import Canvas from "./common/Canvas";
+import Canvas from "geode/Canvas";
 import Deck from "./Deck";
 import Pawn from "./Pawn";
-import Input from "./common/Input";
+import Input from "geode/Input";
 import Card from "./Card";
 import Melter from "./Melter";
-import Sprite from "./Sprite";
+import Sprite from "geode/Sprite";
 import CardTypes from "./CardTypes";
-import { playAudio, audioInstance } from "./common/audio";
-import { getImage, getAudio } from "./common/assets";
+import { playAudio, audioInstance } from "geode/audio";
+import { getImage, getAudio } from "geode/assets";
 
 export default class Game {
     enemyCount = 0
@@ -73,7 +73,7 @@ export default class Game {
         if ( enemy.health > 0 ) {
             player.health -= enemy.damage
             enemy.health += enemy.heal
-            if (enemy.damage == 0) {
+            if ( enemy.damage == 0 ) {
                 enemy.offset.x = -60
                 player.offset.x = -20
             }
@@ -88,9 +88,9 @@ export default class Game {
         //Player Passive Stats
         player.health += player.heal
         //end turn animations
-        enemy.sprite!.animate(100, 6)
-        player.sprite!.animate(200, 1)
-        
+        enemy.sprite!.animate( 100, 6 )
+        player.sprite!.animate( 200, 1 )
+
 
 
         this.refillHand()
@@ -147,7 +147,7 @@ export default class Game {
 
         //BackgroundEffect
         let colorCap = 100
-        if (this.backgroundBlue > colorCap) {
+        if ( this.backgroundBlue > colorCap ) {
             this.backgroundBlue -= 10
             this.backgroundRed -= 9
         }
@@ -174,13 +174,13 @@ export default class Game {
         if ( this.tunes.paused )
             playAudio( this.tunes )
     }
-    
+
     render() {
         let { deck, enemyCount, hand, discard } = this
-        
+
         Canvas.resize( 700, 500 )
         Canvas.context.imageSmoothingEnabled = false
-        Canvas.background(`rgb(${this.backgroundRed}, ${this.backgroundGreen}, ${this.backgroundBlue})`)
+        Canvas.background( `rgb(${this.backgroundRed}, ${this.backgroundGreen}, ${this.backgroundBlue})` )
 
         let backgroundY = 150
         Canvas.rect( 0, backgroundY, Canvas.canvas.clientWidth, Canvas.canvas.clientHeight )
@@ -193,10 +193,10 @@ export default class Game {
         Canvas.fillStyle( "rgb(255, 0, 0)" )
             .text( "level" + enemyCount, Canvas.canvas.clientWidth / 2 - 45, 30, 100, "40px pixel" );
 
-            
+
         for ( let pawn of this.pawns )
             pawn.draw()
-            
+
         deck.draw()
         discard.draw()
         hand.draw( false )

@@ -1,9 +1,9 @@
-import Vector, { vector } from "./common/Vector";
+import Vector, { vector } from "geode/Vector";
 import Card from "./Card";
-import Canvas from "./common/Canvas";
-import GameObject from "./GameObject";
+import Canvas from "geode/Canvas";
+import GameObject from "geode/GameObject";
 import CardTypes from "./CardTypes";
-import { getImage } from "./common/assets";
+import { getImage } from "geode/assets";
 
 export default class Deck extends GameObject {
     spread: Vector
