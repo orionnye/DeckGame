@@ -5,7 +5,7 @@
     "author": "Kody King <kody.j.king@gmail.com>",
     "license": "none",
     "scripts": {
-        "dev": "yarn install && yarn build",
+        "dev": "yarn install && yarn build && yarn link geode",
         "build": "tsc",
         "watch": "tsc -w",
         "webpack": "webpack-dev-server",
