@@ -1,5 +1,5 @@
 import Game from "./Game";
-import Canvas from "geode/Canvas";
+import Canvas from "geode/lib/Canvas";
 
 let game = new Game()
 

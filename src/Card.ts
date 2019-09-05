@@ -1,14 +1,14 @@
-import Vector from "geode/Vector";
+import Vector from "geode/lib/Vector";
 import Deck from "./Deck";
 import Pawn from "./Pawn";
-import Canvas from "geode/Canvas";
-import Input from "geode/Input";
+import Canvas from "geode/lib/Canvas";
+import Input from "geode/lib/Input";
 import Game from "./Game";
-import GameObject from "geode/GameObject";
+import GameObject from "geode/lib/GameObject";
 import CookBook from "./CookBook";
 import CardType from "./CardType";
-import { playAudio } from "geode/audio";
-import { getImage } from "geode/assets";
+import { playAudio } from "geode/lib/audio";
+import { getImage } from "geode/lib/assets";
 
 export default class Card extends GameObject {
 

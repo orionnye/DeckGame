@@ -1,12 +1,12 @@
-import Vector, { vector } from "geode/Vector";
+import Vector, { vector } from "geode/lib/Vector";
 import Card from "./Card";
-import Canvas from "geode/Canvas";
-import GameObject from "geode/GameObject";
+import Canvas from "geode/lib/Canvas";
+import GameObject from "geode/lib/GameObject";
 import CardType from "./CardType";
 import CardTypes from "./CardTypes";
 import CookBook from "./CookBook";
-import Sprite from "geode/Sprite";
-import { getImage } from "geode/assets";
+import Sprite from "geode/lib/Sprite";
+import { getImage } from "geode/lib/assets";
 
 export default class Melter extends GameObject {
     ingredients: CardType[]

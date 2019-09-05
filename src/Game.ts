@@ -1,13 +1,13 @@
-import Canvas from "geode/Canvas";
+import Canvas from "geode/lib/Canvas";
 import Deck from "./Deck";
 import Pawn from "./Pawn";
-import Input from "geode/Input";
+import Input from "geode/lib/Input";
 import Card from "./Card";
 import Melter from "./Melter";
-import Sprite from "geode/Sprite";
+import Sprite from "geode/lib/Sprite";
 import CardTypes from "./CardTypes";
-import { playAudio, audioInstance } from "geode/audio";
-import { getImage, getAudio } from "geode/assets";
+import { playAudio, audioInstance } from "geode/lib/audio";
+import { getImage, getAudio } from "geode/lib/assets";
 
 export default class Game {
     enemyCount = 0

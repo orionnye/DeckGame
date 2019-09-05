@@ -1,6 +1,6 @@
-import Vector, { vector } from "geode/Vector";
-import Canvas from "geode/Canvas";
-import GameObject from "geode/GameObject";
+import Vector, { vector } from "geode/lib/Vector";
+import Canvas from "geode/lib/Canvas";
+import GameObject from "geode/lib/GameObject";
 
 export default class Pawn extends GameObject {
 
