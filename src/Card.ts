@@ -1,19 +1,21 @@
-import Vector from "geode/lib/Vector";
-import Deck from "./Deck";
-import Pawn from "./Pawn";
-import Canvas from "geode/lib/Canvas";
-import Input from "geode/lib/Input";
-import Game from "./Game";
-import GameObject from "geode/lib/GameObject";
-import CookBook from "./CookBook";
-import CardType from "./CardType";
-import { playAudio } from "geode/lib/audio";
 import { getImage } from "geode/lib/assets";
+import Canvas from "geode/lib/Canvas";
+import GameObject from "geode/lib/GameObject";
+import Input from "geode/lib/Input";
+import Sprite from "geode/lib/Sprite";
+import Vector from "geode/lib/Vector";
+import animateSprite from "./animateSprite";
+import CardType from "./CardType";
+import Deck from "./Deck";
+import Game from "./Game";
+import Pawn from "./Pawn";
+
 
 export default class Card extends GameObject {
 
     type: CardType
     grabbed: boolean
+    sprite?: Sprite
 
     constructor( position: Vector, type: CardType ) {
         super( position, 69, 100 )
@@ -60,7 +62,8 @@ export default class Card extends GameObject {
             if ( pawn.overlaps( this ) ) {
                 this.apply( pawn, hand, discard )
                 if ( pawn !== game.player ) {
-                    game.player.sprite!.animate( 80, 9 )
+                    if ( game.player.sprite )
+                        animateSprite( game.player.sprite, 80, 9 )
                 }
             }
         }

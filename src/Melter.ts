@@ -1,16 +1,16 @@
-import Vector, { vector } from "geode/lib/Vector";
-import Card from "./Card";
-import Canvas from "geode/lib/Canvas";
+import { getImage } from "geode/lib/assets";
 import GameObject from "geode/lib/GameObject";
+import Sprite from "geode/lib/Sprite";
+import { vector } from "geode/lib/Vector";
+import Card from "./Card";
 import CardType from "./CardType";
 import CardTypes from "./CardTypes";
 import CookBook from "./CookBook";
-import Sprite from "geode/lib/Sprite";
-import { getImage } from "geode/lib/assets";
 
 export default class Melter extends GameObject {
     ingredients: CardType[]
     base: Card
+    sprite?: Sprite
 
     constructor( x: number, y: number ) {
         super( vector( x, y ), 69, 100 )

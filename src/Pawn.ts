@@ -1,11 +1,13 @@
-import Vector, { vector } from "geode/lib/Vector";
 import Canvas from "geode/lib/Canvas";
 import GameObject from "geode/lib/GameObject";
+import Sprite from "geode/lib/Sprite";
+import Vector, { vector } from "geode/lib/Vector";
 
 export default class Pawn extends GameObject {
 
     offset: Vector
     color: string
+    sprite?: Sprite
     health: number
     maxHealth: number
     damage: number

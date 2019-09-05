@@ -8,6 +8,7 @@ import Sprite from "geode/lib/Sprite";
 import CardTypes from "./CardTypes";
 import { playAudio, audioInstance } from "geode/lib/audio";
 import { getImage, getAudio } from "geode/lib/assets";
+import animateSprite from "./animateSprite";
 
 export default class Game {
     enemyCount = 0
@@ -88,10 +89,10 @@ export default class Game {
         //Player Passive Stats
         player.health += player.heal
         //end turn animations
-        enemy.sprite!.animate( 100, 6 )
-        player.sprite!.animate( 200, 1 )
-
-
+        if ( enemy.sprite )
+            animateSprite( enemy.sprite, 100, 6 )
+        if ( player.sprite )
+            animateSprite( player.sprite, 200, 1 )
 
         this.refillHand()
 
