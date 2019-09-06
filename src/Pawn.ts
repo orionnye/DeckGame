@@ -2,6 +2,7 @@ import Canvas from "geode/lib/Canvas";
 import GameObject from "geode/lib/GameObject";
 import Sprite from "geode/lib/Sprite";
 import Vector, { vector } from "geode/lib/Vector";
+import { getImage } from "geode/lib/assets";
 
 export default class Pawn extends GameObject {
 
@@ -14,7 +15,7 @@ export default class Pawn extends GameObject {
     heal: number
     main: boolean
 
-    constructor( x, y, width, height, color = "red", health = 10 ) {
+    constructor( x, y, width, height, color = "red", health = 10 , sprite: Sprite) {
         super( vector( x, y ), width, height )
         this.offset = vector( 0, 0 )
         this.color = color
@@ -23,6 +24,7 @@ export default class Pawn extends GameObject {
         this.damage = 10
         this.heal = 2
         this.main = false
+        this.sprite = sprite
     }
     //ADD ENEMY ACTIONS AND ACTIONLIST TO SPICE THINGS UP A BIT
 
@@ -43,11 +45,13 @@ export default class Pawn extends GameObject {
             let { sprite, position, width, height } = this
             let { x, y } = position
             let { x: dx, y: dy } = this.offset
-            sprite.draw( x + width / 2 + dx, y + height / 2 + dy, true )
+            sprite.draw( x + sprite.width / 2 + dx, y + height / 2 + dy, true )
         } else {
             this.drawBasic()
         }
+        
         this.drawHealthBar()
+        this.drawIntent()
     }
 
     drawBasic() {
@@ -66,10 +70,11 @@ export default class Pawn extends GameObject {
 
     drawHealthBar() {
         let healthHeight = 20
+        let textWidth = 60
         let healthChunk = this.width / this.maxHealth
         let healthWidth = this.health * healthChunk
-        let healthPos = this.position.addY( this.height + 5 )
-        let healthNumPos = healthPos.addXY( healthWidth / 3, healthHeight - 2 )
+        let healthPos = this.position.addY( this.height + 40 )
+        let healthNumPos = healthPos.addXY( healthWidth / 3 - textWidth / 4, healthHeight - 2 )
 
         Canvas.rect(
             healthPos.x, healthPos.y,
@@ -81,9 +86,23 @@ export default class Pawn extends GameObject {
         ).fillStyle( "red" ).fill().stroke()
         Canvas.fillStyle( "white" )
             .text(
-                this.health.toString(),
+                this.health.toString() + "/" + this.maxHealth.toString(),
                 healthNumPos.x, healthNumPos.y,
-                25, "25px pixel"
+                textWidth, "25px pixel"
             )
     }
-}
+    drawIntent() {
+        Canvas.fillStyle( "orange" )
+        .text(
+            "ATTACK  " + this.damage.toString() + "",
+            this.position.x, this.position.y - 20,
+            100, "25px pixel"
+        )
+        Canvas.fillStyle( "green" )
+        .text(
+            "REGENERATE  " + this.heal.toString() + "",
+            this.position.x, this.position.y,
+            120, "25px pixel"
+        )
+    }
+ }

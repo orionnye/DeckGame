@@ -16,9 +16,23 @@ export default class Game {
     hand = new Deck( 5, 145, 250, 90, 0 )
     discard = new Deck( 0, 600, 250, 1, 1 )
 
-    player = new Pawn( 100, 50, 208, 158, "red", 100 )
-    enemy = new Pawn( 500, 50, 150, 150, "blue", 10 )
-    enemySprites = [ "PawnChadwick2", "Archlizard", "BoneDragon" ]
+    playerSprite = new Sprite( getImage( "PawnEgor" ) )
+    .setSource( { x: 0, y: 0, w: 180, h: 132 } )
+    .setDimensions( 208, 158 )
+    player = new Pawn( 100, 80, 100, 100, "red", 60, this.playerSprite)
+
+    enemySprites = [
+        new Sprite( getImage( "PawnChadwick2" ) )
+        .setSource( { x: 0, y: 0, w: 1000, h: 1000 } )
+        .setDimensions( 120, 120 ),
+        new Sprite( getImage( "Archlizard" ) )
+        .setSource( { x: 0, y: 0, w: 100, h: 50 } )
+        .setDimensions( 150, 70 ),
+        new Sprite( getImage( "BoneDragon" ) )
+        .setSource( { x: 0, y: 0, w: 80, h: 100 } )
+        .setDimensions( 130, 130 )
+    ]
+    enemy = new Pawn( 520, 80, 100, 100, "blue", 15, this.enemySprites[0])
 
     win = false
 
@@ -29,13 +43,15 @@ export default class Game {
 
     ambience = audioInstance(
         getAudio( "DungeonAmbience" ),
-        { volume: 0.30 }
         //TEMPEROARY FIX
+        { volume: 0.0 }
+        // { volume: 0.30 }
     )
     tunes = audioInstance(
         getAudio( "DungeonTunes" ),
-        { volume: 0.35 }
         //TEMPEROARY FIX
+        { volume: 0.0 }
+        // { volume: 0.35 }
     )
 
     backgroundRed = 0
@@ -45,14 +61,9 @@ export default class Game {
     constructor() {
         window.addEventListener( "keyup", e => this.keyup( e ) )
 
-        this.player.sprite = new Sprite( getImage( "PawnEgor" ) )
-            .setSource( { x: 0, y: 0, w: 94, h: 69 } )
-            .setDimensions( this.player.width, this.player.height )
         this.player.main = true
-
-        this.enemy.sprite = new Sprite( getImage( this.enemySprites[ 0 ] ) )
-            .setSource( { x: 0, y: 0, w: 1000, h: 1000 } )
-            .setDimensions( this.enemy.width * 2, this.enemy.height * 2 )
+        this.player.heal = 0
+        this.player.damage = 0
     }
 
     get pawns() {
@@ -73,6 +84,8 @@ export default class Game {
         //if enemy health is alive
         if ( enemy.health > 0 ) {
             player.health -= enemy.damage
+            enemy.damage += 2
+            enemy.heal += 1
             enemy.health += enemy.heal
             if ( enemy.damage == 0 ) {
                 enemy.offset.x = -60
@@ -90,7 +103,7 @@ export default class Game {
         player.health += player.heal
         //end turn animations
         if ( enemy.sprite )
-            animateSprite( enemy.sprite, 100, 6 )
+            animateSprite( enemy.sprite, 300, 5 )
         if ( player.sprite )
             animateSprite( player.sprite, 200, 1 )
 
@@ -105,14 +118,12 @@ export default class Game {
 
     newEncounter() {
         let { enemyCount, enemy, enemySprites } = this
-        let newHealth = ( enemyCount + 2 ) * 10
+        let newHealth = ( enemyCount + 1) * 20
         enemy.heal = enemyCount * 3
         enemy.damage = enemyCount * 10
         enemy.health = newHealth
         enemy.maxHealth = newHealth
-        enemy.sprite = new Sprite( getImage( enemySprites[ enemyCount ] ) )
-            .setSource( { x: 0, y: 0, w: 60, h: 64 } )
-            .setDimensions( enemy.width * 0.8, enemy.height * 0.8 )
+        enemy.sprite = enemySprites[enemyCount]
     }
 
     refillHand() {
