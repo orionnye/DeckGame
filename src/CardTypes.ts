@@ -18,7 +18,7 @@ const CardTypes = {
     }} ),
     Blood: new CardType( {
         imageName: "Blood",
-        damage: 10,
+        damage: 20,
         onApply: pawn => {
             pawn.damage += 3
     } }),
@@ -34,7 +34,7 @@ const CardTypes = {
     Dread: new CardType( {
         imageName: "Dread",
         onApply: pawn => {
-            pawn.damage -= 3
+            pawn.damage -= 5
     }} ),
     Volatile: new CardType( {
         imageName: "Volatile",
