@@ -164,7 +164,7 @@ export default class Game {
         let colorCap = 100
         if ( this.backgroundBlue > colorCap ) {
             this.backgroundBlue -= 10
-            this.backgroundRed -= 9
+            this.backgroundRed -= 10
         }
         else {
             this.backgroundBlue += 0.1
