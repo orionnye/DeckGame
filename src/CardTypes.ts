@@ -1,4 +1,5 @@
 import CardType from "./CardType";
+import Pawn from "./Pawn";
 
 const CardTypes = {
     //Offensive
@@ -7,42 +8,47 @@ const CardTypes = {
     Acid: new CardType( { damage: 15 } ),
     Molotov: new CardType( {
         damage: 5,
-        onApply: pawn => {
+        onApply( pawn: Pawn ) {
             pawn.heal -= 2
-    }} ),
+        }
+    } ),
     Poison: new CardType( {
         imageName: "Poison",
         damage: -8,
-        onApply: pawn => {
+        onApply( pawn: Pawn ) {
             pawn.heal -= 1
-    }} ),
+        }
+    } ),
     Blood: new CardType( {
         imageName: "Blood",
         damage: 20,
-        onApply: pawn => {
+        onApply( pawn: Pawn ) {
             pawn.damage += 3
-    } }),
+        }
+    } ),
     //Defensive
     Heal1: new CardType( { imageName: "Heal", damage: -5 } ),
     Heal2: new CardType( { imageName: "Heal", damage: -10 } ),
     Karma: new CardType( {
         imageName: "Karma",
         damage: 5,
-        onApply: pawn => {
+        onApply( pawn: Pawn ) {
             pawn.maxHealth += 5
-    }} ),
+        }
+    } ),
     Dread: new CardType( {
         imageName: "Dread",
-        onApply: pawn => {
+        onApply( pawn: Pawn ) {
             pawn.damage -= 5
-    }} ),
+        }
+    } ),
     Volatile: new CardType( {
         imageName: "Volatile",
         damage: 0,
-        onApply: pawn => {
-            let potency = Math.floor(Math.random() * 10)
+        onApply( pawn: Pawn ) {
+            let potency = Math.floor( Math.random() * 10 )
             let damage = ( Math.random() > 0.5 ) ? potency : -potency
-            pawn.health -= damage
+            pawn.dealDamage( damage )
         }
     } )
 }

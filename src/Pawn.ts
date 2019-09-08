@@ -34,7 +34,7 @@ export default class Pawn extends GameObject {
 
     dealDamage( amount: number ) {
         this.health -= amount
-        this.damageTime = amount * 2
+        this.damageTime = Math.max( 0, amount * 2 )
     }
 
     updateToFixed() {
