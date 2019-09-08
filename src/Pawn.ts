@@ -1,7 +1,7 @@
-import Canvas from "geode/lib/Canvas";
+import Canvas from "geode/lib/graphics/Canvas";
 import GameObject from "geode/lib/GameObject";
-import Sprite from "geode/lib/Sprite";
-import Vector, { vector } from "geode/lib/Vector";
+import Sprite from "geode/lib/graphics/Sprite";
+import Vector, { vector } from "geode/lib/math/Vector";
 import { getImage } from "geode/lib/assets";
 
 export default class Pawn extends GameObject {
@@ -15,7 +15,7 @@ export default class Pawn extends GameObject {
     heal: number
     main: boolean
 
-    constructor( x, y, width, height, color = "red", health = 10 , sprite: Sprite) {
+    constructor( x, y, width, height, color = "red", health = 10, sprite: Sprite ) {
         super( vector( x, y ), width, height )
         this.offset = vector( 0, 0 )
         this.color = color
@@ -49,7 +49,7 @@ export default class Pawn extends GameObject {
         } else {
             this.drawBasic()
         }
-        
+
         this.drawHealthBar()
         this.drawIntent()
     }
@@ -93,16 +93,16 @@ export default class Pawn extends GameObject {
     }
     drawIntent() {
         Canvas.fillStyle( "orange" )
-        .text(
-            "ATTACK  " + this.damage.toString() + "",
-            this.position.x, this.position.y - 20,
-            100, "25px pixel"
-        )
+            .text(
+                "ATTACK  " + this.damage.toString() + "",
+                this.position.x, this.position.y - 20,
+                100, "25px pixel"
+            )
         Canvas.fillStyle( "green" )
-        .text(
-            "REGENERATE  " + this.heal.toString() + "",
-            this.position.x, this.position.y,
-            120, "25px pixel"
-        )
+            .text(
+                "REGENERATE  " + this.heal.toString() + "",
+                this.position.x, this.position.y,
+                120, "25px pixel"
+            )
     }
- }
+}

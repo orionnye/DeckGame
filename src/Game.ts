@@ -1,10 +1,10 @@
-import Canvas from "geode/lib/Canvas";
+import Canvas from "geode/lib/graphics/Canvas";
 import Deck from "./Deck";
 import Pawn from "./Pawn";
 import Input from "geode/lib/Input";
 import Card from "./Card";
 import Melter from "./Melter";
-import Sprite from "geode/lib/Sprite";
+import Sprite from "geode/lib/graphics/Sprite";
 import CardTypes from "./CardTypes";
 import { playAudio, audioInstance } from "geode/lib/audio";
 import { getImage, getAudio } from "geode/lib/assets";
@@ -17,22 +17,22 @@ export default class Game {
     discard = new Deck( 0, 600, 250, 1, 1 )
 
     playerSprite = new Sprite( getImage( "PawnEgor" ) )
-    .setSource( { x: 0, y: 0, w: 180, h: 132 } )
-    .setDimensions( 208, 158 )
-    player = new Pawn( 100, 80, 100, 100, "red", 60, this.playerSprite)
+        .setSource( { x: 0, y: 0, w: 180, h: 132 } )
+        .setDimensions( 208, 158 )
+    player = new Pawn( 100, 80, 100, 100, "red", 60, this.playerSprite )
 
     enemySprites = [
         new Sprite( getImage( "PawnChadwick2" ) )
-        .setSource( { x: 0, y: 0, w: 1000, h: 1000 } )
-        .setDimensions( 120, 120 ),
+            .setSource( { x: 0, y: 0, w: 1000, h: 1000 } )
+            .setDimensions( 120, 120 ),
         new Sprite( getImage( "Archlizard" ) )
-        .setSource( { x: 0, y: 0, w: 100, h: 50 } )
-        .setDimensions( 150, 70 ),
+            .setSource( { x: 0, y: 0, w: 100, h: 50 } )
+            .setDimensions( 150, 70 ),
         new Sprite( getImage( "BoneDragon" ) )
-        .setSource( { x: 0, y: 0, w: 80, h: 100 } )
-        .setDimensions( 130, 130 )
+            .setSource( { x: 0, y: 0, w: 80, h: 100 } )
+            .setDimensions( 130, 130 )
     ]
-    enemy = new Pawn( 520, 80, 100, 100, "blue", 15, this.enemySprites[0])
+    enemy = new Pawn( 520, 80, 100, 100, "blue", 15, this.enemySprites[ 0 ] )
 
     win = false
 
@@ -118,12 +118,12 @@ export default class Game {
 
     newEncounter() {
         let { enemyCount, enemy, enemySprites } = this
-        let newHealth = ( enemyCount + 1) * 20
+        let newHealth = ( enemyCount + 1 ) * 20
         enemy.heal = enemyCount * 3
         enemy.damage = enemyCount * 10
         enemy.health = newHealth
         enemy.maxHealth = newHealth
-        enemy.sprite = enemySprites[enemyCount]
+        enemy.sprite = enemySprites[ enemyCount ]
     }
 
     refillHand() {

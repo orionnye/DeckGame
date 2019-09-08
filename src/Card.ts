@@ -1,9 +1,9 @@
 import { getImage } from "geode/lib/assets";
-import Canvas from "geode/lib/Canvas";
+import Canvas from "geode/lib/graphics/Canvas";
 import GameObject from "geode/lib/GameObject";
 import Input from "geode/lib/Input";
-import Sprite from "geode/lib/Sprite";
-import Vector from "geode/lib/Vector";
+import Sprite from "geode/lib/graphics/Sprite";
+import Vector from "geode/lib/math/Vector";
 import animateSprite from "./animateSprite";
 import CardType from "./CardType";
 import Deck from "./Deck";

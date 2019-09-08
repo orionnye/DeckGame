@@ -1,4 +1,4 @@
-import Sprite from "geode/lib/Sprite";
+import Sprite from "geode/lib/graphics/Sprite";
 
 export default function animateSprite( sprite: Sprite, frameDelay: number, frameCount: number ) {
     let { source } = sprite
