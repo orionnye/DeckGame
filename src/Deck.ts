@@ -1,7 +1,7 @@
 import Vector, { vector } from "geode/lib/math/Vector";
 import Card from "./Card";
 import Canvas from "geode/lib/graphics/Canvas";
-import GameObject from "geode/lib/GameObject";
+import GameObject from "geode/lib/gameobject/GameObject";
 import CardTypes from "./CardTypes";
 import { getImage } from "geode/lib/assets";
 

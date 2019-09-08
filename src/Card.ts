@@ -1,6 +1,6 @@
 import { getImage } from "geode/lib/assets";
 import Canvas from "geode/lib/graphics/Canvas";
-import GameObject from "geode/lib/GameObject";
+import GameObject from "geode/lib/gameobject/GameObject";
 import Input from "geode/lib/Input";
 import Sprite from "geode/lib/graphics/Sprite";
 import Vector from "geode/lib/math/Vector";
@@ -38,6 +38,9 @@ export default class Card extends GameObject {
 
     update( game: Game ) {
         let { mouse, buttons } = Input
+
+        if ( mouse )
+            mouse = game.globalTransform.inverseTransformPoint( mouse )
 
         if ( buttons.Mouse0 ) {
             if ( this.contains( mouse ) && !game.grabbing ) {

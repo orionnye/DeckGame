@@ -9,6 +9,9 @@ import CardTypes from "./CardTypes";
 import { playAudio, audioInstance } from "geode/lib/audio";
 import { getImage, getAudio } from "geode/lib/assets";
 import animateSprite from "./animateSprite";
+import Transform from "geode/lib/math/Transform";
+import Vector, { vector } from "geode/lib/math/Vector";
+import GMath from "geode/lib/math/GMath";
 
 export default class Game {
     enemyCount = 0
@@ -58,6 +61,8 @@ export default class Game {
     backgroundGreen = 0
     backgroundBlue = 255
 
+    globalTransform = new Transform()
+
     constructor() {
         window.addEventListener( "keyup", e => this.keyup( e ) )
 
@@ -83,7 +88,7 @@ export default class Game {
 
         //if enemy health is alive
         if ( enemy.health > 0 ) {
-            player.health -= enemy.damage
+            player.dealDamage( enemy.damage )
             enemy.damage += 2
             enemy.heal += 1
             enemy.health += enemy.heal
@@ -190,15 +195,52 @@ export default class Game {
             playAudio( this.tunes )
     }
 
+    updateCameraShake( time: number ) {
+        let frequency = 100
+
+        let t = Math.max( time, 0 )
+        let magnitude = Math.pow( t, 0.5 )
+
+        let shakeOffset = new Vector(
+            Math.cos( t * frequency / 7 ),
+            Math.sin( t * frequency / 13 )
+        ).multiply( magnitude )
+        let angle = Math.sin( t ) * magnitude * 0.001
+
+        this.globalTransform = new Transform(
+            Canvas.center.add( shakeOffset ),
+            angle,
+            Vector.ONE,
+            Canvas.center
+        )
+    }
+
+    transformTest() {
+        let t = performance.now() / 100
+        let s = GMath.lerp( 0.75, Math.sin( t / 2 ), 0.1 )
+        this.globalTransform = new Transform(
+            Canvas.center,
+            GMath.degreesToRadians * t,
+            new Vector( s, s ),
+            Canvas.center,
+            new Transform(
+                Canvas.center, 0, new Vector( 1, 0.6 ), Canvas.center
+            )
+        )
+    }
+
     render() {
         let { deck, enemyCount, hand, discard } = this
 
-        Canvas.resize( 700, 500 )
+        Canvas.resize( 700, 500, 2 )
         Canvas.context.imageSmoothingEnabled = false
         Canvas.background( `rgb(${this.backgroundRed}, ${this.backgroundGreen}, ${this.backgroundBlue})` )
 
+        this.updateCameraShake( this.player.damageTime-- )
+        Canvas.transform( this.globalTransform )
+
         let backgroundY = 150
-        Canvas.rect( 0, backgroundY, Canvas.canvas.clientWidth, Canvas.canvas.clientHeight )
+        Canvas.rect( 0, backgroundY, Canvas.dimensions.x, Canvas.dimensions.y )
             .fillStyle( "rgb(100, 100, 100" )
             .fill()
         Canvas.image( getImage( "Ground" ), 0, backgroundY - 5, Canvas.canvas.clientWidth, 200 )

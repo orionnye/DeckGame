@@ -14,10 +14,9 @@ export default class CardType {
         this.onApply = onApply
     }
     apply( pawn: Pawn ) {
-        if ( this.onApply != null ) {
+        if ( this.onApply != null )
             this.onApply( pawn )
-        }
-        pawn.health -= this.damage
+        pawn.dealDamage( this.damage )
     }
 
     get image() {

@@ -1,5 +1,5 @@
 import Canvas from "geode/lib/graphics/Canvas";
-import GameObject from "geode/lib/GameObject";
+import GameObject from "geode/lib/gameobject/GameObject";
 import Sprite from "geode/lib/graphics/Sprite";
 import Vector, { vector } from "geode/lib/math/Vector";
 import { getImage } from "geode/lib/assets";
@@ -15,6 +15,8 @@ export default class Pawn extends GameObject {
     damage: number
     heal: number
     main: boolean
+    // This is just for camera shake animation
+    damageTime: number
 
     constructor( x, y, width, height, color = "red", health = 10, sprite: Sprite ) {
         super( vector( x, y ), width, height )
@@ -26,8 +28,14 @@ export default class Pawn extends GameObject {
         this.heal = 2
         this.main = false
         this.sprite = sprite
+        this.damageTime = 0
     }
     //ADD ENEMY ACTIONS AND ACTIONLIST TO SPICE THINGS UP A BIT
+
+    dealDamage( amount: number ) {
+        this.health -= amount
+        this.damageTime = amount * 2
+    }
 
     updateToFixed() {
         if ( this.offset.length > 0 ) {
@@ -92,6 +100,7 @@ export default class Pawn extends GameObject {
                 textWidth, "25px pixel"
             )
     }
+
     drawIntent() {
         Canvas.fillStyle( "orange" )
             .text(
