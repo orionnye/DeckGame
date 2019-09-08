@@ -3,10 +3,11 @@ import GameObject from "geode/lib/GameObject";
 import Sprite from "geode/lib/graphics/Sprite";
 import Vector, { vector } from "geode/lib/math/Vector";
 import { getImage } from "geode/lib/assets";
+import MutableVector from "geode/lib/math/MutableVector";
 
 export default class Pawn extends GameObject {
 
-    offset: Vector
+    offset: MutableVector
     color: string
     sprite?: Sprite
     health: number
