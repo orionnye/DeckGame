@@ -91,13 +91,10 @@ export default class Game {
                 enemy.offset.x = -60
                 player.offset.x = -20
             }
-        } else if ( enemyCount !== enemySprites.length - 1 ) {
-            //if enemy is dead and !the last enemy
+        } else {
             this.enemyCount += 1
             this.newEncounter()
         }
-        if ( enemy.health <= 0 && enemyCount == enemySprites.length - 1 )
-            this.win = true
 
         //Player Passive Stats
         player.health += player.heal
@@ -107,7 +104,11 @@ export default class Game {
         if ( player.sprite )
             animateSprite( player.sprite, 200, 1 )
 
-        this.refillHand()
+        if ( player.health <= 0 ) {
+            window.setTimeout( () => { location.reload() }, 5000 )
+        } else {
+            this.refillHand()
+        }
 
         let product = melter.product
         console.log( "Crafted " + product.type.name )
@@ -118,12 +119,14 @@ export default class Game {
 
     newEncounter() {
         let { enemyCount, enemy, enemySprites } = this
-        let newHealth = ( enemyCount + 1 ) * 20
-        enemy.heal = enemyCount * 3
-        enemy.damage = enemyCount * 10
+        let newHealth = ( enemyCount + 1 ) * 10
+        enemy.heal = enemyCount * 2
+        enemy.damage = enemyCount * 4
         enemy.health = newHealth
         enemy.maxHealth = newHealth
-        enemy.sprite = enemySprites[ enemyCount ]
+        // random enemy sprite pulled from list.
+        let randomSprite = Math.floor( Math.random() * enemySprites.length )
+        enemy.sprite = enemySprites[ randomSprite ]
     }
 
     refillHand() {
@@ -161,7 +164,7 @@ export default class Game {
         let colorCap = 100
         if ( this.backgroundBlue > colorCap ) {
             this.backgroundBlue -= 10
-            this.backgroundRed -= 9
+            this.backgroundRed -= 10
         }
         else {
             this.backgroundBlue += 0.1
