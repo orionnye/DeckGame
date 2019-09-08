@@ -218,13 +218,14 @@ export default class Game {
     transformTest() {
         let t = performance.now() / 100
         let s = GMath.lerp( 0.75, Math.sin( t / 2 ), 0.1 )
-        this.globalTransform = new Transform(
+        let r = Math.sin( t / 8 ) * 0.05
+        this.globalTransform.parent = new Transform(
             Canvas.center,
             GMath.degreesToRadians * t,
             new Vector( s, s ),
             Canvas.center,
             new Transform(
-                Canvas.center, 0, new Vector( 1, 0.6 ), Canvas.center
+                Canvas.center, 0, new Vector( 1, Math.sin( t * 0.1 ) ), Canvas.center
             )
         )
     }
@@ -237,7 +238,9 @@ export default class Game {
         Canvas.background( `rgb(${this.backgroundRed}, ${this.backgroundGreen}, ${this.backgroundBlue})` )
 
         this.updateCameraShake( this.player.damageTime-- )
+        // this.transformTest()
         Canvas.transform( this.globalTransform )
+
 
         let backgroundY = 150
         Canvas.rect( 0, backgroundY, Canvas.dimensions.x, Canvas.dimensions.y )
