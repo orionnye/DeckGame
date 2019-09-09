@@ -13,8 +13,10 @@ import Transform from "geode/lib/math/Transform";
 import Vector, { vector } from "geode/lib/math/Vector";
 import GMath from "geode/lib/math/GMath";
 import Color, { rgb, rgba } from "geode/lib/graphics/Color";
+import Scene from "geode/lib/gameobject/Scene";
 
 export default class Game {
+
     enemyCount = 0
     deck = new Deck( 10, 30, 250, -1, 1 )
     hand = new Deck( 5, 145, 250, 90, 0 )
@@ -36,6 +38,7 @@ export default class Game {
             .setSource( { x: 0, y: 0, w: 80, h: 100 } )
             .setDimensions( 130, 130 )
     ]
+
     enemy = new Pawn( 520, 80, 100, 100, "blue", 15, this.enemySprites[ 0 ] )
 
     win = false
@@ -60,14 +63,23 @@ export default class Game {
 
     backgroundColor = rgb( 0, 0, 255 )
 
-    globalTransform = new Transform()
+    // globalTransform = new Transform()
+
+    scene: Scene = new Scene()
+
+    static instance: Game
 
     constructor() {
+        Game.instance = this
+
         window.addEventListener( "keyup", e => this.keyup( e ) )
 
         this.player.main = true
         this.player.heal = 0
         this.player.damage = 0
+
+        this.scene.add( this.player )
+        this.scene.add( this.enemy )
     }
 
     get pawns() {
@@ -205,7 +217,7 @@ export default class Game {
         ).multiply( magnitude )
         let angle = Math.sin( t ) * magnitude * 0.001
 
-        this.globalTransform = new Transform(
+        this.scene.globalTransform = new Transform(
             Canvas.center.add( shakeOffset ),
             angle,
             Vector.ONE,
@@ -216,7 +228,7 @@ export default class Game {
     transformTest() {
         let t = performance.now() / 100
         let s = GMath.lerp( 0.75, Math.sin( t / 2 ), 0.1 )
-        this.globalTransform.parent = new Transform(
+        this.scene.globalTransform.parent = new Transform(
             Canvas.center,
             GMath.degreesToRadians * t,
             new Vector( s, s ),
@@ -234,49 +246,52 @@ export default class Game {
         Canvas.context.imageSmoothingEnabled = false
         Canvas.background( this.backgroundColor )
 
-        this.updateCameraShake( this.player.damageTime-- )
-        // this.transformTest()
+        this.scene.render()
 
-        Canvas.push()
-        Canvas.transform( this.globalTransform )
+        // this.updateCameraShake( this.player.damageTime-- )
+        // // this.transformTest()
 
-        let backgroundY = 150
-        Canvas.rect( 0, backgroundY, Canvas.dimensions.x, Canvas.dimensions.y )
-            .fillStyle( rgb( 100, 100, 100 ) )
-            .fill()
-        Canvas.image( getImage( "Ground" ), 0, backgroundY - 5, Canvas.canvas.clientWidth, 200 )
-        Canvas.image( getImage( "BackGroundMid" ), 0, 0, Canvas.canvas.clientWidth, backgroundY )
+        // Canvas.push()
+        // // Canvas.transform( this.scene.globalTransform )
 
-        //Level Count
-        Canvas.fillStyle( rgb( 255, 0, 0 ) )
-            .text( "LEVEL" + enemyCount, Canvas.canvas.clientWidth / 2 - 45, 30, 100, "40px pixel" );
+        // let backgroundY = 150
+        // Canvas.rect( 0, backgroundY, Canvas.dimensions.x, Canvas.dimensions.y )
+        //     .fillStyle( rgb( 100, 100, 100 ) )
+        //     .fill()
+        // Canvas.image( getImage( "Ground" ), 0, backgroundY - 5, Canvas.canvas.clientWidth, 200 )
+        // Canvas.image( getImage( "BackGroundMid" ), 0, 0, Canvas.canvas.clientWidth, backgroundY )
 
-        for ( let pawn of this.pawns )
-            pawn.draw()
+        // //Level Count
+        // Canvas.fillStyle( rgb( 255, 0, 0 ) )
+        //     .text( "LEVEL" + enemyCount, Canvas.canvas.clientWidth / 2 - 45, 30, 100, "40px pixel" );
 
-        deck.draw()
-        discard.draw()
-        hand.draw( false )
-        this.melter.draw()
+        // for ( let pawn of this.pawns )
+        //     pawn.draw()
 
-        if ( this.player.health <= 0 ) {
-            Canvas.fillStyle( rgb( 100, 0, 0 ) )
-            let deathMessageWidth = 700
-            let deathMessageX = Canvas.canvas.clientWidth / 2 - deathMessageWidth / 2
-            let deathMessageY = Canvas.canvas.clientHeight / 2 - 30
-            Canvas.text( "You  Died  On  Level " + this.enemyCount, deathMessageX, deathMessageY, deathMessageWidth, "250px pixel" );
-        }
-        if ( this.win ) {
-            Canvas.fillStyle( rgb( 0, 0, 100 ) )
-            let winMessageWidth = 700
-            let winMessageX = Canvas.canvas.clientWidth / 2 - winMessageWidth / 2
-            let winMessageY = Canvas.canvas.clientHeight / 2
-            Canvas.text( "You Win", winMessageX, winMessageY, winMessageWidth, "400px pixel" );
-        }
+        // deck.draw()
+        // discard.draw()
+        // hand.draw( false )
 
-        Canvas.pop()
+        // this.melter.draw()
 
-        if ( this.player.damageTime > 0 )
-            Canvas.background( rgba( 255, 0, 0, Math.sqrt( this.player.damageTime / 160 ) ) )
+        // if ( this.player.health <= 0 ) {
+        //     Canvas.fillStyle( rgb( 100, 0, 0 ) )
+        //     let deathMessageWidth = 700
+        //     let deathMessageX = Canvas.canvas.clientWidth / 2 - deathMessageWidth / 2
+        //     let deathMessageY = Canvas.canvas.clientHeight / 2 - 30
+        //     Canvas.text( "You  Died  On  Level " + this.enemyCount, deathMessageX, deathMessageY, deathMessageWidth, "250px pixel" );
+        // }
+        // if ( this.win ) {
+        //     Canvas.fillStyle( rgb( 0, 0, 100 ) )
+        //     let winMessageWidth = 700
+        //     let winMessageX = Canvas.canvas.clientWidth / 2 - winMessageWidth / 2
+        //     let winMessageY = Canvas.canvas.clientHeight / 2
+        //     Canvas.text( "You Win", winMessageX, winMessageY, winMessageWidth, "400px pixel" );
+        // }
+
+        // Canvas.pop()
+
+        // if ( this.player.damageTime > 0 )
+        //     Canvas.background( rgba( 255, 0, 0, Math.sqrt( this.player.damageTime / 160 ) ) )
     }
 }

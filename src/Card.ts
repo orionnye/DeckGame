@@ -40,7 +40,7 @@ export default class Card extends GameObject {
         let { mouse, buttons } = Input
 
         if ( mouse )
-            mouse = game.globalTransform.pointToLocal( mouse )
+            mouse = game.scene.localPoint( mouse )
 
         if ( buttons.Mouse0 ) {
             if ( this.contains( mouse ) && !game.grabbing ) {
@@ -83,7 +83,10 @@ export default class Card extends GameObject {
         let { x, y } = position
         let margin = width / 12
 
-        Canvas.push().shadow( 40, options.shadowColor ).vimage( getImage( this.type.image ), position, dimensions ).pop()
+        Canvas.push()
+            .shadow( 40, options.shadowColor )
+            .vimage( getImage( this.type.image ), position, dimensions )
+            .pop()
         //Text IDEALLY would print the card description contained on the card
         Canvas.fillStyle( "#D2B9A6" ).text( this.type.name.toUpperCase(), x + margin, y + height - margin, width - margin * 2, "20px pixel" );
     }

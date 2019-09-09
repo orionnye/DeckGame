@@ -49,16 +49,14 @@ export default class Pawn extends GameObject {
         }
     }
 
-    draw() {
+    onRender() {
         if ( this.sprite ) {
-            let { sprite, position, width, height } = this
-            let { x, y } = position
+            let { sprite, height } = this
             let { x: dx, y: dy } = this.offset
-            sprite.draw( x + sprite.width / 2 + dx, y + height / 2 + dy, true )
+            sprite.draw( sprite.width / 2 + dx, height / 2 + dy, true )
         } else {
             this.drawBasic()
         }
-
         this.drawHealthBar()
         this.drawIntent()
     }
@@ -82,17 +80,12 @@ export default class Pawn extends GameObject {
         let textWidth = 60
         let healthChunk = this.width / this.maxHealth
         let healthWidth = this.health * healthChunk
-        let healthPos = this.position.addY( this.height + 40 )
+        let healthPos = vector( 0, this.height + 40 )
         let healthNumPos = healthPos.addXY( healthWidth / 3 - textWidth / 4, healthHeight - 2 )
 
-        Canvas.rect(
-            healthPos.x, healthPos.y,
-            this.width, healthHeight
-        ).fillStyle( "black" ).fill().stroke()
-        Canvas.rect(
-            healthPos.x, healthPos.y,
-            healthWidth, healthHeight
-        ).fillStyle( "red" ).fill().stroke()
+        Canvas.vrect( healthPos, vector( this.width, healthHeight ) ).fillStyle( "black" ).fill().stroke()
+        Canvas.vrect( healthPos, vector( healthWidth, healthHeight ) ).fillStyle( "red" ).fill().stroke()
+
         Canvas.fillStyle( "white" )
             .text(
                 this.health.toString() + "/" + this.maxHealth.toString(),
@@ -105,13 +98,13 @@ export default class Pawn extends GameObject {
         Canvas.fillStyle( "orange" )
             .text(
                 "ATTACK  " + this.damage.toString() + "",
-                this.position.x, this.position.y - 20,
+                0, 0 - 20,
                 100, "25px pixel"
             )
         Canvas.fillStyle( "green" )
             .text(
                 "REGENERATE  " + this.heal.toString() + "",
-                this.position.x, this.position.y,
+                0, 0,
                 120, "25px pixel"
             )
     }
