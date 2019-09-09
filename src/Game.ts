@@ -12,7 +12,7 @@ import animateSprite from "./animateSprite";
 import Transform from "geode/lib/math/Transform";
 import Vector, { vector } from "geode/lib/math/Vector";
 import GMath from "geode/lib/math/GMath";
-import Color, { rgb, rgba } from "geode/lib/graphics/color";
+import Color, { rgb, rgba } from "geode/lib/graphics/Color";
 
 export default class Game {
     enemyCount = 0
