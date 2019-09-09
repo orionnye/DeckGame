@@ -97,7 +97,7 @@ export default class Pawn extends GameObject {
             .text(
                 this.health.toString() + "/" + this.maxHealth.toString(),
                 healthNumPos.x, healthNumPos.y,
-                textWidth, "25px pixel"
+                textWidth, "20px pixel"
             )
     }
 

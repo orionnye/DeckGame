@@ -40,7 +40,7 @@ export default class Card extends GameObject {
         let { mouse, buttons } = Input
 
         if ( mouse )
-            mouse = game.globalTransform.inverseTransformPoint( mouse )
+            mouse = game.globalTransform.pointToLocal( mouse )
 
         if ( buttons.Mouse0 ) {
             if ( this.contains( mouse ) && !game.grabbing ) {
@@ -85,6 +85,6 @@ export default class Card extends GameObject {
 
         Canvas.vimage( getImage( this.type.image ), position, dimensions )
         //Text IDEALLY would print the card description contained on the card
-        Canvas.text( this.type.name, x + margin, y + height - margin, width - margin * 2, "20px pixel" );
+        Canvas.text( this.type.name.toUpperCase(), x + margin, y + height - margin, width - margin * 2, "20px pixel" );
     }
 }

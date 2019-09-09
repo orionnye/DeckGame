@@ -58,9 +58,6 @@ export default class Game {
         // { volume: 0.35 }
     )
 
-    // backgroundRed = 0
-    // backgroundGreen = 0
-    // backgroundBlue = 255
     backgroundColor = rgb( 0, 0, 255 )
 
     globalTransform = new Transform()
@@ -238,6 +235,9 @@ export default class Game {
         Canvas.background( this.backgroundColor )
 
         this.updateCameraShake( this.player.damageTime-- )
+        // this.transformTest()
+
+        Canvas.push()
         Canvas.transform( this.globalTransform )
 
         let backgroundY = 150
@@ -249,8 +249,7 @@ export default class Game {
 
         //Level Count
         Canvas.fillStyle( rgb( 255, 0, 0 ) )
-            .text( "level" + enemyCount, Canvas.canvas.clientWidth / 2 - 45, 30, 100, "40px pixel" );
-
+            .text( "LEVEL" + enemyCount, Canvas.canvas.clientWidth / 2 - 45, 30, 100, "40px pixel" );
 
         for ( let pawn of this.pawns )
             pawn.draw()
@@ -274,6 +273,8 @@ export default class Game {
             let winMessageY = Canvas.canvas.clientHeight / 2
             Canvas.text( "You Win", winMessageX, winMessageY, winMessageWidth, "400px pixel" );
         }
+
+        Canvas.pop()
 
         if ( this.player.damageTime > 0 )
             Canvas.background( rgba( 255, 0, 0, Math.sqrt( this.player.damageTime / 160 ) ) )
