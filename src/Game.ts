@@ -13,6 +13,7 @@ import Vector, { vector } from "geode/lib/math/Vector";
 import GMath from "geode/lib/math/GMath";
 import { rgb, rgba } from "geode/lib/graphics/Color";
 import Scene from "geode/lib/gameobject/Scene";
+import { scheduleTask } from "./util";
 
 export default class Game {
 
@@ -76,14 +77,19 @@ export default class Game {
     }
 
     keyup( e: KeyboardEvent ) {
-        let { deck, hand } = this
-        if ( e.key == "Enter" ) {
-            if ( hand.length == 0 && deck.length > 0 )
-                this.endTurn()
-        }
+        if ( e.key == "Enter" )
+            this.tryEndTurn()
     }
 
-    endTurn() {
+    get canEndTurn() {
+        let { deck, hand } = this
+        return hand.length == 0 && deck.length > 0 && this.player.health > 0
+    }
+
+    tryEndTurn() {
+        if ( !this.canEndTurn )
+            return
+
         let { enemy, enemySprites, enemyCount, win, player, melter, deck } = this
 
         //if enemy health is alive
@@ -151,6 +157,9 @@ export default class Game {
         this.render( scene )
 
         scene.update()
+
+        if ( this.canEndTurn )
+            scheduleTask( "endTurn", 1000, () => this.tryEndTurn() )
 
         //BackgroundEffect
         let colorCap = 100
