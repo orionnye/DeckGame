@@ -9,6 +9,8 @@ import CookBook from "./CookBook";
 import Canvas from "geode/lib/graphics/Canvas";
 import Transform from "geode/lib/math/Transform";
 import Input from "geode/lib/Input";
+import Scene from "geode/lib/gameobject/Scene";
+import Game from "./Game";
 
 export default class Melter extends GameObject {
     ingredients: CardType[]
@@ -34,49 +36,37 @@ export default class Melter extends GameObject {
         this.ingredients.push( card.type )
     }
 
-    drawProduct() {
+    drawProduct( scene: Scene ) {
         let { product } = this
+        product.isPreview = true
 
         let t = performance.now()
-
         let angle = Math.sin( t / 400 ) * 0.1
-
-        let fequency = 0.01
-
-        let offset = vector(
-            Math.sin( t / 7 * fequency ),
-            Math.cos( t / 13 * fequency )
-        ).multiply( 10 )
+        let fequency = 0.002
+        let offset = Vector.lissajous( t * fequency, 7, 13, 10 )
 
         Canvas.push()
-
-        product.position = Vector.ZERO
-
         Canvas.transform( new Transform(
-            this.center.addY( -150 ).add( offset ),
+            this.dimensions.half.addY( -150 ).add( offset ),
             angle,
             Vector.ONE,
             product.dimensions.half.addY( 20 )
         ) )
-
         Canvas.alpha( 0.8 )
-
-        product.draw( { shadowColor: "cornflowerblue" } )
+        product.onRender( scene )
         Canvas.pop()
     }
 
-    draw() {
-        let { sprite, position } = this
-        let { x, y } = position
+    onRender( scene: Scene ) {
+        let { sprite } = this
+        let mouse = scene.mousePosition
 
-        let { mouse } = Input
-
-        if ( this.contains( mouse ) )
-            this.drawProduct()
+        if ( !Game.instance.grabbing && this.contains( mouse ) )
+            this.drawProduct( scene )
 
         if ( sprite ) {
             let margin = vector( 32, 45 )
-            sprite.draw( x + margin.x, y + margin.y, true )
+            sprite.draw( margin.x, margin.y, true )
         }
     }
 }

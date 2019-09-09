@@ -4,10 +4,11 @@ import Sprite from "geode/lib/graphics/Sprite";
 import Vector, { vector } from "geode/lib/math/Vector";
 import { getImage } from "geode/lib/assets";
 import MutableVector from "geode/lib/math/MutableVector";
+import Scene from "geode/lib/gameobject/Scene";
+import GMath from "geode/lib/math/GMath";
 
 export default class Pawn extends GameObject {
 
-    offset: MutableVector
     color: string
     sprite?: Sprite
     health: number
@@ -20,7 +21,6 @@ export default class Pawn extends GameObject {
 
     constructor( x, y, width, height, color = "red", health = 10, sprite: Sprite ) {
         super( vector( x, y ), width, height )
-        this.offset = vector( 0, 0 )
         this.color = color
         this.health = health
         this.maxHealth = health
@@ -32,28 +32,20 @@ export default class Pawn extends GameObject {
     }
     //ADD ENEMY ACTIONS AND ACTIONLIST TO SPICE THINGS UP A BIT
 
+    addHealth( amount: number ) {
+        this.health += amount
+        this.damageTime = Math.max( 0, - amount * 2 )
+        this.health = GMath.clamp( this.health, 0, this.maxHealth )
+    }
+
     dealDamage( amount: number ) {
-        this.health -= amount
-        this.damageTime = Math.max( 0, amount * 2 )
+        this.addHealth( -amount )
     }
 
-    updateToFixed() {
-        if ( this.offset.length > 0 ) {
-            this.offset
-            if ( this.position.subtract( this.offset ).length > 2 ) {
-                let fixVector = vector( 0, 0 ).subtract( this.offset )
-                this.offset = fixVector.unit.multiply( fixVector.length / 2 )
-            }
-            if ( this.offset.length < 3 )
-                this.offset = vector( 0, 0 )
-        }
-    }
-
-    onRender() {
+    onRender( scene: Scene ) {
         if ( this.sprite ) {
             let { sprite, height } = this
-            let { x: dx, y: dy } = this.offset
-            sprite.draw( sprite.width / 2 + dx, height / 2 + dy, true )
+            sprite.draw( sprite.width / 2, height / 2, true )
         } else {
             this.drawBasic()
         }
@@ -62,17 +54,17 @@ export default class Pawn extends GameObject {
     }
 
     drawBasic() {
-        Canvas.vrect(
-            this.position.add( this.offset ),
-            this.dimensions
-        ).fillStyle( this.color ).fill()
+        // Canvas.vrect(
+        //     this.position.add( this.offset ),
+        //     this.dimensions
+        // ).fillStyle( this.color ).fill()
 
-        if ( this.health <= 0 )
-            Canvas.fillStyle( "black" ).text(
-                "Dead",
-                this.position.x + this.offset.x, this.position.y + this.offset.y + this.height / 2,
-                this.width
-            )
+        // if ( this.health <= 0 )
+        //     Canvas.fillStyle( "black" ).text(
+        //         "Dead",
+        //         this.position.x + this.offset.x, this.position.y + this.offset.y + this.height / 2,
+        //         this.width
+        //     )
     }
 
     drawHealthBar() {

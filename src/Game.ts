@@ -1,7 +1,6 @@
 import Canvas from "geode/lib/graphics/Canvas";
 import Deck from "./Deck";
 import Pawn from "./Pawn";
-import Input from "geode/lib/Input";
 import Card from "./Card";
 import Melter from "./Melter";
 import Sprite from "geode/lib/graphics/Sprite";
@@ -12,20 +11,15 @@ import animateSprite from "./animateSprite";
 import Transform from "geode/lib/math/Transform";
 import Vector, { vector } from "geode/lib/math/Vector";
 import GMath from "geode/lib/math/GMath";
-import Color, { rgb, rgba } from "geode/lib/graphics/Color";
+import { rgb, rgba } from "geode/lib/graphics/Color";
 import Scene from "geode/lib/gameobject/Scene";
 
 export default class Game {
 
     enemyCount = 0
-    deck = new Deck( 10, 30, 250, -1, 1 )
-    hand = new Deck( 5, 145, 250, 90, 0 )
-    discard = new Deck( 0, 600, 250, 1, 1 )
-
-    playerSprite = new Sprite( getImage( "PawnEgor" ) )
-        .setSource( { x: 0, y: 0, w: 180, h: 132 } )
-        .setDimensions( 208, 158 )
-    player = new Pawn( 100, 80, 100, 100, "red", 60, this.playerSprite )
+    deck = new Deck( 10, 30, 250, -1, 1, false )
+    hand = new Deck( 5, 145, 250, 90, 0, true )
+    discard = new Deck( 0, 600, 250, 1, 1, false )
 
     enemySprites = [
         new Sprite( getImage( "PawnChadwick2" ) )
@@ -39,47 +33,44 @@ export default class Game {
             .setDimensions( 130, 130 )
     ]
 
+    player = new Pawn(
+        100, 80, 100, 100, "red", 60,
+        new Sprite( getImage( "PawnEgor" ) )
+            .setSource( { x: 0, y: 0, w: 180, h: 132 } )
+            .setDimensions( 208, 158 )
+    )
     enemy = new Pawn( 520, 80, 100, 100, "blue", 15, this.enemySprites[ 0 ] )
-
-    win = false
-
     melter = new Melter( 325, 375 )
 
-    handCap = 5
+
+
     grabbing = false
+    win = false
+    handCap = 5
 
     ambience = audioInstance(
         getAudio( "DungeonAmbience" ),
-        //TEMPEROARY FIX
         { volume: 0.0 }
         // { volume: 0.30 }
     )
     tunes = audioInstance(
         getAudio( "DungeonTunes" ),
-        //TEMPEROARY FIX
         { volume: 0.0 }
         // { volume: 0.35 }
     )
 
     backgroundColor = rgb( 0, 0, 255 )
 
-    // globalTransform = new Transform()
-
-    scene: Scene = new Scene()
-
     static instance: Game
 
     constructor() {
         Game.instance = this
 
-        window.addEventListener( "keyup", e => this.keyup( e ) )
+        addEventListener( "keyup", e => this.keyup( e ) )
 
         this.player.main = true
         this.player.heal = 0
         this.player.damage = 0
-
-        this.scene.add( this.player )
-        this.scene.add( this.enemy )
     }
 
     get pawns() {
@@ -103,10 +94,6 @@ export default class Game {
             enemy.damage += 2
             enemy.heal += 1
             enemy.health += enemy.heal
-            if ( enemy.damage == 0 ) {
-                enemy.offset.x = -60
-                player.offset.x = -20
-            }
         } else {
             this.enemyCount += 1
             this.newEncounter()
@@ -159,21 +146,13 @@ export default class Game {
     }
 
     update() {
-        this.render()
+        let { deck, hand, discard, enemy, player, melter } = this
 
-        let { deck, hand, discard, enemy, player } = this
-        let { buttons } = Input
+        let scene = new Scene( [ player, enemy, deck, hand, discard, melter ] )
 
-        if ( player.offset.length > 1 )
-            player.updateToFixed()
-        if ( enemy.health > enemy.maxHealth )
-            enemy.health = enemy.maxHealth
-        if ( enemy.health < 0 )
-            enemy.health = 0
-        if ( player.health > player.maxHealth )
-            player.health = player.maxHealth
-        if ( player.health < 0 )
-            player.health = 0
+        this.render( scene )
+
+        scene.update()
 
         //BackgroundEffect
         let colorCap = 100
@@ -185,18 +164,6 @@ export default class Game {
             this.backgroundColor.b += 0.1
             this.backgroundColor.r += 0.1
         }
-        enemy.updateToFixed()
-
-        hand.updateToFixed()
-        discard.updateToFixed()
-        deck.updateToFixed()
-
-        for ( let card of hand.cards )
-            card.update( this )
-
-        if ( !buttons.Mouse0 && hand.length > 0 )
-            for ( let card of hand.cards )
-                card.grabbed = false
 
         if ( this.ambience.paused )
             playAudio( this.ambience )
@@ -205,30 +172,26 @@ export default class Game {
             playAudio( this.tunes )
     }
 
-    updateCameraShake( time: number ) {
-        let frequency = 100
+    updateCameraShake( scene: Scene, time: number ) {
+        const frequency = 20
 
         let t = Math.max( time, 0 )
         let magnitude = Math.pow( t, 0.5 )
-
-        let shakeOffset = new Vector(
-            Math.cos( t * frequency / 7 ),
-            Math.sin( t * frequency / 13 )
-        ).multiply( magnitude )
+        let offset = Vector.lissajous( t * frequency, 7, 13, magnitude )
         let angle = Math.sin( t ) * magnitude * 0.001
 
-        this.scene.globalTransform = new Transform(
-            Canvas.center.add( shakeOffset ),
+        scene.globalTransform = new Transform(
+            Canvas.center.add( offset ),
             angle,
             Vector.ONE,
             Canvas.center
         )
     }
 
-    transformTest() {
+    transformTest( scene: Scene ) {
         let t = performance.now() / 100
         let s = GMath.lerp( 0.75, Math.sin( t / 2 ), 0.1 )
-        this.scene.globalTransform.parent = new Transform(
+        scene.globalTransform.parent = new Transform(
             Canvas.center,
             GMath.degreesToRadians * t,
             new Vector( s, s ),
@@ -239,59 +202,47 @@ export default class Game {
         )
     }
 
-    render() {
-        let { deck, enemyCount, hand, discard } = this
+    render( scene: Scene ) {
+        let { enemyCount } = this
 
         Canvas.resize( 700, 500, 2 )
         Canvas.context.imageSmoothingEnabled = false
         Canvas.background( this.backgroundColor )
 
-        this.scene.render()
+        let backgroundY = 150
+        Canvas.rect( 0, backgroundY, Canvas.dimensions.x, Canvas.dimensions.y )
+            .fillStyle( rgb( 100, 100, 100 ) )
+            .fill()
+        Canvas.image( getImage( "Ground" ), 0, backgroundY - 5, Canvas.canvas.clientWidth, 200 )
+        Canvas.image( getImage( "BackGroundMid" ), 0, 0, Canvas.canvas.clientWidth, backgroundY )
 
-        // this.updateCameraShake( this.player.damageTime-- )
-        // // this.transformTest()
+        //Level Count
+        Canvas.fillStyle( rgb( 255, 0, 0 ) )
+            .text( "LEVEL" + enemyCount, Canvas.canvas.clientWidth / 2 - 45, 30, 100, "40px pixel" )
 
-        // Canvas.push()
-        // // Canvas.transform( this.scene.globalTransform )
+        this.updateCameraShake( scene, this.player.damageTime-- )
+        // this.transformTest( scene )
 
-        // let backgroundY = 150
-        // Canvas.rect( 0, backgroundY, Canvas.dimensions.x, Canvas.dimensions.y )
-        //     .fillStyle( rgb( 100, 100, 100 ) )
-        //     .fill()
-        // Canvas.image( getImage( "Ground" ), 0, backgroundY - 5, Canvas.canvas.clientWidth, 200 )
-        // Canvas.image( getImage( "BackGroundMid" ), 0, 0, Canvas.canvas.clientWidth, backgroundY )
+        scene.render()
 
-        // //Level Count
-        // Canvas.fillStyle( rgb( 255, 0, 0 ) )
-        //     .text( "LEVEL" + enemyCount, Canvas.canvas.clientWidth / 2 - 45, 30, 100, "40px pixel" );
+        if ( this.player.damageTime > 0 )
+            Canvas.background( rgba( 255, 0, 0, Math.sqrt( this.player.damageTime / 160 ) ) )
 
-        // for ( let pawn of this.pawns )
-        //     pawn.draw()
 
-        // deck.draw()
-        // discard.draw()
-        // hand.draw( false )
+        if ( this.player.health <= 0 ) {
+            Canvas.fillStyle( rgb( 100, 0, 0 ) )
+            let deathMessageWidth = 700
+            let deathMessageX = Canvas.canvas.clientWidth / 2 - deathMessageWidth / 2
+            let deathMessageY = Canvas.canvas.clientHeight / 2 - 30
+            Canvas.text( "YOU DIED ON LEVEL " + this.enemyCount, deathMessageX, deathMessageY, deathMessageWidth, "250px pixel" );
+        }
 
-        // this.melter.draw()
-
-        // if ( this.player.health <= 0 ) {
-        //     Canvas.fillStyle( rgb( 100, 0, 0 ) )
-        //     let deathMessageWidth = 700
-        //     let deathMessageX = Canvas.canvas.clientWidth / 2 - deathMessageWidth / 2
-        //     let deathMessageY = Canvas.canvas.clientHeight / 2 - 30
-        //     Canvas.text( "You  Died  On  Level " + this.enemyCount, deathMessageX, deathMessageY, deathMessageWidth, "250px pixel" );
-        // }
-        // if ( this.win ) {
-        //     Canvas.fillStyle( rgb( 0, 0, 100 ) )
-        //     let winMessageWidth = 700
-        //     let winMessageX = Canvas.canvas.clientWidth / 2 - winMessageWidth / 2
-        //     let winMessageY = Canvas.canvas.clientHeight / 2
-        //     Canvas.text( "You Win", winMessageX, winMessageY, winMessageWidth, "400px pixel" );
-        // }
-
-        // Canvas.pop()
-
-        // if ( this.player.damageTime > 0 )
-        //     Canvas.background( rgba( 255, 0, 0, Math.sqrt( this.player.damageTime / 160 ) ) )
+        if ( this.win ) {
+            Canvas.fillStyle( rgb( 0, 0, 100 ) )
+            let winMessageWidth = 700
+            let winMessageX = Canvas.canvas.clientWidth / 2 - winMessageWidth / 2
+            let winMessageY = Canvas.canvas.clientHeight / 2
+            Canvas.text( "YOU WIN", winMessageX, winMessageY, winMessageWidth, "400px pixel" );
+        }
     }
 }
