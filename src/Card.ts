@@ -85,6 +85,6 @@ export default class Card extends GameObject {
 
         Canvas.vimage( getImage( this.type.image ), position, dimensions )
         //Text IDEALLY would print the card description contained on the card
-        Canvas.text( this.type.name.toUpperCase(), x + margin, y + height - margin, width - margin * 2, "20px pixel" );
+        Canvas.fillStyle( "#D2B9A6" ).text( this.type.name.toUpperCase(), x + margin, y + height - margin, width - margin * 2, "20px pixel" );
     }
 }
