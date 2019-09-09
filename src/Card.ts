@@ -1,84 +1,100 @@
-import Vector from "./common/Vector";
-import Deck from "./Deck";
-import Pawn from "./Pawn";
-import Canvas from "./common/Canvas";
-import Input from "./common/Input";
-import Game from "./Game";
-import GameObject from "./GameObject";
-import CookBook from "./CookBook";
+import { getImage } from "geode/lib/assets";
+import Canvas from "geode/lib/graphics/Canvas";
+import GameObject from "geode/lib/gameobject/GameObject";
+import Input from "geode/lib/Input";
+import Sprite from "geode/lib/graphics/Sprite";
+import Vector, { vector } from "geode/lib/math/Vector";
+import animateSprite from "./animateSprite";
 import CardType from "./CardType";
-import { playAudio } from "./common/audio";
-import { getImage } from "./common/assets";
+import Deck from "./Deck";
+import Game from "./Game";
+import Pawn from "./Pawn";
+import Scene from "geode/lib/gameobject/Scene";
+import Color from "geode/lib/graphics/Color";
+
 
 export default class Card extends GameObject {
 
     type: CardType
-    grabbed: boolean
+    // grabbed: boolean
+    sprite?: Sprite
+    inHand: boolean = false
+    isPreview: boolean = false
+
+    static dimensions = vector( 69, 100 )
 
     constructor( position: Vector, type: CardType ) {
-        super( position, 69, 100 )
+        super( position, Card.dimensions.x, Card.dimensions.y )
         this.position = position.copy
         this.type = type
-        this.grabbed = false
+        // this.grabbed = false
+    }
+
+    get grabbed() {
+        return Game.instance.grabbing == this
     }
 
     apply( pawn: Pawn, hand: Deck, discard: Deck ) {
-
         this.type.apply( pawn )
-        this.grabbed = false
-
-        pawn.offset.y = -30
-
         hand.remove( this )
         let random = ( discard.length == 0 ) ? 0 : Math.floor( Math.random() * discard.length )
         discard.insertAt( this, random )
     }
 
-    update( game: Game ) {
-        let { mouse, buttons } = Input
+    onUpdate( scene: Scene ) {
+        if ( !this.inHand )
+            return
+
+        let game = Game.instance
+        let { buttons } = Input
+        let mouse = scene.mousePosition
 
         if ( buttons.Mouse0 ) {
-            if ( this.contains( mouse ) && !game.grabbing ) {
-                game.grabbing = true
-                this.grabbed = true
-            }
+            if ( this.contains( mouse ) && !game.grabbing )
+                game.grabbing = this
         } else {
             if ( this.grabbed )
-                this.onDrop( game )
-            game.grabbing = false
-            this.grabbed = false
+                this.onDrop()
         }
 
         if ( this.grabbed )
             this.position = mouse.subtract( this.dimensions.half )
-
     }
 
-    onDrop( game: Game ) {
-        let { hand, discard, pawns, melter } = game
+    onDrop() {
+        let game = Game.instance
+        game.grabbing = undefined
+        let { hand, discard, pawns, melter, player } = Game.instance
         for ( let pawn of pawns ) {
             if ( pawn.overlaps( this ) ) {
                 this.apply( pawn, hand, discard )
-                if (pawn !== game.player) {
-                    game.player.sprite!.animate(80, 9)
+                if ( pawn !== player ) {
+                    if ( player.sprite )
+                        animateSprite( player.sprite, 80, 9 )
                 }
             }
         }
 
         if ( melter.overlaps( this ) ) {
-            console.log( "Melted ", this.type.name )
             melter.melt( this )
             hand.remove( this )
         }
     }
 
-    draw() {
-        let { position, dimensions, width, height } = this
-        let { x, y } = position
+    onRender( scene: Scene ) {
+        let { dimensions, width, height, type, inHand, isPreview } = this
         let margin = width / 12
 
-        Canvas.vimage( getImage( this.type.image ), position, dimensions )
-        //Text IDEALLY would print the card description contained on the card
-        Canvas.text( this.type.name, x + margin, y + height - margin, width - margin * 2, "20px pixel" );
+        let showFront = isPreview || inHand
+
+        let image = showFront ? type.image : "CardBlank"
+
+        if ( isPreview )
+            Canvas.shadow( 40, "cornflowerblue" )
+        Canvas.vimage( getImage( image ), Vector.ZERO, dimensions )
+
+        Canvas.shadow( 0, Color.transparent )
+        if ( showFront )
+            Canvas.fillStyle( "#D2B9A6" ).text( type.name.toUpperCase(), margin, height - margin, width - margin * 2, "20px pixel" );
     }
 }

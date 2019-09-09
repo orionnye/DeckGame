@@ -1,48 +1,54 @@
 import CardType from "./CardType";
+import Pawn from "./Pawn";
 
 const CardTypes = {
     //Offensive
-    Attack1: new CardType( { imageName: "Attack", damage: 1 } ),
-    Attack2: new CardType( { imageName: "Attack", damage: 2 } ),
-    Attack3: new CardType( { damage: 4 } ),
+    Attack1: new CardType( { imageName: "Attack", damage: 5 } ),
+    Attack2: new CardType( { imageName: "Attack", damage: 10 } ),
+    Acid: new CardType( { damage: 15 } ),
     Molotov: new CardType( {
-        damage: 3,
-        onApply: pawn => {
+        damage: 5,
+        onApply( pawn: Pawn ) {
             pawn.heal -= 2
-    }} ),
-    Nuke: new CardType( { damage: 20 } ),
+        }
+    } ),
     Poison: new CardType( {
         imageName: "Poison",
-        damage: -1,
-        onApply: pawn => {
+        damage: -8,
+        onApply( pawn: Pawn ) {
             pawn.heal -= 1
-    }} ),
+        }
+    } ),
     Blood: new CardType( {
-        damage: -1,
-        onApply: pawn => {
-            pawn.damage += 1
-    } }),
+        imageName: "Blood",
+        damage: 20,
+        onApply( pawn: Pawn ) {
+            pawn.damage += 3
+        }
+    } ),
     //Defensive
-    Heal1: new CardType( { imageName: "Heal", damage: -1 } ),
-    Heal2: new CardType( { imageName: "Heal", damage: -2 } ),
+    Heal1: new CardType( { imageName: "Heal", damage: -5 } ),
+    Heal2: new CardType( { imageName: "Heal", damage: -10 } ),
     Karma: new CardType( {
         imageName: "Karma",
-        damage: 1,
-        onApply: pawn => {
-            pawn.heal += 1
-    }} ),
+        damage: 5,
+        onApply( pawn: Pawn ) {
+            pawn.maxHealth += 5
+        }
+    } ),
     Dread: new CardType( {
         imageName: "Dread",
-        onApply: pawn => {
-            pawn.damage -= 1
-    }} ),
+        onApply( pawn: Pawn ) {
+            pawn.damage -= 5
+        }
+    } ),
     Volatile: new CardType( {
         imageName: "Volatile",
         damage: 0,
-        onApply: pawn => {
-            let potency = Math.floor(Math.random() * 5)
+        onApply( pawn: Pawn ) {
+            let potency = Math.floor( Math.random() * 10 )
             let damage = ( Math.random() > 0.5 ) ? potency : -potency
-            pawn.health -= damage
+            pawn.dealDamage( damage )
         }
     } )
 }

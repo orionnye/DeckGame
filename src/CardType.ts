@@ -1,4 +1,6 @@
 import Pawn from "./Pawn";
+import { playAudio, audioInstance, playSound } from "geode/lib/audio";
+import { getAudio, getAudioInstance } from "geode/lib/assets";
 
 type ApplyFunction = ( pawn: Pawn ) => void
 export default class CardType {
@@ -13,11 +15,13 @@ export default class CardType {
         this.damage = damage
         this.onApply = onApply
     }
+
     apply( pawn: Pawn ) {
-        if ( this.onApply != null ) {
+        if ( this.onApply != null )
             this.onApply( pawn )
-        }
-        pawn.health -= this.damage
+        if ( !pawn.main )
+            setTimeout( () => playSound( "glassbreak", "wav", { volume: 1 / 6 } ), 600 )
+        pawn.dealDamage( this.damage )
     }
 
     get image() {

@@ -1,17 +1,21 @@
-import Vector, { vector } from "./common/Vector";
+import Vector, { vector } from "geode/lib/math/Vector";
 import Card from "./Card";
-import Canvas from "./common/Canvas";
-import GameObject from "./GameObject";
+import Canvas from "geode/lib/graphics/Canvas";
+import GameObject from "geode/lib/gameobject/GameObject";
 import CardTypes from "./CardTypes";
-import { getImage } from "./common/assets";
+import { getImage } from "geode/lib/assets";
+import Scene from "geode/lib/gameobject/Scene";
 
 export default class Deck extends GameObject {
     spread: Vector
     cards: Card[]
+    isHand: boolean
 
-    constructor( count, x, y, spreadX, spreadY ) {
+    constructor( count, x, y, spreadX, spreadY, isHand: boolean ) {
         super( vector( x, y ), 0, 0 )
         this.spread = vector( spreadX, spreadY )
+        this.isHand = isHand
+
         let cards: Card[] = []
         for ( let i = 0; i < count; i++ ) {
             let deckPos = vector( x + spreadX * i, y + spreadY * i )
@@ -22,6 +26,8 @@ export default class Deck extends GameObject {
             cards.push( card )
         }
         this.cards = cards
+
+        this.layer = 10
     }
 
     get length() { return this.cards.length }
@@ -54,7 +60,7 @@ export default class Deck extends GameObject {
             destination.cards.push( card )
     }
 
-    updateToFixed() {
+    onUpdate() {
         this.cards.forEach( card => {
             let fixedPos = this.cardPosition( card )
             if ( fixedPos.subtract( card.position ).length > 1 ) {
@@ -71,23 +77,26 @@ export default class Deck extends GameObject {
         )
     }
 
-    draw( stack: boolean = true ) {
-        for ( let card of this.cards ) {
-            if ( stack ) {
-                let dimensions = new Vector( card.width, card.height )
-                Canvas.vimage( getImage( "CardBlank" ), card.position, dimensions )
-            }
-            else
-                card.draw()
-        }
-        if ( stack && this.length >= 0 ) {
+    onRender() {
+        if ( !this.isHand && this.length >= 0 ) {
             let lastCard = this.cards[ this.length - 1 ]
             if ( !lastCard )
                 return
-            let textX = lastCard.position.x
-            let textY = lastCard.position.y + lastCard.height / 2
-            Canvas.fillStyle( "black" )
-                .text( this.length.toString(), textX, textY, lastCard.width )
+
+            Canvas.vimage( getImage( "CardBlank" ), Vector.ZERO, lastCard.dimensions )
+            Canvas.fillStyle( "#a39081" )
+                .text( this.length.toString(), 0, lastCard.height / 2, lastCard.width, "30px pixel" )
+        }
+    }
+
+    onBuildScene( scene: Scene ) {
+        let layer = 0
+        for ( let card of this.cards ) {
+            card.inHand = this.isHand
+            card.layer = layer--
+            if ( card.grabbed )
+                card.layer = 100
+            scene.add( card )
         }
     }
 
