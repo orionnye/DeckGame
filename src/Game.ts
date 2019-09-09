@@ -12,6 +12,7 @@ import animateSprite from "./animateSprite";
 import Transform from "geode/lib/math/Transform";
 import Vector, { vector } from "geode/lib/math/Vector";
 import GMath from "geode/lib/math/GMath";
+import Color, { rgb, rgba } from "geode/lib/graphics/color";
 
 export default class Game {
     enemyCount = 0
@@ -57,9 +58,10 @@ export default class Game {
         // { volume: 0.35 }
     )
 
-    backgroundRed = 0
-    backgroundGreen = 0
-    backgroundBlue = 255
+    // backgroundRed = 0
+    // backgroundGreen = 0
+    // backgroundBlue = 255
+    backgroundColor = rgb( 0, 0, 255 )
 
     globalTransform = new Transform()
 
@@ -109,11 +111,10 @@ export default class Game {
         if ( player.sprite )
             animateSprite( player.sprite, 200, 1 )
 
-        if ( player.health <= 0 ) {
+        if ( player.health <= 0 )
             window.setTimeout( () => { location.reload() }, 5000 )
-        } else {
+        else
             this.refillHand()
-        }
 
         let product = melter.product
         console.log( "Crafted " + product.type.name )
@@ -167,13 +168,13 @@ export default class Game {
 
         //BackgroundEffect
         let colorCap = 100
-        if ( this.backgroundBlue > colorCap ) {
-            this.backgroundBlue -= 10
-            this.backgroundRed -= 10
+        if ( this.backgroundColor.b > colorCap ) {
+            this.backgroundColor.b -= 10
+            this.backgroundColor.r -= 10
         }
         else {
-            this.backgroundBlue += 0.1
-            this.backgroundRed += 0.1
+            this.backgroundColor.b += 0.1
+            this.backgroundColor.r += 0.1
         }
         enemy.updateToFixed()
 
@@ -218,7 +219,6 @@ export default class Game {
     transformTest() {
         let t = performance.now() / 100
         let s = GMath.lerp( 0.75, Math.sin( t / 2 ), 0.1 )
-        let r = Math.sin( t / 8 ) * 0.05
         this.globalTransform.parent = new Transform(
             Canvas.center,
             GMath.degreesToRadians * t,
@@ -235,22 +235,20 @@ export default class Game {
 
         Canvas.resize( 700, 500, 2 )
         Canvas.context.imageSmoothingEnabled = false
-        Canvas.background( `rgb(${this.backgroundRed}, ${this.backgroundGreen}, ${this.backgroundBlue})` )
+        Canvas.background( this.backgroundColor )
 
         this.updateCameraShake( this.player.damageTime-- )
-        // this.transformTest()
         Canvas.transform( this.globalTransform )
-
 
         let backgroundY = 150
         Canvas.rect( 0, backgroundY, Canvas.dimensions.x, Canvas.dimensions.y )
-            .fillStyle( "rgb(100, 100, 100" )
+            .fillStyle( rgb( 100, 100, 100 ) )
             .fill()
         Canvas.image( getImage( "Ground" ), 0, backgroundY - 5, Canvas.canvas.clientWidth, 200 )
         Canvas.image( getImage( "BackGroundMid" ), 0, 0, Canvas.canvas.clientWidth, backgroundY )
 
         //Level Count
-        Canvas.fillStyle( "rgb(255, 0, 0)" )
+        Canvas.fillStyle( rgb( 255, 0, 0 ) )
             .text( "level" + enemyCount, Canvas.canvas.clientWidth / 2 - 45, 30, 100, "40px pixel" );
 
 
@@ -263,18 +261,21 @@ export default class Game {
         this.melter.draw()
 
         if ( this.player.health <= 0 ) {
-            Canvas.fillStyle( "rgb(100, 0, 0)" )
+            Canvas.fillStyle( rgb( 100, 0, 0 ) )
             let deathMessageWidth = 700
             let deathMessageX = Canvas.canvas.clientWidth / 2 - deathMessageWidth / 2
             let deathMessageY = Canvas.canvas.clientHeight / 2 - 30
             Canvas.text( "You  Died  On  Level " + this.enemyCount, deathMessageX, deathMessageY, deathMessageWidth, "250px pixel" );
         }
         if ( this.win ) {
-            Canvas.fillStyle( "rgb(0, 0, 100)" )
+            Canvas.fillStyle( rgb( 0, 0, 100 ) )
             let winMessageWidth = 700
             let winMessageX = Canvas.canvas.clientWidth / 2 - winMessageWidth / 2
             let winMessageY = Canvas.canvas.clientHeight / 2
             Canvas.text( "You Win", winMessageX, winMessageY, winMessageWidth, "400px pixel" );
         }
+
+        if ( this.player.damageTime > 0 )
+            Canvas.background( rgba( 255, 0, 0, Math.sqrt( this.player.damageTime / 160 ) ) )
     }
 }
