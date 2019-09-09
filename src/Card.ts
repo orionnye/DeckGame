@@ -78,12 +78,12 @@ export default class Card extends GameObject {
         }
     }
 
-    draw() {
+    draw( options: { shadowColor } = { shadowColor: "rgba(0, 0, 0, 0)" } ) {
         let { position, dimensions, width, height } = this
         let { x, y } = position
         let margin = width / 12
 
-        Canvas.vimage( getImage( this.type.image ), position, dimensions )
+        Canvas.push().shadow( 40, options.shadowColor ).vimage( getImage( this.type.image ), position, dimensions ).pop()
         //Text IDEALLY would print the card description contained on the card
         Canvas.fillStyle( "#D2B9A6" ).text( this.type.name.toUpperCase(), x + margin, y + height - margin, width - margin * 2, "20px pixel" );
     }

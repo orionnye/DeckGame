@@ -1,11 +1,14 @@
 import { getImage } from "geode/lib/assets";
 import GameObject from "geode/lib/gameobject/GameObject";
 import Sprite from "geode/lib/graphics/Sprite";
-import { vector } from "geode/lib/math/Vector";
+import Vector, { vector } from "geode/lib/math/Vector";
 import Card from "./Card";
 import CardType from "./CardType";
 import CardTypes from "./CardTypes";
 import CookBook from "./CookBook";
+import Canvas from "geode/lib/graphics/Canvas";
+import Transform from "geode/lib/math/Transform";
+import Input from "geode/lib/Input";
 
 export default class Melter extends GameObject {
     ingredients: CardType[]
@@ -31,15 +34,48 @@ export default class Melter extends GameObject {
         this.ingredients.push( card.type )
     }
 
+    drawProduct() {
+        let { product } = this
+
+        let t = performance.now()
+
+        let angle = Math.sin( t / 400 ) * 0.1
+
+        let fequency = 0.01
+
+        let offset = vector(
+            Math.sin( t / 7 * fequency ),
+            Math.cos( t / 13 * fequency )
+        ).multiply( 10 )
+
+        Canvas.push()
+
+        product.position = Vector.ZERO
+
+        Canvas.transform( new Transform(
+            this.center.addY( -150 ).add( offset ),
+            angle,
+            Vector.ONE,
+            product.dimensions.half.addY( 20 )
+        ) )
+
+        Canvas.alpha( 0.8 )
+
+        product.draw( { shadowColor: "cornflowerblue" } )
+        Canvas.pop()
+    }
+
     draw() {
-        let margin = vector( 32, 45 )
-        // Canvas.vrect( this.position.subtract( margin.half ), this.dimensions.add( margin ) )
-        //     .fillStyle( "black" ).fill()
-        // Canvas.vrect( this.position, this.product.dimensions )
-        //     .fillStyle( "blue" ).fill()
-        if ( this.sprite ) {
-            let { sprite, position, width, height } = this
-            let { x, y } = position
+        let { sprite, position } = this
+        let { x, y } = position
+
+        let { mouse } = Input
+
+        if ( this.contains( mouse ) )
+            this.drawProduct()
+
+        if ( sprite ) {
+            let margin = vector( 32, 45 )
             sprite.draw( x + margin.x, y + margin.y, true )
         }
     }
