@@ -16,7 +16,7 @@ import Color from "geode/lib/graphics/Color";
 export default class Card extends GameObject {
 
     type: CardType
-    grabbed: boolean
+    // grabbed: boolean
     sprite?: Sprite
     inHand: boolean = false
     isPreview: boolean = false
@@ -27,13 +27,15 @@ export default class Card extends GameObject {
         super( position, Card.dimensions.x, Card.dimensions.y )
         this.position = position.copy
         this.type = type
-        this.grabbed = false
+        // this.grabbed = false
+    }
+
+    get grabbed() {
+        return Game.instance.grabbing == this
     }
 
     apply( pawn: Pawn, hand: Deck, discard: Deck ) {
         this.type.apply( pawn )
-        this.grabbed = false
-
         hand.remove( this )
         let random = ( discard.length == 0 ) ? 0 : Math.floor( Math.random() * discard.length )
         discard.insertAt( this, random )
@@ -48,15 +50,11 @@ export default class Card extends GameObject {
         let mouse = scene.mousePosition
 
         if ( buttons.Mouse0 ) {
-            if ( this.contains( mouse ) && !game.grabbing ) {
-                game.grabbing = true
-                this.grabbed = true
-            }
+            if ( this.contains( mouse ) && !game.grabbing )
+                game.grabbing = this
         } else {
             if ( this.grabbed )
                 this.onDrop()
-            game.grabbing = false
-            this.grabbed = false
         }
 
         if ( this.grabbed )
@@ -64,6 +62,8 @@ export default class Card extends GameObject {
     }
 
     onDrop() {
+        let game = Game.instance
+        game.grabbing = undefined
         let { hand, discard, pawns, melter, player } = Game.instance
         for ( let pawn of pawns ) {
             if ( pawn.overlaps( this ) ) {

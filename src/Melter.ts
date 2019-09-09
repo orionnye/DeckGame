@@ -11,11 +11,14 @@ import Transform from "geode/lib/math/Transform";
 import Input from "geode/lib/Input";
 import Scene from "geode/lib/gameobject/Scene";
 import Game from "./Game";
+import GMath from "geode/lib/math/GMath";
 
 export default class Melter extends GameObject {
     ingredients: CardType[]
     base: Card
     sprite?: Sprite
+
+    preview = 0
 
     constructor( x: number, y: number ) {
         super( vector( x, y ), 69, 100 )
@@ -32,12 +35,23 @@ export default class Melter extends GameObject {
         return concoction
     }
 
+    get potentialProduct() {
+        let game = Game.instance
+        if ( !game.grabbing ) return
+
+        let ingredients = this.ingredients.slice()
+        ingredients.push( game.grabbing.type )
+
+        let type = CookBook.getProduct( ingredients )
+        let concoction = new Card( this.base.position, type )
+        return concoction
+    }
+
     melt( card: Card ) {
         this.ingredients.push( card.type )
     }
 
-    drawProduct( scene: Scene ) {
-        let { product } = this
+    drawProduct( scene: Scene, product: Card ) {
         product.isPreview = true
 
         let t = performance.now()
@@ -52,7 +66,7 @@ export default class Melter extends GameObject {
             Vector.ONE,
             product.dimensions.half.addY( 20 )
         ) )
-        Canvas.alpha( 0.8 )
+        Canvas.alpha( this.preview * 0.8 )
         product.onRender( scene )
         Canvas.pop()
     }
@@ -61,8 +75,11 @@ export default class Melter extends GameObject {
         let { sprite } = this
         let mouse = scene.mousePosition
 
-        if ( !Game.instance.grabbing && this.contains( mouse ) )
-            this.drawProduct( scene )
+        let previewTarget = 0
+        if ( this.contains( mouse ) )
+            previewTarget = 1
+        this.preview = GMath.lerp( this.preview, previewTarget, 0.1 )
+        this.drawProduct( scene, this.potentialProduct || this.product )
 
         if ( sprite ) {
             let margin = vector( 32, 45 )

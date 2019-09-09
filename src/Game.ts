@@ -42,9 +42,7 @@ export default class Game {
     enemy = new Pawn( 520, 80, 100, 100, "blue", 15, this.enemySprites[ 0 ] )
     melter = new Melter( 325, 375 )
 
-
-
-    grabbing = false
+    grabbing?: Card
     win = false
     handCap = 5
 
