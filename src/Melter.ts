@@ -12,6 +12,7 @@ import Input from "geode/lib/Input";
 import Scene from "geode/lib/gameobject/Scene";
 import Game from "./Game";
 import GMath from "geode/lib/math/GMath";
+import { playSound } from "geode/lib/audio";
 
 export default class Melter extends GameObject {
     ingredients: CardType[]
@@ -49,6 +50,7 @@ export default class Melter extends GameObject {
 
     melt( card: Card ) {
         this.ingredients.push( card.type )
+        playSound( "bubble", "wav", { volume: 0.5 } )
     }
 
     drawProduct( scene: Scene, product: Card ) {

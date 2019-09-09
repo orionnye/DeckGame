@@ -76,7 +76,6 @@ export default class Card extends GameObject {
         }
 
         if ( melter.overlaps( this ) ) {
-            console.log( "Melted ", this.type.name )
             melter.melt( this )
             hand.remove( this )
         }

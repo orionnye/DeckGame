@@ -5,7 +5,7 @@ import Card from "./Card";
 import Melter from "./Melter";
 import Sprite from "geode/lib/graphics/Sprite";
 import CardTypes from "./CardTypes";
-import { playAudio, audioInstance } from "geode/lib/audio";
+import { playAudio, audioInstance, playSound } from "geode/lib/audio";
 import { getImage, getAudio } from "geode/lib/assets";
 import animateSprite from "./animateSprite";
 import Transform from "geode/lib/math/Transform";
@@ -89,16 +89,17 @@ export default class Game {
         //if enemy health is alive
         if ( enemy.health > 0 ) {
             player.dealDamage( enemy.damage )
+            playSound( "slap", "wav" )
             enemy.damage += 2
             enemy.heal += 1
-            enemy.health += enemy.heal
+            enemy.addHealth( enemy.heal )
         } else {
             this.enemyCount += 1
             this.newEncounter()
         }
 
         //Player Passive Stats
-        player.health += player.heal
+        player.addHealth( player.heal )
         //end turn animations
         if ( enemy.sprite )
             animateSprite( enemy.sprite, 300, 5 )
@@ -111,7 +112,6 @@ export default class Game {
             this.refillHand()
 
         let product = melter.product
-        console.log( "Crafted " + product.type.name )
         deck.cards.push( product )
         melter.base = new Card( melter.position, CardTypes.Volatile )
         melter.ingredients = []
@@ -139,7 +139,7 @@ export default class Game {
             discard.cards = []
         }
 
-        while ( hand.length < handCap )
+        while ( hand.length < handCap && deck.length > 0 )
             deck.transferCard( hand )
     }
 

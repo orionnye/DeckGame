@@ -6,6 +6,7 @@ import { getImage } from "geode/lib/assets";
 import MutableVector from "geode/lib/math/MutableVector";
 import Scene from "geode/lib/gameobject/Scene";
 import GMath from "geode/lib/math/GMath";
+import { playSound } from "geode/lib/audio";
 
 export default class Pawn extends GameObject {
 
@@ -34,11 +35,11 @@ export default class Pawn extends GameObject {
 
     addHealth( amount: number ) {
         this.health += amount
-        this.damageTime = Math.max( 0, - amount * 2 )
         this.health = GMath.clamp( this.health, 0, this.maxHealth )
     }
 
     dealDamage( amount: number ) {
+        this.damageTime = Math.max( 0, amount * 2 )
         this.addHealth( -amount )
     }
 
@@ -54,17 +55,10 @@ export default class Pawn extends GameObject {
     }
 
     drawBasic() {
-        // Canvas.vrect(
-        //     this.position.add( this.offset ),
-        //     this.dimensions
-        // ).fillStyle( this.color ).fill()
-
-        // if ( this.health <= 0 )
-        //     Canvas.fillStyle( "black" ).text(
-        //         "Dead",
-        //         this.position.x + this.offset.x, this.position.y + this.offset.y + this.height / 2,
-        //         this.width
-        //     )
+        Canvas.vrect(
+            Vector.ZERO,
+            this.dimensions
+        ).fillStyle( this.color ).fill()
     }
 
     drawHealthBar() {
