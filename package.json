@@ -6,6 +6,7 @@
     "license": "none",
     "scripts": {
         "dev": "yarn install && yarn build",
+        "clean": "rm -f yarn.lock && rm -rf lib && rm -rf node_modules",
         "build": "tsc",
         "watch": "tsc -w",
         "webpack": "webpack-dev-server",
