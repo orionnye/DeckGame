@@ -9,19 +9,19 @@ const CardTypes = {
     Molotov: new CardType( {
         damage: 5,
         onApply( pawn: Pawn ) {
-            pawn.heal -= 2
+            pawn.heal -= 3
         }
     } ),
     Poison: new CardType( {
         imageName: "Poison",
         damage: -8,
         onApply( pawn: Pawn ) {
-            pawn.heal -= 1
+            pawn.heal -= 2
         }
     } ),
     Blood: new CardType( {
         imageName: "Blood",
-        damage: 20,
+        damage: 25,
         onApply( pawn: Pawn ) {
             pawn.damage += 3
         }
@@ -39,7 +39,10 @@ const CardTypes = {
     Dread: new CardType( {
         imageName: "Dread",
         onApply( pawn: Pawn ) {
-            pawn.damage -= 5
+            let potency = Math.floor( Math.random() * 5 )
+            let damage = ( Math.random() > 0.5 ) ? potency : -potency
+            pawn.damage -= 3
+            pawn.dealDamage( damage )
         }
     } ),
     Volatile: new CardType( {

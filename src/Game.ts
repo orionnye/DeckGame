@@ -154,6 +154,8 @@ export default class Game {
 
         if ( player.offset.length > 1 )
             player.updateToFixed()
+        if ( player.heal < 0 )
+            player.heal += 1
         if ( enemy.health > enemy.maxHealth )
             enemy.health = enemy.maxHealth
         if ( enemy.health < 0 )
