@@ -101,6 +101,11 @@ export default class Game {
         }
 
         //Player Passive Stats
+        if ( player.heal < 0 )
+            player.heal += 1
+        if ( player.heal > 0 ) {
+            player.heal -= 1
+        }
         player.health += player.heal
         //end turn animations
         if ( enemy.sprite )
@@ -154,8 +159,6 @@ export default class Game {
 
         if ( player.offset.length > 1 )
             player.updateToFixed()
-        if ( player.heal < 0 )
-            player.heal += 1
         if ( enemy.health > enemy.maxHealth )
             enemy.health = enemy.maxHealth
         if ( enemy.health < 0 )
@@ -266,7 +269,7 @@ export default class Game {
             let deathMessageWidth = 700
             let deathMessageX = Canvas.canvas.clientWidth / 2 - deathMessageWidth / 2
             let deathMessageY = Canvas.canvas.clientHeight / 2 - 30
-            Canvas.text( "You  Died  On  Level " + this.enemyCount, deathMessageX, deathMessageY, deathMessageWidth, "250px pixel" );
+            Canvas.text( "YOU DIED ON LEVEL " + this.enemyCount, deathMessageX, deathMessageY, deathMessageWidth, "250px pixel" );
         }
         if ( this.win ) {
             Canvas.fillStyle( rgb( 0, 0, 100 ) )

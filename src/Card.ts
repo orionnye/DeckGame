@@ -24,9 +24,9 @@ export default class Card extends GameObject {
         this.grabbed = false
     }
 
-    apply( pawn: Pawn, hand: Deck, discard: Deck ) {
+    apply( pawn: Pawn, hand: Deck, discard: Deck, player?: Pawn ) {
 
-        this.type.apply( pawn )
+        this.type.apply( pawn, player )
         this.grabbed = false
 
         pawn.offset.y = -30
@@ -60,10 +60,10 @@ export default class Card extends GameObject {
     }
 
     onDrop( game: Game ) {
-        let { hand, discard, pawns, melter } = game
+        let { hand, discard, pawns, melter, player } = game
         for ( let pawn of pawns ) {
             if ( pawn.overlaps( this ) ) {
-                this.apply( pawn, hand, discard )
+                this.apply( pawn, hand, discard, player )
                 if ( pawn !== game.player ) {
                     if ( game.player.sprite )
                         animateSprite( game.player.sprite, 80, 9 )
