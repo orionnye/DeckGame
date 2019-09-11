@@ -50,7 +50,7 @@ export default class Melter extends GameObject {
 
     melt( card: Card ) {
         this.ingredients.push( card.type )
-        playSound( "bubble", "wav", { volume: 0.5 } )
+        playSound( "bubble.wav", { volume: 0.5 } )
     }
 
     drawProduct( scene: Scene, product: Card ) {

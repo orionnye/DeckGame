@@ -98,7 +98,7 @@ export default class Game {
         //if enemy health is alive
         if ( enemy.health > 0 ) {
             player.dealDamage( enemy.damage )
-            playSound( "slap", "wav" )
+            playSound( "slap.wav" )
             enemy.damage += 2
             enemy.heal += 1
             enemy.addHealth( enemy.heal )
@@ -113,7 +113,7 @@ export default class Game {
         if ( player.heal > 0 ) {
             player.heal -= 1
         }
-      
+
         player.addHealth( player.heal )
         //end turn animations
         if ( enemy.sprite )

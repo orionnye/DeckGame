@@ -19,9 +19,9 @@ export default class CardType {
 
     apply( pawn: Pawn, player?: Pawn ) {
         if ( this.onApply != null )
-            this.onApply( pawn, player)
+            this.onApply( pawn, player )
         if ( !pawn.main )
-            setTimeout( () => playSound( "glassbreak", "wav", { volume: 1 / 9 } ), 600 )
+            setTimeout( () => playSound( "glassbreak.wav", { volume: 1 / 9 } ), 600 )
         pawn.dealDamage( this.damage )
     }
 

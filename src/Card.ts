@@ -21,7 +21,7 @@ export default class Card extends GameObject {
     inHand: boolean = false
     isPreview: boolean = false
 
-    static dimensions = vector( 69, 100 )
+    static dimensions = vector( 67, 111 )
 
     constructor( position: Vector, type: CardType ) {
         super( position, Card.dimensions.x, Card.dimensions.y )
@@ -29,7 +29,7 @@ export default class Card extends GameObject {
         this.type = type
         // this.grabbed = false
     }
-  
+
     get grabbed() {
         return Game.instance.grabbing == this
     }
