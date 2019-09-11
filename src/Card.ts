@@ -10,7 +10,7 @@ import Deck from "./Deck";
 import Game from "./Game";
 import Pawn from "./Pawn";
 import Scene from "geode/lib/gameobject/Scene";
-import Color from "geode/lib/graphics/Color";
+import Colors from "geode/lib/graphics/Colors";
 
 
 export default class Card extends GameObject {
@@ -93,7 +93,7 @@ export default class Card extends GameObject {
             Canvas.shadow( 40, "cornflowerblue" )
         Canvas.vimage( getImage( image ), Vector.ZERO, dimensions )
 
-        Canvas.shadow( 0, Color.transparent )
+        Canvas.shadow( 0, Colors.transparent )
         if ( showFront )
             Canvas.fillStyle( "#D2B9A6" ).text( type.name.toUpperCase(), margin, height - margin, width - margin * 2, "20px pixel" );
     }

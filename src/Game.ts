@@ -14,6 +14,7 @@ import GMath from "geode/lib/math/GMath";
 import { rgb, rgba } from "geode/lib/graphics/Color";
 import Scene from "geode/lib/gameobject/Scene";
 import { scheduleTask } from "./util";
+import Background from "./Background";
 
 export default class Game {
 
@@ -42,6 +43,8 @@ export default class Game {
     )
     enemy = new Pawn( 520, 80, 100, 100, "blue", 15, this.enemySprites[ 0 ] )
     melter = new Melter( 325, 375 )
+
+    background = new Background()
 
     grabbing?: Card
     win = false
@@ -150,9 +153,9 @@ export default class Game {
     }
 
     update() {
-        let { deck, hand, discard, enemy, player, melter } = this
+        let { deck, hand, discard, enemy, player, melter, background } = this
 
-        let scene = new Scene( [ player, enemy, deck, hand, discard, melter ] )
+        let scene = new Scene( [ player, enemy, deck, hand, discard, melter, background ] )
 
         this.render( scene )
 
@@ -179,62 +182,47 @@ export default class Game {
             playAudio( this.tunes )
     }
 
-    updateCameraShake( scene: Scene, time: number ) {
+    cameraTransform() {
+        // let time = performance.now() / 100
+        // let s = GMath.lerp( 0.75, Math.sin( time / 2 ), 0.1 )
+
+        // let dizzyTransform = new Transform(
+        //     Canvas.center,
+        //     GMath.degreesToRadians * time,
+        //     new Vector( 1 / s, 1 / s ),
+        //     Canvas.center,
+        //     new Transform(
+        //         Canvas.center, 0, new Vector( 1, 1 / Math.sin( time * 0.1 ) ), Canvas.center
+        //     )
+        // )
+
         const frequency = 20
+        let damageTime = Math.max( this.player.damageTime--, 0 )
+        let magnitude = Math.pow( damageTime, 0.5 )
+        let offset = Vector.lissajous( damageTime * frequency, 7, 13, magnitude )
+        let angle = Math.sin( damageTime ) * magnitude * 0.001
 
-        let t = Math.max( time, 0 )
-        let magnitude = Math.pow( t, 0.5 )
-        let offset = Vector.lissajous( t * frequency, 7, 13, magnitude )
-        let angle = Math.sin( t ) * magnitude * 0.001
-
-        scene.globalTransform = new Transform(
+        let cameraShakeTransform = new Transform(
             Canvas.center.add( offset ),
             angle,
             Vector.ONE,
-            Canvas.center
+            Canvas.center,
+            // dizzyTransform
         )
-    }
 
-    transformTest( scene: Scene ) {
-        let t = performance.now() / 100
-        let s = GMath.lerp( 0.75, Math.sin( t / 2 ), 0.1 )
-        scene.globalTransform.parent = new Transform(
-            Canvas.center,
-            GMath.degreesToRadians * t,
-            new Vector( s, s ),
-            Canvas.center,
-            new Transform(
-                Canvas.center, 0, new Vector( 1, Math.sin( t * 0.1 ) ), Canvas.center
-            )
-        )
+        return cameraShakeTransform
     }
 
     render( scene: Scene ) {
-        let { enemyCount } = this
-
         Canvas.resize( 700, 500, 2 )
         Canvas.context.imageSmoothingEnabled = false
         Canvas.background( this.backgroundColor )
 
-        let backgroundY = 150
-        Canvas.rect( 0, backgroundY, Canvas.dimensions.x, Canvas.dimensions.y )
-            .fillStyle( rgb( 100, 100, 100 ) )
-            .fill()
-        Canvas.image( getImage( "Ground" ), 0, backgroundY - 5, Canvas.canvas.clientWidth, 200 )
-        Canvas.image( getImage( "BackGroundMid" ), 0, 0, Canvas.canvas.clientWidth, backgroundY )
-
-        //Level Count
-        Canvas.fillStyle( rgb( 255, 0, 0 ) )
-            .text( "LEVEL" + enemyCount, Canvas.canvas.clientWidth / 2 - 45, 30, 100, "40px pixel" )
-
-        this.updateCameraShake( scene, this.player.damageTime-- )
-        // this.transformTest( scene )
-
+        scene.cameraTransform = this.cameraTransform()
         scene.render()
 
         if ( this.player.damageTime > 0 )
             Canvas.background( rgba( 255, 0, 0, Math.sqrt( this.player.damageTime / 160 ) ) )
-
 
         if ( this.player.health <= 0 ) {
             Canvas.fillStyle( rgb( 100, 0, 0 ) )
