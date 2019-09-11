@@ -18,7 +18,12 @@ import Background from "./Background";
 
 export default class Game {
 
+    win = false
+    handCap = 5
     enemyCount = 0
+    grabbing?: Card
+    backgroundColor = rgb( 0, 0, 255 )
+
     deck = new Deck( 10, 30, 250, -1, 1, false )
     hand = new Deck( 5, 145, 250, 90, 0, true )
     discard = new Deck( 0, 600, 250, 1, 1, false )
@@ -35,36 +40,28 @@ export default class Game {
             .setDimensions( 130, 130 )
     ]
 
+    background = new Background()
+    melter = new Melter( 325, 375 )
+    enemy = new Pawn( 520, 80, 100, 100, "blue", 15, this.enemySprites[ 0 ] )
     player = new Pawn(
         100, 80, 100, 100, "red", 60,
         new Sprite( getImage( "PawnEgor" ) )
             .setSource( { x: 0, y: 0, w: 180, h: 132 } )
             .setDimensions( 208, 158 )
     )
-    enemy = new Pawn( 520, 80, 100, 100, "blue", 15, this.enemySprites[ 0 ] )
-    melter = new Melter( 325, 375 )
-
-    background = new Background()
-
-    grabbing?: Card
-    win = false
-    handCap = 5
 
     ambience = audioInstance(
         getAudio( "DungeonAmbience" ),
-        { volume: 0.0 }
-        // { volume: 0.30 }
+        { volume: 0.3 * 0 }
     )
+
     tunes = audioInstance(
         getAudio( "DungeonTunes" ),
-        { volume: 0.0 }
-        // { volume: 0.35 }
+        { volume: 0.35 * 0 }
     )
 
-    backgroundColor = rgb( 0, 0, 255 )
 
     static instance: Game
-
     constructor() {
         Game.instance = this
 
