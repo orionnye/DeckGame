@@ -18,11 +18,11 @@ export default class CardType {
     }
 
     apply( pawn: Pawn, player?: Pawn ) {
+        pawn.health -= this.damage
         if ( this.onApply != null )
             this.onApply( pawn, player )
         if ( !pawn.main )
             setTimeout( () => playSound( "glassbreak.wav", { volume: 1 / 9 } ), 600 )
-        pawn.health -= this.damage
     }
 
     get imagePath() {
