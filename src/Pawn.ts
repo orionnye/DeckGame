@@ -99,15 +99,15 @@ export default class Pawn extends GameObject {
     drawIntent() {
         Canvas.fillStyle( "orange" )
             .text(
-                "ATTACK  " + this.damage.toString() + "",
-                0, 0 - 20,
-                100, "25px pixel"
+                "Attack  " + this.damage.toString() + "",
+                0, -20,
+                120, "25px pixel"
             )
         Canvas.fillStyle( "green" )
             .text(
-                "REGENERATE  " + this.heal.toString() + "",
+                "Regenerate  " + this.heal.toString() + "",
                 0, 0,
-                120, "25px pixel"
+                120, "20px pixel"
             )
     }
 }

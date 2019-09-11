@@ -18,6 +18,6 @@ export default class Background extends GameObject {
 
         //Level Count
         Canvas.fillStyle( rgb( 255, 0, 0 ) )
-            .text( "LEVEL" + enemyCount, Canvas.canvas.clientWidth / 2 - 45, 30, 100, "40px pixel" )
+            .text( "Level " + enemyCount, Canvas.canvas.clientWidth / 2 - 45, 30, 100, "40px pixel" )
     }
 }
