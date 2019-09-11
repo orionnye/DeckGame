@@ -1,0 +1,19 @@
+{
+    "include": [
+        "src"
+    ],
+    "compilerOptions": {
+        "target": "ESNEXT",
+        "module": "commonjs",
+        // "declaration": true,
+        "outDir": "lib",
+        "rootDir": "src",
+        "strict": true,
+        "noImplicitAny": false,
+        "allowJs": true,
+        "allowSyntheticDefaultImports": true,
+        "experimentalDecorators": true,
+        "esModuleInterop": true,
+        "preserveWatchOutput": true
+    }
+}
