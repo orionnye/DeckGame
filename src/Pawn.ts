@@ -3,49 +3,57 @@ import GameObject from "geode/lib/gameobject/GameObject";
 import Sprite from "geode/lib/graphics/Sprite";
 import Vector, { vector } from "geode/lib/math/Vector";
 import { getImage } from "geode/lib/assets";
-import MutableVector from "geode/lib/math/MutableVector";
 import Scene from "geode/lib/gameobject/Scene";
 import GMath from "geode/lib/math/GMath";
-import { playSound } from "geode/lib/audio";
 
 export default class Pawn extends GameObject {
 
     color: string
-    sprite?: Sprite = new Sprite( getImage( "Archlizard" ) )
-    .setSource( { x: 0, y: 0, w: 100, h: 50 } )
-    .setDimensions( 150, 70 )
-    health: number
+    private pDamageTime: number
+    private pHealth: number
     maxHealth: number
     damage: number
     heal: number
     main: boolean
-    // This is just for camera shake animation
-    damageTime: number
+    sprite?: Sprite = new Sprite( getImage( "Archlizard" ) )
+        .setSource( { x: 0, y: 0, w: 100, h: 50 } )
+        .setDimensions( 150, 70 )
 
     constructor( x, y, width, height, color = "red", health = 10, sprite ) {
         super( vector( x, y ), width, height )
         this.color = color
-        this.health = health
         this.maxHealth = health
+        this.pHealth = health
         this.damage = 10
         this.heal = 2
         this.main = false
         this.sprite = sprite
-        this.damageTime = 0
-    }
-    //ADD ENEMY ACTIONS AND ACTIONLIST TO SPICE THINGS UP A BIT
-
-    addHealth( amount: number ) {
-        this.health += amount
-        this.health = GMath.clamp( this.health, 0, this.maxHealth )
+        this.pDamageTime = 0
     }
 
-    dealDamage( amount: number ) {
+    get damageTime() { return this.pDamageTime }
+    set damageTime( value ) { this.pDamageTime = Math.max( 0, value ) }
+
+    get health() { return this.pHealth }
+    set health( value: number ) {
+        let increase = value - this.pHealth
+        this.pHealth = GMath.clamp( value, 0, this.maxHealth )
+        if ( increase < 0 )
+            this.onDamage( -increase )
+    }
+
+    onDamage( amount: number ) {
         this.damageTime = Math.max( 0, amount * 2 )
-        this.addHealth( -amount )
     }
 
     onRender( scene: Scene ) {
+        Canvas.vtranslate(
+            Vector.lissajous(
+                this.damageTime * 10,
+                7, 13, Math.sqrt( this.damageTime )
+            )
+        )
+
         if ( this.sprite ) {
             let { sprite, height } = this
             sprite.draw( sprite.width / 2, height / 2, true )
@@ -54,6 +62,10 @@ export default class Pawn extends GameObject {
         }
         this.drawHealthBar()
         this.drawIntent()
+    }
+
+    onUpdate() {
+        this.damageTime--
     }
 
     drawBasic() {

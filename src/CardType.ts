@@ -22,11 +22,11 @@ export default class CardType {
             this.onApply( pawn, player )
         if ( !pawn.main )
             setTimeout( () => playSound( "glassbreak.wav", { volume: 1 / 9 } ), 600 )
-        pawn.dealDamage( this.damage )
+        pawn.health -= this.damage
     }
 
-    get image() {
-        return "Card" + ( this.imageName || this.name )
+    get imagePath() {
+        return "cards/" + ( this.imageName || this.name )
     }
 
 }

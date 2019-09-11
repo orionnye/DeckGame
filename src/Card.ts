@@ -12,7 +12,6 @@ import Pawn from "./Pawn";
 import Scene from "geode/lib/gameobject/Scene";
 import Colors from "geode/lib/graphics/Colors";
 
-
 export default class Card extends GameObject {
 
     type: CardType
@@ -87,11 +86,11 @@ export default class Card extends GameObject {
 
         let showFront = isPreview || inHand
 
-        let image = showFront ? type.image : "CardBlank"
+        let image = getImage( showFront ? type.imagePath : "cards/Blank" )
 
         if ( isPreview )
             Canvas.shadow( 40, "cornflowerblue" )
-        Canvas.vimage( getImage( image ), Vector.ZERO, dimensions )
+        Canvas.vimage( image, Vector.ZERO, dimensions )
 
         Canvas.shadow( 0, Colors.transparent )
         if ( showFront )

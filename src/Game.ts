@@ -97,11 +97,11 @@ export default class Game {
 
         //if enemy health is alive
         if ( enemy.health > 0 ) {
-            player.dealDamage( enemy.damage )
+            player.health -= enemy.damage
             playSound( "slap.wav" )
             enemy.damage += 2
             enemy.heal += 1
-            enemy.addHealth( enemy.heal )
+            enemy.health += enemy.heal
         } else {
             this.enemyCount += 1
             this.newEncounter()
@@ -114,7 +114,7 @@ export default class Game {
             player.heal -= 1
         }
 
-        player.addHealth( player.heal )
+        player.health += player.heal
         //end turn animations
         if ( enemy.sprite )
             animateSprite( enemy.sprite, 300, 5 )
@@ -191,7 +191,6 @@ export default class Game {
     cameraTransform() {
         // let time = performance.now() / 100
         // let s = GMath.lerp( 0.75, Math.sin( time / 2 ), 0.1 )
-
         // let dizzyTransform = new Transform(
         //     Canvas.center,
         //     GMath.degreesToRadians * time,
@@ -201,13 +200,11 @@ export default class Game {
         //         Canvas.center, 0, new Vector( 1, 1 / Math.sin( time * 0.1 ) ), Canvas.center
         //     )
         // )
-
         const frequency = 20
-        let damageTime = Math.max( this.player.damageTime--, 0 )
-        let magnitude = Math.pow( damageTime, 0.5 )
+        let damageTime = this.player.damageTime
+        let magnitude = Math.sqrt( damageTime )
         let offset = Vector.lissajous( damageTime * frequency, 7, 13, magnitude )
         let angle = Math.sin( damageTime ) * magnitude * 0.001
-
         let cameraShakeTransform = new Transform(
             Canvas.center.add( offset ),
             angle,
@@ -215,7 +212,6 @@ export default class Game {
             Canvas.center,
             // dizzyTransform
         )
-
         return cameraShakeTransform
     }
 

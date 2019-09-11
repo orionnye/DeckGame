@@ -23,18 +23,18 @@ const CardTypes = {
         imageName: "Blood",
         damage: 25,
         onApply( pawn: Pawn, player?: Pawn ) {
-            if (player)
+            if ( player )
                 player.health -= 5
             pawn.damage += 3
         }
     } ),
     Pact: new CardType( {
         onApply( pawn: Pawn, player?: Pawn ) {
-            if (player) {
+            if ( player ) {
                 let damage = player.maxHealth - player.health
                 pawn.health -= damage
-                player.health += Math.floor(damage / 3)
-                player.maxHealth -= Math.floor(damage / 3)
+                player.health += Math.floor( damage / 3 )
+                player.maxHealth -= Math.floor( damage / 3 )
             }
         }
     } ),
@@ -42,7 +42,7 @@ const CardTypes = {
     Leeches: new CardType( {
         damage: 5,
         onApply( pawn: Pawn, player?: Pawn ) {
-            if (player)
+            if ( player )
                 player.health += 5
         }
     } ),
@@ -77,7 +77,7 @@ const CardTypes = {
             let potency = Math.floor( Math.random() * 10 )
             let damage = ( Math.random() > 0.5 ) ? potency : -potency
             pawn.damage -= 3
-            pawn.dealDamage( damage )
+            pawn.heal -= damage
         }
     } ),
     Volatile: new CardType( {
@@ -86,7 +86,7 @@ const CardTypes = {
         onApply( pawn: Pawn ) {
             let potency = Math.floor( Math.random() * 10 )
             let damage = ( Math.random() > 0.5 ) ? potency : -potency
-            pawn.dealDamage( damage )
+            pawn.health -= damage
         }
     } )
 }
