@@ -59,7 +59,7 @@ export default class Deck extends GameObject {
             destination.cards.push( card )
     }
 
-    onUpdate() {
+    onUpdate( scene: Scene ) {
         this.cards.forEach( card => {
             let fixedPos = this.cardPosition( card )
             if ( fixedPos.subtract( card.position ).length > 1 ) {

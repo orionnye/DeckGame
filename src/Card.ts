@@ -67,7 +67,7 @@ export default class Card extends GameObject {
         let { hand, discard, pawns, melter, player } = Game.instance
         for ( let pawn of pawns ) {
             if ( pawn.overlaps( this ) ) {
-                this.apply( pawn, hand, discard )
+                this.apply( pawn, hand, discard, player )
                 if ( pawn !== player ) {
                     if ( player.sprite )
                         animateSprite( player.sprite, 80, 9 )
