@@ -53,7 +53,7 @@ export default class Melter extends GameObject {
         playSound( "bubble.wav", { volume: 0.5 } )
     }
 
-    drawProduct( scene: Scene, product: Card ) {
+    drawProduct( canvas: Canvas, scene: Scene, product: Card ) {
         product.isPreview = true
 
         let t = performance.now()
@@ -61,19 +61,19 @@ export default class Melter extends GameObject {
         let fequency = 0.002
         let offset = Vector.lissajous( t * fequency, 7, 13, 10 )
 
-        Canvas.push()
-        Canvas.transform( new Transform(
+        canvas.push()
+        canvas.transform( new Transform(
             this.dimensions.half.addY( -150 ).add( offset ),
             angle,
             Vector.ONE,
             product.dimensions.half.addY( 20 )
         ) )
-        Canvas.alpha( this.preview * 0.8 )
-        product.onRender( scene )
-        Canvas.pop()
+        canvas.alpha( this.preview * 0.8 )
+        product.onRender( canvas, scene )
+        canvas.pop()
     }
 
-    onRender( scene: Scene ) {
+    onRender( canvas: Canvas, scene: Scene ) {
         let { sprite } = this
         let mouse = scene.mousePosition
 
@@ -81,11 +81,11 @@ export default class Melter extends GameObject {
         if ( this.contains( mouse ) )
             previewTarget = 1
         this.preview = GMath.lerp( this.preview, previewTarget, 0.1 )
-        this.drawProduct( scene, this.potentialProduct || this.product )
+        this.drawProduct( canvas, scene, this.potentialProduct || this.product )
 
         if ( sprite ) {
             let margin = vector( 32, 45 )
-            sprite.draw( margin.x, margin.y, true )
+            sprite.draw( canvas, margin.x, margin.y, true )
         }
     }
 }

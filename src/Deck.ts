@@ -76,14 +76,14 @@ export default class Deck extends GameObject {
         )
     }
 
-    onRender() {
+    onRender( canvas: Canvas ) {
         if ( !this.isHand && this.length >= 0 ) {
             let lastCard = this.cards[ this.length - 1 ]
             if ( !lastCard )
                 return
 
-            Canvas.vimage( getImage( "cards/Blank" ), Vector.ZERO, lastCard.dimensions )
-            Canvas.fillStyle( "#a39081" )
+            canvas.vimage( getImage( "cards/Blank" ), Vector.ZERO, lastCard.dimensions )
+            canvas.fillStyle( "#a39081" )
                 .text( this.length.toString(), 0, lastCard.height / 2, lastCard.width, "30px pixel" )
         }
     }

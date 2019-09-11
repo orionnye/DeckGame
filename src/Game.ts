@@ -60,10 +60,13 @@ export default class Game {
         { volume: 0.35 * 0 }
     )
 
+    canvas: Canvas
 
     static instance: Game
     constructor() {
         Game.instance = this
+
+        this.canvas = new Canvas( "canvas" )
 
         addEventListener( "keyup", e => this.keyup( e ) )
 
@@ -156,9 +159,9 @@ export default class Game {
     }
 
     update() {
-        let { deck, hand, discard, enemy, player, melter, background } = this
+        let { canvas, deck, hand, discard, enemy, player, melter, background } = this
 
-        let scene = new Scene( [ player, enemy, deck, hand, discard, melter, background ] )
+        let scene = new Scene( canvas, this.cameraTransform(), [ player, enemy, deck, hand, discard, melter, background ] )
 
         this.render( scene )
 
@@ -186,57 +189,61 @@ export default class Game {
     }
 
     cameraTransform() {
+        let { canvas } = this
         let dizzyTime = GMath.soften( this.player.dizzyTime / 4, 20 )
         let s = GMath.lerp( 1, Math.cos( dizzyTime / 4 ), 0.1 )
         let dizzyTransform = new Transform(
-            Canvas.center,
+            canvas.center,
             Math.sin( dizzyTime / 13 ) * GMath.TAU / 8,
             new Vector( 1 / s, 1 / s ),
-            Canvas.center,
+            canvas.center,
             new Transform(
-                Canvas.center, 0, new Vector( 1, 1 / Math.cos( dizzyTime * 0.1 ) ), Canvas.center
+                canvas.center, 0, new Vector( 1, 1 / Math.cos( dizzyTime * 0.1 ) ), canvas.center
             )
         )
+
         const frequency = 20
         let damageTime = this.player.damageTime
         let magnitude = Math.sqrt( damageTime )
         let offset = Vector.lissajous( damageTime * frequency, 7, 13, magnitude )
         let angle = Math.sin( damageTime ) * magnitude * 0.001
         let cameraShakeTransform = new Transform(
-            Canvas.center.add( offset ),
+            canvas.center.add( offset ),
             angle,
             Vector.ONE,
-            Canvas.center,
+            canvas.center,
             dizzyTransform
         )
         return cameraShakeTransform
     }
 
     render( scene: Scene ) {
-        Canvas.resize( 700, 500, 2 )
-        Canvas.context.imageSmoothingEnabled = false
-        Canvas.background( this.backgroundColor )
+        let { canvas } = this
+
+        canvas.resize( 700, 500, 2 )
+        canvas.context.imageSmoothingEnabled = false
+        canvas.background( this.backgroundColor )
 
         scene.cameraTransform = this.cameraTransform()
         scene.render()
 
         if ( this.player.damageTime > 0 )
-            Canvas.background( rgba( 255, 0, 0, Math.sqrt( this.player.damageTime / 160 ) ) )
+            canvas.background( rgba( 255, 0, 0, Math.sqrt( this.player.damageTime / 160 ) ) )
 
         if ( this.player.health <= 0 ) {
-            Canvas.fillStyle( rgb( 100, 0, 0 ) )
+            canvas.fillStyle( rgb( 100, 0, 0 ) )
             let deathMessageWidth = 700
-            let deathMessageX = Canvas.canvas.clientWidth / 2 - deathMessageWidth / 2
-            let deathMessageY = Canvas.canvas.clientHeight / 2 - 30
-            Canvas.text( "YOU DIED ON LEVEL " + this.enemyCount, deathMessageX, deathMessageY, deathMessageWidth, "250px pixel" );
+            let deathMessageX = canvas.canvas.clientWidth / 2 - deathMessageWidth / 2
+            let deathMessageY = canvas.canvas.clientHeight / 2 - 30
+            canvas.text( "YOU DIED ON LEVEL " + this.enemyCount, deathMessageX, deathMessageY, deathMessageWidth, "250px pixel" );
         }
 
         if ( this.win ) {
-            Canvas.fillStyle( rgb( 0, 0, 100 ) )
+            canvas.fillStyle( rgb( 0, 0, 100 ) )
             let winMessageWidth = 700
-            let winMessageX = Canvas.canvas.clientWidth / 2 - winMessageWidth / 2
-            let winMessageY = Canvas.canvas.clientHeight / 2
-            Canvas.text( "YOU WIN", winMessageX, winMessageY, winMessageWidth, "400px pixel" );
+            let winMessageX = canvas.canvas.clientWidth / 2 - winMessageWidth / 2
+            let winMessageY = canvas.canvas.clientHeight / 2
+            canvas.text( "YOU WIN", winMessageX, winMessageY, winMessageWidth, "400px pixel" );
         }
     }
 }

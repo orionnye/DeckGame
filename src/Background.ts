@@ -6,18 +6,18 @@ import Game from "./Game";
 
 export default class Background extends GameObject {
     layer = -100
-    onRender() {
+    onRender( canvas: Canvas ) {
         let { enemyCount } = Game.instance
 
         let backgroundY = 150
-        Canvas.rect( 0, backgroundY, Canvas.dimensions.x, Canvas.dimensions.y )
+        canvas.rect( 0, backgroundY, canvas.dimensions.x, canvas.dimensions.y )
             .fillStyle( rgb( 100, 100, 100 ) )
             .fill()
-        Canvas.image( getImage( "Ground" ), 0, backgroundY - 5, Canvas.canvas.clientWidth, 200 )
-        Canvas.image( getImage( "BackGroundMid" ), 0, 0, Canvas.canvas.clientWidth, backgroundY )
+        canvas.image( getImage( "Ground" ), 0, backgroundY - 5, canvas.canvas.clientWidth, 200 )
+        canvas.image( getImage( "BackGroundMid" ), 0, 0, canvas.canvas.clientWidth, backgroundY )
 
         //Level Count
-        Canvas.fillStyle( rgb( 255, 0, 0 ) )
-            .text( "Level " + enemyCount, Canvas.canvas.clientWidth / 2 - 45, 30, 100, "40px pixel" )
+        canvas.fillStyle( rgb( 255, 0, 0 ) )
+            .text( "Level " + enemyCount, canvas.canvas.clientWidth / 2 - 45, 30, 100, "40px pixel" )
     }
 }

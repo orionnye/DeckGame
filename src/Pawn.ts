@@ -44,24 +44,6 @@ export default class Pawn extends GameObject {
         this.damageTime = Math.max( 0, amount * 2 )
     }
 
-    onRender( scene: Scene ) {
-        Canvas.vtranslate(
-            Vector.lissajous(
-                this.damageTime * 10,
-                7, 13, Math.sqrt( this.damageTime )
-            )
-        )
-
-        if ( this.sprite ) {
-            let { sprite, height } = this
-            sprite.draw( sprite.width / 2, height / 2, true )
-        } else {
-            this.drawBasic()
-        }
-        this.drawHealthBar()
-        this.drawIntent()
-    }
-
     onUpdate() {
         this.damageTime = Math.max( 0, this.damageTime - 1 )
         this.dizzyTime = Math.max( 0, this.dizzyTime - 1 )
@@ -70,14 +52,32 @@ export default class Pawn extends GameObject {
             this.dizziness = 0
     }
 
-    drawBasic() {
-        Canvas.vrect(
+    onRender( canvas: Canvas, scene: Scene ) {
+        canvas.vtranslate(
+            Vector.lissajous(
+                this.damageTime * 10,
+                7, 13, Math.sqrt( this.damageTime )
+            )
+        )
+
+        if ( this.sprite ) {
+            let { sprite, height } = this
+            sprite.draw( canvas, sprite.width / 2, height / 2, true )
+        } else {
+            this.drawBasic( canvas )
+        }
+        this.drawHealthBar( canvas )
+        this.drawIntent( canvas )
+    }
+
+    drawBasic( canvas: Canvas ) {
+        canvas.vrect(
             Vector.ZERO,
             this.dimensions
         ).fillStyle( this.color ).fill()
     }
 
-    drawHealthBar() {
+    drawHealthBar( canvas: Canvas ) {
         let healthHeight = 20
         let textWidth = 60
         let healthChunk = this.width / this.maxHealth
@@ -85,10 +85,10 @@ export default class Pawn extends GameObject {
         let healthPos = vector( 0, this.height + 40 )
         let healthNumPos = healthPos.addXY( healthWidth / 3 - textWidth / 4, healthHeight - 2 )
 
-        Canvas.vrect( healthPos, vector( this.width, healthHeight ) ).fillStyle( "black" ).fill().stroke()
-        Canvas.vrect( healthPos, vector( healthWidth, healthHeight ) ).fillStyle( "red" ).fill().stroke()
+        canvas.vrect( healthPos, vector( this.width, healthHeight ) ).fillStyle( "black" ).fill().stroke()
+        canvas.vrect( healthPos, vector( healthWidth, healthHeight ) ).fillStyle( "red" ).fill().stroke()
 
-        Canvas.fillStyle( "white" )
+        canvas.fillStyle( "white" )
             .text(
                 this.health.toString() + "/" + this.maxHealth.toString(),
                 healthNumPos.x, healthNumPos.y,
@@ -96,14 +96,14 @@ export default class Pawn extends GameObject {
             )
     }
 
-    drawIntent() {
-        Canvas.fillStyle( "orange" )
+    drawIntent( canvas: Canvas ) {
+        canvas.fillStyle( "orange" )
             .text(
                 "Attack  " + this.damage.toString() + "",
                 0, -20,
                 120, "25px pixel"
             )
-        Canvas.fillStyle( "green" )
+        canvas.fillStyle( "green" )
             .text(
                 "Regenerate  " + this.heal.toString() + "",
                 0, 0,

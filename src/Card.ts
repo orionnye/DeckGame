@@ -81,7 +81,7 @@ export default class Card extends GameObject {
         }
     }
 
-    onRender( scene: Scene ) {
+    onRender( canvas: Canvas, scene: Scene ) {
         let { dimensions, width, height, type, inHand, isPreview } = this
         let margin = width / 12
 
@@ -92,11 +92,11 @@ export default class Card extends GameObject {
             image = getImage( "cards/Blank" )
 
         if ( isPreview )
-            Canvas.shadow( 40, "cornflowerblue" )
-        Canvas.vimage( image, Vector.ZERO, dimensions )
+            canvas.shadow( 40, "cornflowerblue" )
+        canvas.vimage( image, Vector.ZERO, dimensions )
 
-        Canvas.shadow( 0, Colors.transparent )
+        canvas.shadow( 0, Colors.transparent )
         if ( showFront )
-            Canvas.fillStyle( "#D2B9A6" ).text( type.name.toUpperCase(), margin, height - margin, width - margin * 2, "20px pixel" );
+            canvas.fillStyle( "#D2B9A6" ).text( type.name.toUpperCase(), margin, height - margin, width - margin * 2, "20px pixel" );
     }
 }
