@@ -108,6 +108,12 @@ export default class Game {
         }
 
         //Player Passive Stats
+        if ( player.heal < 0 )
+            player.heal += 1
+        if ( player.heal > 0 ) {
+            player.heal -= 1
+        }
+      
         player.addHealth( player.heal )
         //end turn animations
         if ( enemy.sprite )

@@ -11,7 +11,9 @@ import { playSound } from "geode/lib/audio";
 export default class Pawn extends GameObject {
 
     color: string
-    sprite?: Sprite
+    sprite?: Sprite = new Sprite( getImage( "Archlizard" ) )
+    .setSource( { x: 0, y: 0, w: 100, h: 50 } )
+    .setDimensions( 150, 70 )
     health: number
     maxHealth: number
     damage: number
@@ -20,7 +22,7 @@ export default class Pawn extends GameObject {
     // This is just for camera shake animation
     damageTime: number
 
-    constructor( x, y, width, height, color = "red", health = 10, sprite: Sprite ) {
+    constructor( x, y, width, height, color = "red", health = 10, sprite ) {
         super( vector( x, y ), width, height )
         this.color = color
         this.health = health

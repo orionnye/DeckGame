@@ -29,13 +29,13 @@ export default class Card extends GameObject {
         this.type = type
         // this.grabbed = false
     }
-
+  
     get grabbed() {
         return Game.instance.grabbing == this
     }
 
-    apply( pawn: Pawn, hand: Deck, discard: Deck ) {
-        this.type.apply( pawn )
+    apply( pawn: Pawn, hand: Deck, discard: Deck, player?: Pawn ) {
+        this.type.apply( pawn, player )
         hand.remove( this )
         let random = ( discard.length == 0 ) ? 0 : Math.floor( Math.random() * discard.length )
         discard.insertAt( this, random )

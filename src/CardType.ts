@@ -1,8 +1,9 @@
 import Pawn from "./Pawn";
 import { playAudio, audioInstance, playSound } from "geode/lib/audio";
 import { getAudio, getAudioInstance } from "geode/lib/assets";
+import Player from "./Game"
 
-type ApplyFunction = ( pawn: Pawn ) => void
+type ApplyFunction = ( pawn: Pawn, player?: Pawn ) => void
 export default class CardType {
 
     name!: string
@@ -16,11 +17,11 @@ export default class CardType {
         this.onApply = onApply
     }
 
-    apply( pawn: Pawn ) {
+    apply( pawn: Pawn, player?: Pawn ) {
         if ( this.onApply != null )
-            this.onApply( pawn )
+            this.onApply( pawn, player)
         if ( !pawn.main )
-            setTimeout( () => playSound( "glassbreak", "wav", { volume: 1 / 6 } ), 600 )
+            setTimeout( () => playSound( "glassbreak", "wav", { volume: 1 / 9 } ), 600 )
         pawn.dealDamage( this.damage )
     }
 
