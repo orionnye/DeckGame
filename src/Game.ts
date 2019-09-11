@@ -139,15 +139,18 @@ export default class Game {
 
     refillHand() {
         let { deck, hand, discard, handCap } = this
-
-        if ( deck.length < handCap ) {
+        let totalCards = deck.length + discard.length + hand.length
+        let handMax = handCap
+        if (handCap > totalCards)
+            handMax = totalCards
+        if ( deck.length < handMax ) {
             for ( let card of deck.cards )
                 hand.cards.push( card )
             deck.cards = discard.cards
             discard.cards = []
         }
 
-        while ( hand.length < handCap )
+        while ( hand.length < handMax )
             deck.transferCard( hand )
     }
 
