@@ -15,10 +15,10 @@ import Colors from "geode/lib/graphics/Colors";
 export default class Card extends GameObject {
 
     type: CardType
-    // grabbed: boolean
     sprite?: Sprite
     inHand: boolean = false
     isPreview: boolean = false
+    grabOffset: Vector = Vector.ZERO
 
     static dimensions = vector( 67, 111 )
 
@@ -26,7 +26,6 @@ export default class Card extends GameObject {
         super( position, Card.dimensions.x, Card.dimensions.y )
         this.position = position.copy
         this.type = type
-        // this.grabbed = false
     }
 
     get grabbed() {
@@ -49,15 +48,17 @@ export default class Card extends GameObject {
         let mouse = scene.mousePosition
 
         if ( buttons.Mouse0 ) {
-            if ( this.contains( mouse ) && !game.grabbing )
+            if ( this.contains( mouse ) && !game.grabbing ) {
                 game.grabbing = this
+                this.grabOffset = this.position.subtract( mouse )
+            }
         } else {
             if ( this.grabbed )
                 this.onDrop()
         }
 
         if ( this.grabbed )
-            this.position = mouse.subtract( this.dimensions.half )
+            this.position = mouse.add( this.grabOffset )
     }
 
     onDrop() {
