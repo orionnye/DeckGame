@@ -186,17 +186,17 @@ export default class Game {
     }
 
     cameraTransform() {
-        // let time = performance.now() / 100
-        // let s = GMath.lerp( 0.75, Math.sin( time / 2 ), 0.1 )
-        // let dizzyTransform = new Transform(
-        //     Canvas.center,
-        //     GMath.degreesToRadians * time,
-        //     new Vector( 1 / s, 1 / s ),
-        //     Canvas.center,
-        //     new Transform(
-        //         Canvas.center, 0, new Vector( 1, 1 / Math.sin( time * 0.1 ) ), Canvas.center
-        //     )
-        // )
+        let dizzyTime = GMath.soften( this.player.dizzyTime / 4, 20 )
+        let s = GMath.lerp( 1, Math.cos( dizzyTime / 4 ), 0.1 )
+        let dizzyTransform = new Transform(
+            Canvas.center,
+            Math.sin( dizzyTime / 13 ) * GMath.TAU / 8,
+            new Vector( 1 / s, 1 / s ),
+            Canvas.center,
+            new Transform(
+                Canvas.center, 0, new Vector( 1, 1 / Math.cos( dizzyTime * 0.1 ) ), Canvas.center
+            )
+        )
         const frequency = 20
         let damageTime = this.player.damageTime
         let magnitude = Math.sqrt( damageTime )
@@ -207,7 +207,7 @@ export default class Game {
             angle,
             Vector.ONE,
             Canvas.center,
-            // dizzyTransform
+            dizzyTransform
         )
         return cameraShakeTransform
     }

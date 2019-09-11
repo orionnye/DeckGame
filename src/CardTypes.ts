@@ -13,14 +13,13 @@ const CardTypes = {
         }
     } ),
     Poison: new CardType( {
-        imageName: "Poison",
         damage: -10,
         onApply( pawn: Pawn ) {
             pawn.heal -= 5
+            // pawn.dizzyTime += 1000
         }
     } ),
     Blood: new CardType( {
-        imageName: "Blood",
         damage: 25,
         onApply( pawn: Pawn, player?: Pawn ) {
             if ( player )
@@ -65,14 +64,12 @@ const CardTypes = {
         }
     } ),
     Karma: new CardType( {
-        imageName: "Karma",
         damage: 5,
         onApply( pawn: Pawn ) {
             pawn.maxHealth += 5
         }
     } ),
     Dread: new CardType( {
-        imageName: "Dread",
         onApply( pawn: Pawn ) {
             let potency = Math.floor( Math.random() * 10 )
             let damage = ( Math.random() > 0.5 ) ? potency : -potency
@@ -81,7 +78,6 @@ const CardTypes = {
         }
     } ),
     Volatile: new CardType( {
-        imageName: "Volatile",
         damage: 0,
         onApply( pawn: Pawn ) {
             let potency = Math.floor( Math.random() * 10 )

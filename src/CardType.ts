@@ -11,7 +11,7 @@ export default class CardType {
     damage: number = 0
     onApply?: ApplyFunction
 
-    constructor( { imageName = "Blank", damage = 0, onApply = pawn => { } } ) {
+    constructor( { imageName = "", damage = 0, onApply = pawn => { } } ) {
         this.imageName = imageName
         this.damage = damage
         this.onApply = onApply
@@ -26,7 +26,7 @@ export default class CardType {
     }
 
     get imagePath() {
-        return "cards/" + ( this.imageName || this.name )
+        return "cards/" + ( this.imageName || this.name || "Blank" )
     }
 
 }

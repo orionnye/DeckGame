@@ -9,7 +9,9 @@ import GMath from "geode/lib/math/GMath";
 export default class Pawn extends GameObject {
 
     color: string
-    private pDamageTime: number
+    dizzyTime: number = 0
+    dizziness: number = 0
+    damageTime: number = 0
     private pHealth: number
     maxHealth: number
     damage: number
@@ -28,11 +30,7 @@ export default class Pawn extends GameObject {
         this.heal = 2
         this.main = false
         this.sprite = sprite
-        this.pDamageTime = 0
     }
-
-    get damageTime() { return this.pDamageTime }
-    set damageTime( value ) { this.pDamageTime = Math.max( 0, value ) }
 
     get health() { return this.pHealth }
     set health( value: number ) {
@@ -65,7 +63,11 @@ export default class Pawn extends GameObject {
     }
 
     onUpdate() {
-        this.damageTime--
+        this.damageTime = Math.max( 0, this.damageTime - 1 )
+        this.dizzyTime = Math.max( 0, this.dizzyTime - 1 )
+
+        if ( this.dizzyTime == 0 )
+            this.dizziness = 0
     }
 
     drawBasic() {
