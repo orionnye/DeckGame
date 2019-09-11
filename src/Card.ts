@@ -88,6 +88,8 @@ export default class Card extends GameObject {
         let showFront = isPreview || inHand
 
         let image = getImage( showFront ? type.imagePath : "cards/Blank" )
+        if ( !image.width )
+            image = getImage( "cards/Blank" )
 
         if ( isPreview )
             Canvas.shadow( 40, "cornflowerblue" )

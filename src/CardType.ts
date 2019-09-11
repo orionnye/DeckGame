@@ -26,7 +26,7 @@ export default class CardType {
     }
 
     get imagePath() {
-        return "cards/" + ( this.imageName || this.name || "Blank" )
+        return "cards/" + ( this.imageName || this.name )
     }
 
 }
