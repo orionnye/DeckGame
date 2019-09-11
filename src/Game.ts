@@ -221,6 +221,7 @@ export default class Game {
         let { canvas } = this
 
         canvas.resize( 700, 500, 2 )
+
         canvas.context.imageSmoothingEnabled = false
         canvas.background( this.backgroundColor )
 
