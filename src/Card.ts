@@ -11,6 +11,7 @@ import Game from "./Game";
 import Pawn from "./Pawn";
 import Scene from "geode/lib/gameobject/Scene";
 import Color from "geode/lib/graphics/Color";
+import Melter from "./Melter";
 
 export default class Card extends GameObject {
 
@@ -54,17 +55,17 @@ export default class Card extends GameObject {
             }
         } else {
             if ( this.grabbed )
-                this.onDrop()
+                this.onDrop( scene )
         }
 
         if ( this.grabbed )
             this.position = mouse.add( this.grabOffset )
     }
 
-    onDrop() {
+    onDrop( scene: Scene ) {
         let game = Game.instance
         game.grabbing = undefined
-        let { hand, discard, pawns, melter, player } = Game.instance
+        let { hand, discard, pawns, player } = Game.instance
         for ( let pawn of pawns ) {
             if ( pawn.overlaps( this ) ) {
                 this.apply( pawn, hand, discard, player )
@@ -74,6 +75,9 @@ export default class Card extends GameObject {
                 }
             }
         }
+
+        let melters = scene.objectsInBox( this, x => x instanceof Melter ) as Melter[]
+        let melter = melters[ 0 ]
 
         if ( melter.overlaps( this ) ) {
             melter.melt( this )

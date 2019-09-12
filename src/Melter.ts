@@ -13,6 +13,7 @@ import Scene from "geode/lib/gameobject/Scene";
 import Game from "./Game";
 import GMath from "geode/lib/math/GMath";
 import { playSound } from "geode/lib/audio";
+import Color, { rgba } from "geode/lib/graphics/Color";
 
 export default class Melter extends GameObject {
     ingredients: CardType[]
@@ -56,19 +57,37 @@ export default class Melter extends GameObject {
     drawProduct( canvas: Canvas, scene: Scene, product: Card ) {
         product.isPreview = true
 
+        canvas.push()
+        canvas.alpha( this.preview * 0.8 )
+
+        let center = this.dimensions.half
         let t = performance.now()
+        // let flicker = 0.2 * ( 1 + Math.sin( t / 200 ) + 0.5 )
+        // canvas.fillStyle(
+        //     canvas.gradient(
+        //         Vector.ZERO, Vector.UP.multiply( 200 ),
+        //         [
+        //             [ 0, rgba( 109, 188, 201, flicker ) ],
+        //             [ 1, rgba( 109, 188, 201, 0 ) ]
+        //         ]
+        //     ),
+        // ).closedPath( [
+        //     center.x - 30, center.y - 4,
+        //     center.x - 100, center.y - 300,
+        //     center.x + 100, center.y - 300,
+        //     center.x + 30, center.y - 4,
+        // ] ).fill()
+
         let angle = Math.sin( t / 400 ) * 0.1
         let fequency = 0.002
         let offset = Vector.lissajous( t * fequency, 7, 13, 10 )
 
-        canvas.push()
         canvas.transform( new Transform(
             this.dimensions.half.addY( -150 ).add( offset ),
             angle,
             Vector.ONE,
             product.dimensions.half.addY( 20 )
         ) )
-        canvas.alpha( this.preview * 0.8 )
         product.onRender( canvas, scene )
         canvas.pop()
     }
