@@ -60,8 +60,8 @@ export default class Melter extends GameObject {
         canvas.push()
         canvas.alpha( this.preview * 0.8 )
 
-        let center = this.dimensions.half
         let t = performance.now()
+        // let center = this.dimensions.half 
         // let flicker = 0.2 * ( 1 + Math.sin( t / 200 ) + 0.5 )
         // canvas.fillStyle(
         //     canvas.gradient(
@@ -87,7 +87,7 @@ export default class Melter extends GameObject {
             angle,
             Vector.ONE,
             product.dimensions.half.addY( 20 )
-        ) ).shadow( 20, Color.cornflowerblue )
+        ) ).shadow( 40, Color.cornflowerblue )
         product.onRender( canvas )
         canvas.pop()
     }

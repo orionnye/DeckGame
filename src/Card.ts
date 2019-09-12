@@ -90,8 +90,11 @@ export default class Card extends GameObject {
     onRender( canvas: Canvas ) {
         let { type, inHand, isPreview } = this
         let showFront = isPreview || inHand
-        let img = showFront ? type.image : getImage( "cards/Blank" )
-        canvas.scale( 1 / 2, 1 / 2 )
-        canvas.vimage( img, Vector.ZERO )
+        if ( showFront ) {
+            canvas.scale( 1 / 2, 1 / 2 )
+            canvas.vimage( type.image, Vector.ZERO )
+        } else {
+            canvas.vimage( getImage( "cards/Blank" ), Vector.ZERO )
+        }
     }
 }
