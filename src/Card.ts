@@ -21,8 +21,8 @@ export default class Card extends GameObject {
     isPreview: boolean = false
     grabOffset: Vector = Vector.ZERO
 
-    static dimensions = vector( 69, 111 )
-    static upperSectionHeight = 82
+    static dimensions = vector( 68, 108 )
+    static upperSectionHeight = 80
 
     constructor( position: Vector, type: CardType ) {
         super( position, Card.dimensions.x, Card.dimensions.y )

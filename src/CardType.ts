@@ -55,8 +55,16 @@ export default class CardType {
             Card.upperSectionHeight / 2 - icon.height / 2
         )
 
-        let margin = Math.round( Card.dimensions.x / 12 )
-        canvas.fillStyle( "#D2B9A6" ).text( this.name.toUpperCase(), margin, Card.dimensions.y - margin, Card.dimensions.x - margin * 2, "20px pixel" )
+        let fontSize = 16
+        let font = fontSize + "px pixel"
+        let xMargin = Card.dimensions.x / 12
+        let textWidth = Card.dimensions.x - xMargin * 2
+
+        let lowerSectionHeight = Card.dimensions.y - Card.upperSectionHeight
+        let yMargin = ( lowerSectionHeight - fontSize ) / 2
+        let textY = Card.upperSectionHeight + fontSize + yMargin - 2
+
+        canvas.fillStyle( "#D2B9A6" ).text( this.name.toUpperCase(), xMargin, textY, textWidth, font )
 
         this.generatedImage = innerCanvas.transferToImageBitmap()
         return this.generatedImage
