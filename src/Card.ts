@@ -78,8 +78,7 @@ export default class Card extends GameObject {
 
         let melters = scene.objectsInBox( this, x => x instanceof Melter ) as Melter[]
         let melter = melters[ 0 ]
-
-        if ( melter.overlaps( this ) ) {
+        if ( melter ) {
             melter.melt( this )
             hand.remove( this )
         }
