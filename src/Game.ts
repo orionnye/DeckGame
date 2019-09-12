@@ -52,7 +52,7 @@ export default class Game {
 
     background = new Background()
     melter = new Melter( 325, 375 )
-    enemy = new Pawn( 520, 80, 100, 100, "blue", 15, this.enemySprites[ 0 ], 6)
+    enemy = new Pawn( 520, 80, 100, 100, "blue", 15, this.enemySprites[ 0 ], 6 )
     player = new Pawn(
         100, 80, 100, 100, "red", 60,
         new Sprite( getImage( "PawnEgor" ) )
@@ -106,27 +106,22 @@ export default class Game {
 
         let { enemy, enemySprites, enemyCount, win, player, melter, deck } = this
 
+        player.onEndTurn()
+        enemy.onEndTurn()
+
         //if enemy health is alive
         if ( enemy.health > 0 ) {
             player.health -= enemy.damage
             playSound( "slap.wav" )
             enemy.damage += 2
-
             enemy.heal += 1
-            enemy.health += enemy.heal
         } else {
             this.enemyCount += 1
             this.newEncounter()
         }
 
-        //Player Passive Stats
-        if ( player.heal < 0 )
-            player.heal += 1
-        if ( player.heal > 0 ) {
-            player.heal -= 1
-        }
+        player.heal -= Math.sign( player.heal )
 
-        player.health += player.heal
         //end turn animations
         if ( enemy.sprite )
             animateSprite( enemy.sprite, 300, enemy.frameCount )
@@ -149,7 +144,7 @@ export default class Game {
         let newHealth = ( enemyCount + 1 ) * 10
         // random enemy sprite pulled from list.
         let randomEnemy = Math.floor( Math.random() * enemies.length )
-        this.enemy = enemies[randomEnemy]
+        this.enemy = enemies[ randomEnemy ]
 
         //stat changes will be obsolete with proper enemy planning, keeping it for now to increase gamelength
         enemy.heal = enemyCount * 2

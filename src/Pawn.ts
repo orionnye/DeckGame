@@ -54,6 +54,11 @@ export default class Pawn extends GameObject {
             this.dizziness = 0
     }
 
+    onEndTurn() {
+        if ( this.health > 0 )
+            this.health += this.heal
+    }
+
     onRender( canvas: Canvas, scene: Scene ) {
         canvas.vtranslate(
             Vector.lissajous(
