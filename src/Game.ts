@@ -163,6 +163,7 @@ export default class Game {
 
         let scene = new Scene( canvas, this.cameraTransform(), [ player, enemy, deck, hand, discard, melter, background ] )
 
+        //  Rendering in update function? Seems odd
         this.render( scene )
 
         scene.update()
