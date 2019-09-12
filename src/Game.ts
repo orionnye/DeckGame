@@ -232,7 +232,7 @@ export default class Game {
 
         canvas.resize( 700, 500, 2 )
 
-        canvas.smooth(false)
+        canvas.smooth( false )
         canvas.background( this.backgroundColor )
 
         scene.cameraTransform = this.cameraTransform()
