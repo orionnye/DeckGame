@@ -1,6 +1,5 @@
 import Pawn from "./Pawn";
-import { playAudio, audioInstance, playSound } from "geode/lib/audio";
-import { getAudio, getAudioInstance } from "geode/lib/assets";
+import { playSound } from "geode/lib/audio";
 import Player from "./Game"
 
 type ApplyFunction = ( pawn: Pawn, player?: Pawn ) => void
