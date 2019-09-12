@@ -8,81 +8,82 @@ const CardTypes = {
     Acid: new CardType( { damage: 15 } ),
     Molotov: new CardType( {
         damage: 5,
-        onApply( pawn: Pawn ) {
-            pawn.heal -= 3
+        onApply( receiver: Pawn ) {
+            receiver.heal -= 3
         }
     } ),
     Poison: new CardType( {
         damage: -10,
-        onApply( pawn: Pawn ) {
-            pawn.heal -= 5
-            // pawn.dizzyTime += 1000
+        onApply( receiver: Pawn ) {
+            receiver.heal -= 5
+            // receiver.dizzyTime += 1000
         }
     } ),
     Blood: new CardType( {
         damage: 25,
-        onApply( pawn: Pawn, player?: Pawn ) {
-            if ( player )
-                player.health -= 5
-            pawn.damage += 3
+        onApply( receiver: Pawn, dealer?: Pawn ) {
+            if ( dealer )
+                dealer.health -= 5
+            receiver.damage += 3
         }
     } ),
     Pact: new CardType( {
-        onApply( pawn: Pawn, player?: Pawn ) {
-            if ( player ) {
-                let damage = player.maxHealth - player.health
-                pawn.health -= damage
-                player.health += Math.floor( damage / 3 )
-                player.maxHealth -= Math.floor( damage / 3 )
+        onApply( receiver: Pawn, dealer?: Pawn ) {
+            if ( dealer ) {
+                let damage = dealer.maxHealth - dealer.health
+                receiver.health -= damage
+                dealer.health += Math.floor( damage / 3 )
+                dealer.maxHealth -= Math.floor( damage / 3 )
             }
         }
     } ),
     //Mix
     Leeches: new CardType( {
-        damage: 5,
-        onApply( pawn: Pawn, player?: Pawn ) {
-            if ( player )
-                player.health += 5
+        onApply( receiver: Pawn, dealer?: Pawn ) {
+            if ( dealer ) {
+                dealer.health += 5
+                receiver.health -= 5
+            }
         }
     } ),
     Meds: new CardType( {
-        onApply( pawn: Pawn ) {
-            if ( pawn.heal < 0 )
-                pawn.heal += 10
-            else if ( pawn.heal >= 0 )
-                pawn.heal -= 10
+        onApply( receiver: Pawn ) {
+            if ( receiver.heal < 0 )
+                receiver.heal += 10
+            else if ( receiver.heal >= 0 )
+                receiver.heal -= 10
         }
     } ),
     //Defensive
     Heal1: new CardType( { imageName: "Heal", damage: -5 } ),
     Heal2: new CardType( { imageName: "Heal", damage: -10 } ),
     Infusion: new CardType( {
-        onApply( pawn: Pawn ) {
-            pawn.maxHealth -= 5
-            pawn.health += 15
-            pawn.heal += 3
+        onApply( receiver: Pawn ) {
+            receiver.maxHealth -= 5
+            receiver.health += 15
+            receiver.heal += 3
         }
     } ),
     Karma: new CardType( {
         damage: 5,
-        onApply( pawn: Pawn ) {
-            pawn.maxHealth += 5
+        onApply( receiver: Pawn ) {
+            receiver.maxHealth += 5
         }
     } ),
     Dread: new CardType( {
-        onApply( pawn: Pawn ) {
+        onApply( receiver: Pawn ) {
             let potency = Math.floor( Math.random() * 10 )
             let damage = ( Math.random() > 0.5 ) ? potency : -potency
-            pawn.damage -= 3
-            pawn.health -= damage
+            receiver.damage -= 3
+            receiver.health -= damage
         }
     } ),
     Volatile: new CardType( {
         damage: 0,
-        onApply( pawn: Pawn ) {
+        onApply( receiver: Pawn ) {
             let potency = Math.floor( Math.random() * 10 )
             let damage = ( Math.random() > 0.5 ) ? potency : -potency
-            pawn.health -= damage
+            receiver.health -= damage
         }
     } )
 }

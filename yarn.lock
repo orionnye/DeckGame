@@ -2394,7 +2394,7 @@ gauge@~2.7.3:
 
 "geode@https://github.com/KodyJKing/geode.git":
   version "0.0.0"
-  resolved "https://github.com/KodyJKing/geode.git#d7cb5f2902a9402c0933eae3bcb35a8acac3aaac"
+  resolved "https://github.com/KodyJKing/geode.git#b44166107bca6ffd13d04ced6cce07f8d4e42f68"
   dependencies:
     liberate "https://github.com/KodyJKing/liberate.git"
 

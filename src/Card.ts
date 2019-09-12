@@ -33,8 +33,8 @@ export default class Card extends GameObject {
         return Game.instance.grabbing == this
     }
 
-    apply( pawn: Pawn, hand: Deck, discard: Deck, player?: Pawn ) {
-        this.type.apply( pawn, player )
+    apply( receiver: Pawn, hand: Deck, discard: Deck, dealer?: Pawn ) {
+        this.type.apply( receiver, dealer )
         hand.remove( this )
         let random = ( discard.length == 0 ) ? 0 : Math.floor( Math.random() * discard.length )
         discard.insertAt( this, random )
@@ -65,11 +65,13 @@ export default class Card extends GameObject {
     onDrop( scene: Scene ) {
         let game = Game.instance
         game.grabbing = undefined
-        let { hand, discard, pawns, player } = Game.instance
+        let { hand, discard, pawns, player, enemy } = Game.instance
         for ( let pawn of pawns ) {
             if ( pawn.overlaps( this ) ) {
-                this.apply( pawn, hand, discard, player )
-                if ( pawn !== player ) {
+                if ( pawn == player )
+                    this.apply( player, hand, discard, enemy)
+                else if ( pawn !== player ) {
+                    this.apply( pawn, hand, discard, player )
                     if ( player.sprite )
                         animateSprite( player.sprite, 80, 9 )
                 }

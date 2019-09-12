@@ -2,7 +2,7 @@ import Pawn from "./Pawn";
 import { playSound } from "geode/lib/audio";
 import Player from "./Game"
 
-type ApplyFunction = ( pawn: Pawn, player?: Pawn ) => void
+type ApplyFunction = ( receiver: Pawn, dealer?: Pawn ) => void
 export default class CardType {
 
     name!: string
@@ -10,17 +10,17 @@ export default class CardType {
     damage: number = 0
     onApply?: ApplyFunction
 
-    constructor( { imageName = "", damage = 0, onApply = pawn => { } } ) {
+    constructor( { imageName = "", damage = 0, onApply = receiver => { } } ) {
         this.imageName = imageName
         this.damage = damage
         this.onApply = onApply
     }
 
-    apply( pawn: Pawn, player?: Pawn ) {
-        pawn.health -= this.damage
+    apply( receiver: Pawn, dealer?: Pawn ) {
+        receiver.health -= this.damage
         if ( this.onApply != null )
-            this.onApply( pawn, player )
-        if ( !pawn.main )
+            this.onApply( receiver, dealer )
+        if ( !receiver.main )
             setTimeout( () => playSound( "glassbreak.wav", { volume: 1 / 9 } ), 600 )
     }
 

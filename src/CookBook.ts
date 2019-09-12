@@ -31,6 +31,7 @@ class CookBook {
     add( Molotov, [ Poison, Attack1 ] )
     add( Blood, [ Dread, Attack1 ] )
     add( CardTypes.Pact, [ Blood, Karma ] )
+    add( Leeches, [ Attack1, Heal1 ] )
     //Defensive
     add( Heal1, [ Volatile ] )
     add( Heal2, [ Heal1, Heal1 ] )
@@ -38,7 +39,6 @@ class CookBook {
     add( Dread, [ Attack1, Volatile ] )
     add( CardTypes.Infusion, [ Blood, Heal1 ] )
     //MISC
-    add( Leeches, [ Attack1, Heal1 ] )
     add( CardTypes.Meds, [ Volatile, Heal2 ] )
 }
 
