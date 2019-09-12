@@ -13,11 +13,11 @@ export default class Background extends GameObject {
         canvas.rect( 0, backgroundY, canvas.dimensions.x, canvas.dimensions.y )
             .fillStyle( rgb( 100, 100, 100 ) )
             .fill()
-        canvas.image( getImage( "Ground" ), 0, backgroundY - 5, canvas.canvas.clientWidth, 200 )
-        canvas.image( getImage( "BackGroundMid" ), 0, 0, canvas.canvas.clientWidth, backgroundY )
+        canvas.image( getImage( "Ground" ), 0, backgroundY - 5, this.dimensions.x, 200 )
+        canvas.image( getImage( "BackGroundMid" ), 0, 0, canvas.dimensions.x, backgroundY )
 
         //Level Count
         canvas.fillStyle( rgb( 255, 0, 0 ) )
-            .text( "Level " + enemyCount, canvas.canvas.clientWidth / 2 - 45, 30, 100, "40px pixel" )
+            .text( "Level " + enemyCount, canvas.dimensions.x / 2 - 45, 30, 100, "40px pixel" )
     }
 }

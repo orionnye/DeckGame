@@ -12,8 +12,8 @@ import Input from "geode/lib/Input";
 import Scene from "geode/lib/gameobject/Scene";
 import Game from "./Game";
 import GMath from "geode/lib/math/GMath";
-import { playSound } from "geode/lib/audio";
 import Color, { rgba } from "geode/lib/graphics/Color";
+import { playSound } from "geode/lib/audio";
 
 export default class Melter extends GameObject {
     ingredients: CardType[]
@@ -87,8 +87,8 @@ export default class Melter extends GameObject {
             angle,
             Vector.ONE,
             product.dimensions.half.addY( 20 )
-        ) )
-        product.onRender( canvas, scene )
+        ) ).shadow( 20, Color.cornflowerblue )
+        product.onRender( canvas )
         canvas.pop()
     }
 

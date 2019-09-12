@@ -21,7 +21,8 @@ export default class Card extends GameObject {
     isPreview: boolean = false
     grabOffset: Vector = Vector.ZERO
 
-    static dimensions = vector( 67, 111 )
+    static dimensions = vector( 69, 111 )
+    static upperSectionHeight = 82
 
     constructor( position: Vector, type: CardType ) {
         super( position, Card.dimensions.x, Card.dimensions.y )
@@ -69,7 +70,7 @@ export default class Card extends GameObject {
         for ( let pawn of pawns ) {
             if ( pawn.overlaps( this ) ) {
                 if ( pawn == player )
-                    this.apply( player, hand, discard, enemy)
+                    this.apply( player, hand, discard, enemy )
                 else if ( pawn !== player ) {
                     this.apply( pawn, hand, discard, player )
                     if ( player.sprite )
@@ -86,22 +87,11 @@ export default class Card extends GameObject {
         }
     }
 
-    onRender( canvas: Canvas, scene: Scene ) {
-        let { dimensions, width, height, type, inHand, isPreview } = this
-        let margin = width / 12
-
+    onRender( canvas: Canvas ) {
+        let { type, inHand, isPreview } = this
         let showFront = isPreview || inHand
-
-        let image = getImage( showFront ? type.imagePath : "cards/Blank" )
-        if ( !image.width )
-            image = getImage( "cards/Blank" )
-
-        if ( isPreview )
-            canvas.shadow( 40, "cornflowerblue" )
-        canvas.vimage( image, Vector.ZERO, dimensions )
-
-        canvas.shadow( 0, Color.transparent )
-        if ( showFront )
-            canvas.fillStyle( "#D2B9A6" ).text( type.name.toUpperCase(), margin, height - margin, width - margin * 2, "20px pixel" );
+        let img = showFront ? type.image : getImage( "cards/Blank" )
+        canvas.scale( 1 / 2, 1 / 2 )
+        canvas.vimage( img, Vector.ZERO )
     }
 }

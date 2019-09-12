@@ -232,7 +232,7 @@ export default class Game {
 
         canvas.resize( 700, 500, 2 )
 
-        canvas.context.imageSmoothingEnabled = false
+        canvas.smooth(false)
         canvas.background( this.backgroundColor )
 
         scene.cameraTransform = this.cameraTransform()
@@ -243,18 +243,16 @@ export default class Game {
 
         if ( this.player.health <= 0 ) {
             canvas.fillStyle( rgb( 100, 0, 0 ) )
-            let deathMessageWidth = 700
-            let deathMessageX = canvas.canvas.clientWidth / 2 - deathMessageWidth / 2
-            let deathMessageY = canvas.canvas.clientHeight / 2 - 30
-            canvas.text( "YOU DIED ON LEVEL " + this.enemyCount, deathMessageX, deathMessageY, deathMessageWidth, "250px pixel" );
+            let messageWidth = 700
+            let messagePos = canvas.dimensions.half.addXY( -messageWidth / 2, -30 )
+            canvas.text( "YOU DIED ON LEVEL " + this.enemyCount, messagePos.x, messagePos.y, messageWidth, "250px pixel" );
         }
 
         if ( this.win ) {
             canvas.fillStyle( rgb( 0, 0, 100 ) )
-            let winMessageWidth = 700
-            let winMessageX = canvas.canvas.clientWidth / 2 - winMessageWidth / 2
-            let winMessageY = canvas.canvas.clientHeight / 2
-            canvas.text( "YOU WIN", winMessageX, winMessageY, winMessageWidth, "400px pixel" );
+            let messageWidth = 700
+            let messagePos = canvas.dimensions.half.addX( -messageWidth / 2 )
+            canvas.text( "YOU WIN", messagePos.x, messagePos.y, messageWidth, "400px pixel" );
         }
     }
 }
