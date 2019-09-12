@@ -36,7 +36,7 @@ class CookBook {
     add( Heal2, [ Heal1, Heal1 ] )
     add( Karma, [ Heal1, Heal1, Heal1 ] )
     add( Dread, [ Attack1, Volatile ] )
-    add( CardTypes.Infusion, [ Attack1, Volatile, Heal1 ] )
+    add( CardTypes.Infusion, [ Blood, Heal1 ] )
     //MISC
     add( Leeches, [ Attack1, Heal1 ] )
     add( CardTypes.Meds, [ Volatile, Heal2 ] )

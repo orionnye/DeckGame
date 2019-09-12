@@ -12,7 +12,7 @@ export default class Pawn extends GameObject {
     dizzyTime: number = 0
     dizziness: number = 0
     damageTime: number = 0
-    private pHealth: number
+    private pHealth: number = 10
     maxHealth: number
     damage: number
     heal: number
@@ -20,8 +20,9 @@ export default class Pawn extends GameObject {
     sprite?: Sprite = new Sprite( getImage( "Archlizard" ) )
         .setSource( { x: 0, y: 0, w: 100, h: 50 } )
         .setDimensions( 150, 70 )
+    frameCount: number = 2
 
-    constructor( x, y, width, height, color = "red", health = 10, sprite ) {
+    constructor( x, y, width, height, color = "red", health, sprite, frameCount ) {
         super( vector( x, y ), width, height )
         this.color = color
         this.maxHealth = health
@@ -30,6 +31,7 @@ export default class Pawn extends GameObject {
         this.heal = 2
         this.main = false
         this.sprite = sprite
+        this.frameCount = frameCount
     }
 
     get health() { return this.pHealth }

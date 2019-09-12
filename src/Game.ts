@@ -37,17 +37,28 @@ export default class Game {
             .setDimensions( 150, 70 ),
         new Sprite( getImage( "BoneDragon" ) )
             .setSource( { x: 0, y: 0, w: 80, h: 100 } )
+            .setDimensions( 130, 130 ),
+        new Sprite( getImage( "Noodle" ) )
+            .setSource( { x: 0, y: 0, w: 100, h: 100 } )
             .setDimensions( 130, 130 )
     ]
 
+    enemies = [
+        new Pawn( 520, 80, 100, 100, "blue", 15, this.enemySprites[ 1 ], 2 ),
+        new Pawn( 520, 80, 100, 100, "blue", 15, this.enemySprites[ 2 ], 1 ),
+        new Pawn( 520, 80, 100, 100, "blue", 15, this.enemySprites[ 3 ], 9 )
+    ]
+
+
     background = new Background()
     melter = new Melter( 325, 375 )
-    enemy = new Pawn( 520, 80, 100, 100, "blue", 15, this.enemySprites[ 0 ] )
+    enemy = new Pawn( 520, 80, 100, 100, "blue", 15, this.enemySprites[ 0 ], 6)
     player = new Pawn(
         100, 80, 100, 100, "red", 60,
         new Sprite( getImage( "PawnEgor" ) )
             .setSource( { x: 0, y: 0, w: 180, h: 132 } )
-            .setDimensions( 208, 158 )
+            .setDimensions( 208, 158 ),
+        9
     )
 
     ambience = audioInstance(
@@ -100,6 +111,7 @@ export default class Game {
             player.health -= enemy.damage
             playSound( "slap.wav" )
             enemy.damage += 2
+
             enemy.heal += 1
             enemy.health += enemy.heal
         } else {
@@ -117,7 +129,7 @@ export default class Game {
         player.health += player.heal
         //end turn animations
         if ( enemy.sprite )
-            animateSprite( enemy.sprite, 300, 5 )
+            animateSprite( enemy.sprite, 300, enemy.frameCount )
         if ( player.sprite )
             animateSprite( player.sprite, 200, 1 )
 
@@ -133,15 +145,17 @@ export default class Game {
     }
 
     newEncounter() {
-        let { enemyCount, enemy, enemySprites } = this
+        let { enemyCount, enemy, enemySprites, enemies } = this
         let newHealth = ( enemyCount + 1 ) * 10
-        enemy.heal = enemyCount * 2
-        enemy.damage = enemyCount * 4
-        enemy.health = newHealth
-        enemy.maxHealth = newHealth
         // random enemy sprite pulled from list.
-        let randomSprite = Math.floor( Math.random() * enemySprites.length )
-        enemy.sprite = enemySprites[ randomSprite ]
+        let randomEnemy = Math.floor( Math.random() * enemies.length )
+        this.enemy = enemies[randomEnemy]
+
+        //stat changes will be obsolete with proper enemy planning, keeping it for now to increase gamelength
+        enemy.heal = enemyCount * 2
+        enemy.maxHealth = newHealth
+        enemy.health = enemy.maxHealth
+        enemy.damage = enemyCount * 4
     }
 
     refillHand() {

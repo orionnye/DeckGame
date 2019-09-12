@@ -59,7 +59,7 @@ const CardTypes = {
     Infusion: new CardType( {
         onApply( pawn: Pawn ) {
             pawn.maxHealth -= 5
-            pawn.health += 20
+            pawn.health += 15
             pawn.heal += 3
         }
     } ),
@@ -74,7 +74,7 @@ const CardTypes = {
             let potency = Math.floor( Math.random() * 10 )
             let damage = ( Math.random() > 0.5 ) ? potency : -potency
             pawn.damage -= 3
-            pawn.heal -= damage
+            pawn.health -= damage
         }
     } ),
     Volatile: new CardType( {
