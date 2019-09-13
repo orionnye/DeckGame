@@ -26,7 +26,7 @@ class CookBook {
         Attack1, Attack2, Acid, Molotov,
         Poison, Heal1, Heal2, Karma,
         Volatile, Dread, Blood, Leeches,
-        Infusion, Meds
+        Infusion, Meds, Dissect, Pact
     } = CardTypes
     let add = CookBook.addRecipe
     //Offensive
@@ -37,8 +37,9 @@ class CookBook {
     add( Poison, [ Volatile, Heal1 ] )
     add( Molotov, [ Poison, Attack1 ] )
     add( Blood, [ Dread, Attack1 ] )
-    add( CardTypes.Pact, [ Blood, Karma ] )
+    add( Pact, [ Blood, Karma ] )
     add( Leeches, [ Attack1, Heal1 ] )
+    add( Dissect, [ Blood, Karma ] )
     //Defensive
     add( Heal1, [ Volatile ] )
     add( Heal2, [ Heal1, Heal1 ] )
