@@ -39,7 +39,7 @@ class CookBook {
     add( Blood, [ Dread, Attack1 ] )
     add( Pact, [ Blood, Karma ] )
     add( Leeches, [ Attack1, Heal1 ] )
-    add( Dissect, [ Blood, Karma ] )
+    add( Dissect, [ Leeches, Karma ] )
     //Defensive
     add( Heal1, [ Volatile ] )
     add( Heal2, [ Heal1, Heal1 ] )
