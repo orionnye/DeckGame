@@ -40,14 +40,12 @@ const CardTypes = {
     Dissect: new CardType( {
         onApply( receiver: Pawn, dealer?: Pawn ) {
             let damage = 5
-            if ( dealer && dealer != receiver ) {
-                if ( receiver.health <= damage ) {
-                    dealer.maxHealth += 5
-                    dealer.health = dealer.maxHealth
-                }
+            if ( dealer && receiver.health <= damage ) {
+                dealer.maxHealth += 5
+                dealer.health = dealer.maxHealth
                 dealer.heal -= 10
+                receiver.health -= damage
             }
-            receiver.health -= damage
         }
     } ),
     //Mix
