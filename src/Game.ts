@@ -96,13 +96,16 @@ export default class Game {
     }
 
     get canEndTurn() {
-        let { deck, hand } = this
-        return hand.length == 0 && deck.length > 0 && this.player.health > 0
+        let { deck, hand, endingTurn } = this
+        return !endingTurn && hand.length == 0 && deck.length > 0 && this.player.health > 0
     }
 
+    endingTurn = false
     tryEndTurn() {
         if ( !this.canEndTurn )
             return
+
+        this.endingTurn = true
 
         let { enemy, enemySprites, enemyCount, win, player, melter, deck } = this
 
@@ -131,16 +134,18 @@ export default class Game {
         if ( player.health <= 0 )
             window.setTimeout( () => { location.reload() }, 5000 )
         else
-            window.setTimeout( () => { this.refillHand() }, 500 )
+            this.refillHand()
 
         // Edit tryEndturn to accept an array as a product
         let products = melter.products
         products.forEach( product => {
-            console.log(product, "being pushed")
+            console.log( product, "being pushed" )
             deck.cards.push( product )
-        })
+        } )
         melter.base = new Card( melter.position, CardTypes.Volatile )
         melter.ingredients = []
+
+        this.endingTurn = false
     }
 
     newEncounter() {
@@ -164,7 +169,7 @@ export default class Game {
         let deckLength2 = deck.length + discardToDeck
         let deckToHand = Math.min( handCap, deckLength2 )
 
-        let delay = 0
+        let delay = 30
         let deal = ( from, to, amount ) => {
             for ( let i = 0; i < amount; i++ ) {
                 from.transferCard( to, delay )
