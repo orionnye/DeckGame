@@ -162,21 +162,14 @@ export default class Game {
     refillHand() {
         let { deck, hand, discard, handCap } = this
 
-        let discardToDeck = deck.length < handCap ? discard.length : 0
-        let deckLength2 = deck.length + discardToDeck
-        let deckToHand = Math.min( handCap, deckLength2 )
-
-        let delay = 30
-        let deal = ( from, to, amount ) => {
-            for ( let i = 0; i < amount; i++ ) {
-                from.transferCard( to, delay )
-                // playSound( Card.randomFlipSound(), { volume: 1 / 8 } )
-                delay += 5
-            }
+        let delay = 6
+        while ( hand.length < handCap && ( deck.length > 0 || discard.length > 0 ) ) {
+            if ( deck.length == 0 )
+                while ( discard.length > 0 )
+                    discard.transferCard( deck, ( delay++ ) * 5 )
+            else
+                deck.transferCard( hand, ( delay++ ) * 5 )
         }
-
-        deal( discard, deck, discardToDeck )
-        deal( deck, hand, deckToHand )
     }
 
     update() {
