@@ -71,14 +71,10 @@ export default class Pawn extends GameObject {
             )
         )
 
-        if ( this.sprite ) {
-            let { sprite, height } = this
-
-            sprite.draw( canvas, sprite.width / 2, height / 2, true )
-
-        } else {
+        if ( this.sprite )
+            this.sprite.draw( canvas, this.sprite.width / 2, this.height / 2, true )
+        else
             this.drawBasic( canvas )
-        }
 
         this.drawHealthBar( canvas )
         this.drawIntent( canvas )
