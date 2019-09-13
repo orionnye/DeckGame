@@ -5,13 +5,15 @@ import Vector, { vector } from "geode/lib/math/Vector";
 import { getImage } from "geode/lib/assets";
 import Scene from "geode/lib/gameobject/Scene";
 import GMath from "geode/lib/math/GMath";
+import Color from "geode/lib/graphics/Color";
 
 export default class Pawn extends GameObject {
 
     color: string
     dizzyTime: number = 0
     dizziness: number = 0
-    damageTime: number = 0
+    recentDamage = 0
+    damageTime = 0
     private pHealth: number = 10
     maxHealth: number
     damage: number
@@ -45,10 +47,12 @@ export default class Pawn extends GameObject {
     }
 
     onDamage( amount: number ) {
-        this.damageTime = Math.max( 0, amount * 2 )
+        this.recentDamage += amount
+        this.damageTime += amount * 2
     }
 
     onUpdate() {
+        this.recentDamage = Math.max( 0, this.recentDamage - 0.15 )
         this.damageTime = Math.max( 0, this.damageTime - 1 )
         this.dizzyTime = Math.max( 0, this.dizzyTime - 1 )
 
@@ -96,9 +100,12 @@ export default class Pawn extends GameObject {
         let healthWidth = this.health * healthChunk
         let healthPos = vector( 0, this.height + 40 )
         let healthNumPos = healthPos.addXY( healthWidth / 3 - textWidth / 4, healthHeight - 2 )
+        let damageWidth = this.recentDamage * healthChunk
 
-        canvas.vrect( healthPos, vector( this.width, healthHeight ) ).fillStyle( "black" ).fill().stroke()
-        canvas.vrect( healthPos, vector( healthWidth, healthHeight ) ).fillStyle( "red" ).fill().stroke()
+        canvas.vrect( healthPos, vector( this.width, healthHeight ) ).fillStyle( Color.black ).fill()
+        canvas.vrect( healthPos, vector( healthWidth, healthHeight ) ).fillStyle( Color.red ).fill()
+        canvas.vrect( healthPos.addX( healthWidth ), vector( damageWidth, healthHeight ) ).fillStyle( Color.orange ).fill()
+        // canvas.vrect( healthPos, vector( this.width, healthHeight ) ).fillStyle( "black" ).stroke()
 
         canvas.fillStyle( "white" )
             .text(
