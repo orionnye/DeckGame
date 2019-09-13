@@ -22,13 +22,14 @@ class CookBook {
 }
 
 {
+    let add = CookBook.addRecipe
     let {
         Attack1, Attack2, Acid, Molotov,
         Poison, Heal1, Heal2, Karma,
         Volatile, Dread, Blood, Leeches,
         Infusion, Meds, Dissect, Pact
     } = CardTypes
-    let add = CookBook.addRecipe
+
     //Offensive
     add( Attack1, [ Volatile, Volatile ] )
     add( Attack2, [ Attack1, Attack1 ] )
@@ -40,12 +41,14 @@ class CookBook {
     add( Pact, [ Blood, Karma ] )
     add( Leeches, [ Attack1, Heal1 ] )
     add( Dissect, [ Leeches, Karma ] )
+
     //Defensive
     add( Heal1, [ Volatile ] )
     add( Heal2, [ Heal1, Heal1 ] )
     add( Karma, [ Heal1, Heal1, Heal1 ] )
     add( Dread, [ Attack1, Volatile ] )
     add( Infusion, [ Blood, Heal1 ] )
+
     //MISC
     add( Meds, [ Volatile, Heal2 ] )
 }
