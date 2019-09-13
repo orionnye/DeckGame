@@ -9,10 +9,12 @@ import Scene from "geode/lib/gameobject/Scene";
 export default class Deck extends GameObject {
     spread: Vector
     cards: Card[]
+    capacity: number
     isHand: boolean
 
-    constructor( count, x, y, spreadX, spreadY, isHand: boolean ) {
+    constructor( count, capacity, x, y, spreadX, spreadY, isHand: boolean ) {
         super( vector( x, y ), 0, 0 )
+        this.capacity = capacity
         this.spread = vector( spreadX, spreadY )
         this.isHand = isHand
 
@@ -33,9 +35,10 @@ export default class Deck extends GameObject {
 
     remove( card: Card ) {
         let index = this.cards.indexOf( card )
-        let store = this.cards[ this.length - 1 ]
-        this.cards[ index ] = store
-        this.cards.pop()
+        this.cards.splice( index, 1 )
+        // let store = this.cards[ this.length - 1 ]
+        // this.cards[ index ] = store
+        // this.cards.pop()
     }
 
     insertAt( card, index ) {

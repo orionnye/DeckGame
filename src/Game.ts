@@ -24,9 +24,9 @@ export default class Game {
     grabbing?: Card
     backgroundColor = rgb( 0, 0, 255 )
 
-    deck = new Deck( 10, 30, 250, -1, 1, false )
-    hand = new Deck( 5, 145, 250, 90, 0, true )
-    discard = new Deck( 0, 600, 250, 1, 1, false )
+    deck = new Deck( 10, Infinity, 30, 250, -1, 1, false )
+    hand = new Deck( this.handCap, this.handCap, 145, 250, 90, 0, true )
+    discard = new Deck( 0, Infinity, 600, 250, 1, 1, false )
 
     enemySprites = [
         new Sprite( getImage( "PawnChadwick2" ) )

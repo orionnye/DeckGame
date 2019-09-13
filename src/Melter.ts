@@ -39,9 +39,8 @@ export default class Melter extends GameObject {
         let type = CookBook.getProduct( this.ingredients )
         //Edit concotion to Equal an Array depending on Quantity
         let products: Card[] = []
-        for (let i = 0; i <= this.multiplier * type.craftQuantity; i++) {
-            products.push(new Card( this.base.position, type ))
-        }
+        for ( let i = 0; i < this.multiplier * type.craftQuantity; i++ )
+            products.push( new Card( this.base.position, type ) )
         return products
     }
 
@@ -67,23 +66,6 @@ export default class Melter extends GameObject {
         canvas.alpha( this.preview * 0.8 )
 
         let t = performance.now()
-        // let center = this.dimensions.half 
-        // let flicker = 0.2 * ( 1 + Math.sin( t / 200 ) + 0.5 )
-        // canvas.fillStyle(
-        //     canvas.gradient(
-        //         Vector.ZERO, Vector.UP.multiply( 200 ),
-        //         [
-        //             [ 0, rgba( 109, 188, 201, flicker ) ],
-        //             [ 1, rgba( 109, 188, 201, 0 ) ]
-        //         ]
-        //     ),
-        // ).closedPath( [
-        //     center.x - 30, center.y - 4,
-        //     center.x - 100, center.y - 300,
-        //     center.x + 100, center.y - 300,
-        //     center.x + 30, center.y - 4,
-        // ] ).fill()
-
         let angle = Math.sin( t / 400 ) * 0.1
         let fequency = 0.002
         let offset = Vector.lissajous( t * fequency, 7, 13, 10 )
@@ -106,9 +88,9 @@ export default class Melter extends GameObject {
         if ( this.contains( mouse ) )
             previewTarget = 1
         this.preview = GMath.lerp( this.preview, previewTarget, 0.1 )
-        this.products.forEach(product => {
+        this.products.forEach( product => {
             this.drawProduct( canvas, scene, this.potentialProduct || product )
-        })
+        } )
 
         if ( sprite ) {
             let margin = vector( 32, 45 )
