@@ -131,7 +131,7 @@ export default class Game {
         if ( player.health <= 0 )
             window.setTimeout( () => { location.reload() }, 5000 )
         else
-            this.refillHand()
+            window.setTimeout( () => { this.refillHand() }, 500 )
 
         let product = melter.product
         deck.cards.push( product )
@@ -156,15 +156,21 @@ export default class Game {
     refillHand() {
         let { deck, hand, discard, handCap } = this
 
-        if ( deck.length < handCap ) {
-            for ( let card of deck.cards )
-                hand.cards.push( card )
-            deck.cards = discard.cards
-            discard.cards = []
+        let discardToDeck = deck.length < handCap ? discard.length : 0
+        let deckLength2 = deck.length + discardToDeck
+        let deckToHand = Math.min( handCap, deckLength2 )
+
+        let delay = 0
+        let deal = ( from, to, amount ) => {
+            for ( let i = 0; i < amount; i++ ) {
+                from.transferCard( to, delay )
+                // playSound( Card.randomFlipSound(), { volume: 1 / 8 } )
+                delay += 5
+            }
         }
 
-        while ( hand.length < handCap && deck.length > 0 )
-            deck.transferCard( hand )
+        deal( discard, deck, discardToDeck )
+        deal( deck, hand, deckToHand )
     }
 
     update() {

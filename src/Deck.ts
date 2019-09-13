@@ -53,20 +53,12 @@ export default class Deck extends GameObject {
         this.insertAt( card, random )
     }
 
-    transferCard( destination: Deck ) {
+    transferCard( destination: Deck, animationDelay = 1 ) {
         let card = this.cards.pop()
-        if ( card )
+        if ( card ) {
+            card.dealDelay = animationDelay
             destination.cards.push( card )
-    }
-
-    onUpdate( scene: Scene ) {
-        this.cards.forEach( card => {
-            let fixedPos = this.cardPosition( card )
-            if ( fixedPos.subtract( card.position ).length > 1 ) {
-                let fixVector = fixedPos.subtract( card.position )
-                card.position = card.position.add( fixVector.unit.multiply( fixVector.length / 10 ) )
-            }
-        } )
+        }
     }
 
     cardPosition( card: Card ) {
@@ -89,10 +81,11 @@ export default class Deck extends GameObject {
     }
 
     onBuildScene( scene: Scene ) {
-        let layer = 0
+        let i = 0
+        let layerDir = this.isHand ? 1 : -1
         for ( let card of this.cards ) {
-            card.inHand = this.isHand
-            card.layer = layer--
+            card.deck = this
+            card.layer = ( i++ ) * layerDir
             if ( card.grabbed )
                 card.layer = 100
             scene.add( card )

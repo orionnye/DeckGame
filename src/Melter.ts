@@ -22,6 +22,8 @@ export default class Melter extends GameObject {
 
     preview = 0
 
+    layer = 50
+
     constructor( x: number, y: number ) {
         super( vector( x, y ), 69, 100 )
         this.ingredients = []
@@ -55,8 +57,6 @@ export default class Melter extends GameObject {
     }
 
     drawProduct( canvas: Canvas, scene: Scene, product: Card ) {
-        product.isPreview = true
-
         canvas.push()
         canvas.alpha( this.preview * 0.8 )
 

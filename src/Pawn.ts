@@ -22,6 +22,8 @@ export default class Pawn extends GameObject {
         .setDimensions( 150, 70 )
     frameCount: number = 2
 
+    layer = -50
+
     constructor( x, y, width, height, color = "red", health, sprite, frameCount ) {
         super( vector( x, y ), width, height )
         this.color = color

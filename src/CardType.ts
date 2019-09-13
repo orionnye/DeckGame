@@ -23,6 +23,7 @@ export default class CardType {
         receiver.health -= this.damage
         if ( this.onApply != null )
             this.onApply( receiver, dealer )
+        playSound( Card.randomFlipSound(), { volume: 1 / 4 } )
         if ( !receiver.main )
             setTimeout( () => playSound( "glassbreak.wav", { volume: 1 / 9 } ), 600 )
     }

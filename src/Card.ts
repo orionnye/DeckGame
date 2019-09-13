@@ -12,14 +12,18 @@ import Pawn from "./Pawn";
 import Scene from "geode/lib/gameobject/Scene";
 import Color from "geode/lib/graphics/Color";
 import Melter from "./Melter";
+import { playSound } from "geode/lib/audio";
 
 export default class Card extends GameObject {
 
     type: CardType
     sprite?: Sprite
-    inHand: boolean = false
-    isPreview: boolean = false
     grabOffset: Vector = Vector.ZERO
+
+    deck?: Deck
+    dealDelay = 0
+    get inHand() { return this.deck && this.deck.isHand }
+    get isPreview() { return !this.deck || !this.deck.isHand }
 
     static dimensions = vector( 68, 108 )
     static upperSectionHeight = 80
@@ -42,6 +46,19 @@ export default class Card extends GameObject {
     }
 
     onUpdate( scene: Scene ) {
+        let { deck } = this
+        if ( deck && this.dealDelay == 0 ) {
+            let fixedPos = deck.cardPosition( this )
+            if ( fixedPos.subtract( this.position ).length > 1 ) {
+                let fixVector = fixedPos.subtract( this.position )
+                this.position = this.position.add( fixVector.unit.multiply( fixVector.length / 10 ) )
+            }
+        }
+
+        if ( this.dealDelay == 1 )
+            playSound( Card.randomFlipSound(), { volume: 1 / 8 } )
+        this.dealDelay = Math.max( 0, this.dealDelay - 1 )
+
         if ( !this.inHand )
             return
 
@@ -96,5 +113,9 @@ export default class Card extends GameObject {
         } else {
             canvas.vimage( getImage( "cards/Blank" ), Vector.ZERO )
         }
+    }
+
+    static randomFlipSound() {
+        return "cardflip_" + Math.floor( Math.random() * 4 ) + ".wav"
     }
 }
