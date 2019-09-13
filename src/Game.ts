@@ -138,10 +138,9 @@ export default class Game {
 
         // Edit tryEndturn to accept an array as a product
         let products = melter.products
-        products.forEach( product => {
-            console.log( product, "being pushed" )
+        for ( let product of melter.products )
             deck.cards.push( product )
-        } )
+
         melter.base = new Card( melter.position, CardTypes.Volatile )
         melter.ingredients = []
 
@@ -212,6 +211,8 @@ export default class Game {
         if ( this.tunes.paused )
             playAudio( this.tunes )
     }
+
+    // ---- Rendering ----
 
     cameraTransform() {
         let { canvas } = this
