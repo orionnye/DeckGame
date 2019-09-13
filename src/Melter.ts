@@ -19,6 +19,7 @@ export default class Melter extends GameObject {
     ingredients: CardType[]
     base: Card
     sprite?: Sprite
+    multiplier: number
 
     preview = 0
 
@@ -27,16 +28,21 @@ export default class Melter extends GameObject {
     constructor( x: number, y: number ) {
         super( vector( x, y ), 69, 100 )
         this.ingredients = []
+        this.multiplier = 1
         this.base = new Card( this.position, CardTypes.Volatile )
         this.sprite = new Sprite( getImage( "BrewStation" ) )
             .setSource( { x: 0, y: 0, w: 100, h: 100 } )
             .setDimensions( 200, 200 )
     }
 
-    get product() {
+    get products() {
         let type = CookBook.getProduct( this.ingredients )
-        let concoction = new Card( this.base.position, type )
-        return concoction
+        //Edit concotion to Equal an Array depending on Quantity
+        let products: Card[] = []
+        for (let i = 0; i <= this.multiplier * type.craftQuantity; i++) {
+            products.push(new Card( this.base.position, type ))
+        }
+        return products
     }
 
     get potentialProduct() {
@@ -100,7 +106,9 @@ export default class Melter extends GameObject {
         if ( this.contains( mouse ) )
             previewTarget = 1
         this.preview = GMath.lerp( this.preview, previewTarget, 0.1 )
-        this.drawProduct( canvas, scene, this.potentialProduct || this.product )
+        this.products.forEach(product => {
+            this.drawProduct( canvas, scene, this.potentialProduct || product )
+        })
 
         if ( sprite ) {
             let margin = vector( 32, 45 )

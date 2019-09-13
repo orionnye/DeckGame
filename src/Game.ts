@@ -133,8 +133,12 @@ export default class Game {
         else
             window.setTimeout( () => { this.refillHand() }, 500 )
 
-        let product = melter.product
-        deck.cards.push( product )
+        // Edit tryEndturn to accept an array as a product
+        let products = melter.products
+        products.forEach( product => {
+            console.log(product, "being pushed")
+            deck.cards.push( product )
+        })
         melter.base = new Card( melter.position, CardTypes.Volatile )
         melter.ingredients = []
     }
