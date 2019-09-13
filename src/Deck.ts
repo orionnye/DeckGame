@@ -36,9 +36,6 @@ export default class Deck extends GameObject {
     remove( card: Card ) {
         let index = this.cards.indexOf( card )
         this.cards.splice( index, 1 )
-        // let store = this.cards[ this.length - 1 ]
-        // this.cards[ index ] = store
-        // this.cards.pop()
     }
 
     insertAt( card, index ) {
