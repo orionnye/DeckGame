@@ -23,7 +23,7 @@ export default class Card extends GameObject {
     deck?: Deck
     dealDelay = 0
     get inHand() { return this.deck && this.deck.isHand }
-    get isPreview() { return !this.deck || !this.deck.isHand }
+    get isPreview() { return !this.deck }
 
     static dimensions = vector( 68, 108 )
     static upperSectionHeight = 80
