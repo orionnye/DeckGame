@@ -44,17 +44,16 @@ export default class Game {
     ]
 
     enemies = [
-        new Pawn( 520, 80, 100, 100, "blue", 15, this.enemySprites[ 1 ], 2 ),
-        new Pawn( 520, 80, 100, 100, "blue", 15, this.enemySprites[ 2 ], 1 ),
-        new Pawn( 520, 80, 100, 100, "blue", 15, this.enemySprites[ 3 ], 9 )
+        new Pawn( vector( 520, 80 ), 100, 100, 15, this.enemySprites[ 1 ], 2 ),
+        new Pawn( vector( 520, 80 ), 100, 100, 15, this.enemySprites[ 2 ], 1 ),
+        new Pawn( vector( 520, 80 ), 100, 100, 15, this.enemySprites[ 3 ], 9 )
     ]
-
 
     background = new Background()
     melter = new Melter( 325, 375 )
-    enemy = new Pawn( 520, 80, 100, 100, "blue", 15, this.enemySprites[ 0 ], 6 )
+    enemy = new Pawn( vector( 520, 80 ), 100, 100, 15, this.enemySprites[ 0 ], 6 )
     player = new Pawn(
-        100, 80, 100, 100, "red", 60,
+        vector( 100, 80 ), 100, 100, 60,
         new Sprite( getImage( "PawnEgor" ) )
             .setSource( { x: 0, y: 0, w: 180, h: 132 } )
             .setDimensions( 208, 158 ),

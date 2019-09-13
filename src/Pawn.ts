@@ -9,7 +9,6 @@ import Color from "geode/lib/graphics/Color";
 
 export default class Pawn extends GameObject {
 
-    color: string
     dizzyTime: number = 0
     dizziness: number = 0
     recentDamage = 0
@@ -26,9 +25,8 @@ export default class Pawn extends GameObject {
 
     layer = -50
 
-    constructor( x, y, width, height, color = "red", health, sprite, frameCount ) {
-        super( vector( x, y ), width, height )
-        this.color = color
+    constructor( position, width, height, health, sprite, frameCount ) {
+        super( position, width, height )
         this.maxHealth = health
         this.pHealth = health
         this.damage = 10
@@ -90,7 +88,7 @@ export default class Pawn extends GameObject {
         canvas.vrect(
             Vector.ZERO,
             this.dimensions
-        ).fillStyle( this.color ).fill()
+        ).fillStyle( Color.magenta ).fill()
     }
 
     drawHealthBar( canvas: Canvas ) {
