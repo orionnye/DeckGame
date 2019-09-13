@@ -39,6 +39,7 @@ const CardTypes = {
     } ),
     //Mix
     Leeches: new CardType( {
+        craftQuanity: 2,
         onApply( receiver: Pawn, dealer?: Pawn ) {
             if ( dealer ) {
                 dealer.health += 5

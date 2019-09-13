@@ -10,6 +10,8 @@ class CookBook {
 
     static addRecipe( product: CardType, ingredients: CardType[] ) {
         let key = CookBook.getKey( ingredients )
+        //change product to an arrray here
+        
         CookBook.recipes[ key ] = product
     }
 

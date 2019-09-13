@@ -12,11 +12,13 @@ export default class CardType {
     imageName: string
     damage: number = 0
     onApply?: ApplyFunction
+    craftQuantity: number = 1
 
-    constructor( { imageName = "", damage = 0, onApply = receiver => { } } ) {
+    constructor( { imageName = "", damage = 0, craftQuanity = 1, onApply = receiver => { } } ) {
         this.imageName = imageName
         this.damage = damage
         this.onApply = onApply
+        this.craftQuantity = 1
     }
 
     apply( receiver: Pawn, dealer?: Pawn ) {
