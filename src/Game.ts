@@ -136,8 +136,6 @@ export default class Game {
         else
             this.refillHand()
 
-        // Edit tryEndturn to accept an array as a product
-        let products = melter.products
         for ( let product of melter.products )
             deck.cards.push( product )
 
