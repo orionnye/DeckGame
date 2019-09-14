@@ -71,6 +71,7 @@ export default class CardType {
 
         this.generatedImage = innerCanvas.transferToImageBitmap()
         return this.generatedImage
+        // innerCanvas.transferToImageBitmap()
     }
 
 }
