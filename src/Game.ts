@@ -66,8 +66,8 @@ export default class Game {
     )
 
     tunes = audioInstance(
-        getAudio( "DungeonTunes" ),
-        { volume: 0.35 * 0 }
+        getAudio( "SomberTune.wav" ),
+        { volume: 0.35 }
     )
 
     canvas: Canvas
