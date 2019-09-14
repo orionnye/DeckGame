@@ -47,7 +47,7 @@ export default class Game {
     )
 
     ambience = audioInstance( getAudio( "DungeonAmbience" ), { volume: 0.025 } )
-    tunes = audioInstance( getAudio( "SomberTune.wav" ), { volume: 0.75 } )
+    tunes = audioInstance( getAudio( "SomberTune.wav" ), { volume: 0.95 } )
 
     canvas: Canvas
 
@@ -88,7 +88,7 @@ export default class Game {
         //if enemy health is alive
         if ( enemy.health > 0 ) {
             player.health -= enemy.damage
-            playSound( "slap.wav" )
+            playSound( "slap.wav", { volume: 0.1 } )
             enemy.damage += 2
             enemy.heal += 1
         } else {
