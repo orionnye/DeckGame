@@ -32,7 +32,7 @@ export default class Melter extends GameObject {
         this.base = new Card( this.position, CardTypes.Volatile )
         this.sprite = new Sprite( getImage( "BrewStation" ) )
             .setSource( { x: 0, y: 0, w: 100, h: 100 } )
-            .setDimensions( 200, 200 )
+            .setDimensions( vector( 200, 200 ) )
     }
 
     get products() {

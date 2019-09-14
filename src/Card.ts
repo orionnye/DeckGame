@@ -2,22 +2,18 @@ import { getImage } from "geode/lib/assets";
 import Canvas from "geode/lib/graphics/Canvas";
 import GameObject from "geode/lib/gameobject/GameObject";
 import Input from "geode/lib/Input";
-import Sprite from "geode/lib/graphics/Sprite";
 import Vector, { vector } from "geode/lib/math/Vector";
-import animateSprite from "./animateSprite";
 import CardType from "./CardType";
 import Deck from "./Deck";
 import Game from "./Game";
 import Pawn from "./Pawn";
 import Scene from "geode/lib/gameobject/Scene";
-import Color from "geode/lib/graphics/Color";
 import Melter from "./Melter";
 import { playSound } from "geode/lib/audio";
 
 export default class Card extends GameObject {
 
     type: CardType
-    sprite?: Sprite
     grabOffset: Vector = Vector.ZERO
 
     deck?: Deck
@@ -90,8 +86,8 @@ export default class Card extends GameObject {
                     this.apply( player, hand, discard, enemy )
                 else if ( pawn !== player ) {
                     this.apply( pawn, hand, discard, player )
-                    if ( player.sprite )
-                        animateSprite( player.sprite, 80, 9 )
+                    if ( player.animator )
+                        player.animator.play( 1000 )
                 }
             }
         }

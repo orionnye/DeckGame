@@ -1,11 +1,10 @@
 import Canvas from "geode/lib/graphics/Canvas";
 import GameObject from "geode/lib/gameobject/GameObject";
-import Sprite from "geode/lib/graphics/Sprite";
 import Vector, { vector } from "geode/lib/math/Vector";
-import { getImage } from "geode/lib/assets";
 import Scene from "geode/lib/gameobject/Scene";
 import GMath from "geode/lib/math/GMath";
 import Color from "geode/lib/graphics/Color";
+import Animator from "geode/lib/graphics/Animator";
 
 export default class Pawn extends GameObject {
 
@@ -18,22 +17,18 @@ export default class Pawn extends GameObject {
     damage: number
     heal: number
     main: boolean
-    sprite?: Sprite = new Sprite( getImage( "Archlizard" ) )
-        .setSource( { x: 0, y: 0, w: 100, h: 50 } )
-        .setDimensions( 150, 70 )
-    frameCount: number = 2
+    animator: Animator
 
     layer = -50
 
-    constructor( position, width, height, health, sprite, frameCount ) {
-        super( position, width, height )
+    constructor( position, health, animator ) {
+        super( position, 100, 140 )
         this.maxHealth = health
         this.pHealth = health
         this.damage = 10
         this.heal = 2
         this.main = false
-        this.sprite = sprite
-        this.frameCount = frameCount
+        this.animator = animator
     }
 
     get health() { return this.pHealth }
@@ -71,10 +66,15 @@ export default class Pawn extends GameObject {
             )
         )
 
-        if ( this.sprite )
-            this.sprite.draw( canvas, this.sprite.width / 2, this.height / 2, true )
-        else
+        // this.drawBasic( canvas )
+        if ( this.animator ) {
+            let { width, height } = this
+            canvas.push().translate( width / 2, height / 2 )
+            this.animator.onRender( canvas )
+            canvas.pop()
+        } else {
             this.drawBasic( canvas )
+        }
 
         this.drawHealthBar( canvas )
         this.drawIntent( canvas )
@@ -92,18 +92,17 @@ export default class Pawn extends GameObject {
         let textWidth = 60
         let healthChunk = this.width / this.maxHealth
         let healthWidth = this.health * healthChunk
-        let healthPos = vector( 0, this.height + 40 )
+        let healthPos = vector( 0, this.height )
         let healthNumPos = healthPos.addXY( healthWidth / 3 - textWidth / 4, healthHeight - 2 )
         let damageWidth = this.recentDamage * healthChunk
 
         canvas.vrect( healthPos, vector( this.width, healthHeight ) ).fillStyle( Color.black ).fill()
         canvas.vrect( healthPos, vector( healthWidth, healthHeight ) ).fillStyle( Color.red ).fill()
         canvas.vrect( healthPos.addX( healthWidth ), vector( damageWidth, healthHeight ) ).fillStyle( Color.orange ).fill()
-        // canvas.vrect( healthPos, vector( this.width, healthHeight ) ).fillStyle( "black" ).stroke()
 
         canvas.fillStyle( "white" )
             .text(
-                this.health.toString() + "/" + this.maxHealth.toString(),
+                this.health + "/" + this.maxHealth,
                 healthNumPos.x, healthNumPos.y,
                 textWidth, "20px pixel"
             )
@@ -112,13 +111,13 @@ export default class Pawn extends GameObject {
     drawIntent( canvas: Canvas ) {
         canvas.fillStyle( "orange" )
             .text(
-                "Attack  " + this.damage.toString() + "",
+                "Attack  " + this.damage + "",
                 0, -20,
                 120, "25px pixel"
             )
         canvas.fillStyle( "green" )
             .text(
-                "Regenerate  " + this.heal.toString() + "",
+                "Regenerate  " + this.heal + "",
                 0, 0,
                 120, "20px pixel"
             )

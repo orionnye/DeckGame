@@ -3,11 +3,9 @@ import Deck from "./Deck";
 import Pawn from "./Pawn";
 import Card from "./Card";
 import Melter from "./Melter";
-import Sprite from "geode/lib/graphics/Sprite";
 import CardTypes from "./CardTypes";
 import { playAudio, audioInstance, playSound } from "geode/lib/audio";
 import { getImage, getAudio } from "geode/lib/assets";
-import animateSprite from "./animateSprite";
 import Transform from "geode/lib/math/Transform";
 import Vector, { vector } from "geode/lib/math/Vector";
 import GMath from "geode/lib/math/GMath";
@@ -15,6 +13,10 @@ import { rgb, rgba } from "geode/lib/graphics/Color";
 import Scene from "geode/lib/gameobject/Scene";
 import { scheduleTask } from "./util";
 import Background from "./Background";
+import SpriteSheet from "geode/lib/graphics/SpriteSheet";
+import { getEnemy, newEncounter } from "./enemies";
+import { GameClock } from "geode/lib/Clock";
+import Animator from "geode/lib/graphics/Animator";
 
 export default class Game {
 
@@ -28,70 +30,44 @@ export default class Game {
     hand = new Deck( this.handCap, this.handCap, 145, 250, 90, 0, true )
     discard = new Deck( 0, Infinity, 600, 250, 1, 1, false )
 
-    enemySprites = [
-        new Sprite( getImage( "PawnChadwick2" ) )
-            .setSource( { x: 0, y: 0, w: 1000, h: 1000 } )
-            .setDimensions( 120, 120 ),
-        new Sprite( getImage( "Archlizard" ) )
-            .setSource( { x: 0, y: 0, w: 100, h: 50 } )
-            .setDimensions( 150, 70 ),
-        new Sprite( getImage( "BoneDragon" ) )
-            .setSource( { x: 0, y: 0, w: 80, h: 100 } )
-            .setDimensions( 130, 130 ),
-        new Sprite( getImage( "Noodle" ) )
-            .setSource( { x: 0, y: 0, w: 100, h: 100 } )
-            .setDimensions( 130, 130 )
-    ]
-
-    enemies = [
-        new Pawn( vector( 520, 80 ), 100, 100, 15, this.enemySprites[ 1 ], 2 ),
-        new Pawn( vector( 520, 80 ), 100, 100, 15, this.enemySprites[ 2 ], 1 ),
-        new Pawn( vector( 520, 80 ), 100, 100, 15, this.enemySprites[ 3 ], 9 )
-    ]
-
     background = new Background()
     melter = new Melter( 325, 375 )
-    enemy = new Pawn( vector( 520, 80 ), 100, 100, 15, this.enemySprites[ 0 ], 6 )
+    enemy = getEnemy( 0 )
     player = new Pawn(
-        vector( 100, 80 ), 100, 100, 60,
-        new Sprite( getImage( "PawnEgor" ) )
-            .setSource( { x: 0, y: 0, w: 180, h: 132 } )
-            .setDimensions( 208, 158 ),
-        9
+        vector( 100, 80 ),
+        60,
+        new Animator(
+            new SpriteSheet( {
+                image: getImage( "PawnEgor" ),
+                center: vector( 18, 38 ),
+                frameWidth: 90,
+                scale: 2.4
+            } )
+        )
     )
 
-    ambience = audioInstance(
-        getAudio( "DungeonAmbience" ),
-        { volume: 0.025 }
-    )
-
-    tunes = audioInstance(
-        getAudio( "SomberTune.wav" ),
-        { volume: 0.75 }
-    )
+    ambience = audioInstance( getAudio( "DungeonAmbience" ), { volume: 0.025 } )
+    tunes = audioInstance( getAudio( "SomberTune.wav" ), { volume: 0.75 } )
 
     canvas: Canvas
 
     static instance: Game
     constructor() {
         Game.instance = this
-
         this.canvas = new Canvas( "canvas" )
-
-        addEventListener( "keyup", e => this.keyup( e ) )
-
         this.player.main = true
         this.player.heal = 0
         this.player.damage = 0
+        addEventListener( "keyup", e => this.keyup( e ) )
     }
 
-    get pawns() {
-        return [ this.player, this.enemy ]
-    }
+    get pawns() { return [ this.player, this.enemy ] }
 
     keyup( e: KeyboardEvent ) {
         if ( e.key == "Enter" )
             this.tryEndTurn()
+        if ( e.key == "e" )
+            this.player.animator.play( 1000 )
     }
 
     get canEndTurn() {
@@ -101,12 +77,10 @@ export default class Game {
 
     endingTurn = false
     tryEndTurn() {
-        if ( !this.canEndTurn )
-            return
-
+        if ( !this.canEndTurn ) return
         this.endingTurn = true
 
-        let { enemy, enemySprites, enemyCount, win, player, melter, deck } = this
+        let { enemy, player, melter, deck } = this
 
         player.onEndTurn()
         enemy.onEndTurn()
@@ -119,16 +93,13 @@ export default class Game {
             enemy.heal += 1
         } else {
             this.enemyCount += 1
-            this.newEncounter()
+            this.enemy = newEncounter( this.enemyCount )
         }
 
         player.heal -= Math.sign( player.heal )
 
-        //end turn animations
-        if ( enemy.sprite )
-            animateSprite( enemy.sprite, 300, enemy.frameCount )
-        if ( player.sprite )
-            animateSprite( player.sprite, 200, 1 )
+        if ( enemy.animator )
+            enemy.animator.play( 1000 )
 
         if ( player.health <= 0 )
             window.setTimeout( () => { location.reload() }, 5000 )
@@ -142,20 +113,6 @@ export default class Game {
         melter.ingredients = []
 
         this.endingTurn = false
-    }
-
-    newEncounter() {
-        let { enemyCount, enemy, enemySprites, enemies } = this
-        let newHealth = ( enemyCount + 1 ) * 10
-        // random enemy sprite pulled from list.
-        let randomEnemy = Math.floor( Math.random() * enemies.length )
-        this.enemy = enemies[ randomEnemy ]
-
-        //stat changes will be obsolete with proper enemy planning, keeping it for now to increase gamelength
-        enemy.heal = enemyCount * 2
-        enemy.maxHealth = newHealth
-        enemy.health = enemy.maxHealth
-        enemy.damage = enemyCount * 4
     }
 
     refillHand() {
@@ -175,10 +132,7 @@ export default class Game {
         let { canvas, deck, hand, discard, enemy, player, melter, background } = this
 
         let scene = new Scene( canvas, this.cameraTransform(), [ player, enemy, deck, hand, discard, melter, background ] )
-
-        //  Rendering in update function? Seems odd
         this.render( scene )
-
         scene.update()
 
         if ( this.canEndTurn )
