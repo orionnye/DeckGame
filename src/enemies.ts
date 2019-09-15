@@ -26,6 +26,16 @@ const enemySpriteSheets = [
         image: getImage( "Noodle" ),
         frameWidth: 100,
         scale: 1.4
+    } ),
+    new SpriteSheet( {
+        image: getImage( "EyeSlug" ),
+        frameWidth: 100,
+        scale: 0.25
+    } ),
+    new SpriteSheet( {
+        image: getImage( "SimpleBoofer" ),
+        frameWidth: 100,
+        scale: 1
     } )
 ] as SpriteSheet[]
 
