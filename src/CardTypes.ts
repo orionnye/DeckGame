@@ -73,6 +73,7 @@ const CardTypes = {
     Heal1: new CardType( { imageName: "Heal", damage: -5 } ),
     Heal2: new CardType( { imageName: "Heal", damage: -10 } ),
     Infusion: new CardType( {
+        imageName: "Infusion",
         onApply( receiver: Pawn ) {
             receiver.maxHealth -= 5
             receiver.health += 15
