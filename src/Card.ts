@@ -87,7 +87,7 @@ export default class Card extends GameObject {
                 else if ( pawn !== player ) {
                     this.apply( pawn, hand, discard, player )
                     if ( player.animator )
-                        player.animator.play( 500 )
+                        player.animator.play( 700 )
                 }
             }
         }

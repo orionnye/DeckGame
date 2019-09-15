@@ -51,6 +51,7 @@ const CardTypes = {
     } ),
     //Mix
     Leeches: new CardType( {
+        imageName: "Leeches",
         craftQuanity: 2,
         onApply( receiver: Pawn, dealer?: Pawn ) {
             if ( dealer ) {
