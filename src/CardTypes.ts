@@ -5,7 +5,7 @@ const CardTypes = {
     //Offensive
     Attack1: new CardType( { imageName: "Attack", damage: 5 } ),
     Attack2: new CardType( { imageName: "Attack", damage: 10 } ),
-    Acid: new CardType( { imageName: "Acid", damage: 15 } ),
+    Acid: new CardType( { imageName: "Acid2", damage: 15 } ),
     Molotov: new CardType( {
         damage: 5,
         onApply( receiver: Pawn ) {
@@ -28,7 +28,7 @@ const CardTypes = {
         }
     } ),
     Pact: new CardType( {
-        imageName: "Pact",
+        imageName: "Pact3",
         onApply( receiver: Pawn, dealer?: Pawn ) {
             if ( dealer ) {
                 let damage = dealer.maxHealth - dealer.health
