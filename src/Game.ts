@@ -32,7 +32,7 @@ export default class Game {
 
     background = new Background()
     melter = new Melter( 325, 375 )
-    enemy = getEnemy( 0 )
+    enemy = getEnemy( 6 )
     player = new Pawn(
         vector( 100, 80 ),
         60,
