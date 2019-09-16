@@ -3,10 +3,12 @@ import { getImage } from "geode/lib/assets";
 import { vector } from "geode/lib/math/Vector";
 import Pawn from "./Pawn";
 import Animator from "geode/lib/graphics/Animator";
+import MoveType from "./MoveType";
+import MoveTypes from "./MoveTypes";
 
 const enemySpriteSheets = [
     new SpriteSheet( {
-        image: getImage( "PawnChadwick2" ),
+        image: getImage( "Chadwick" ),
         frameWidth: 500,
         scale: 2 / 7
     } ),
@@ -43,6 +45,13 @@ const enemySpriteSheets = [
         scale: 2.3
     } )
 ] as SpriteSheet[]
+
+const enemies: Pawn[] = [
+    new Pawn( vector( 520, 80 ), 15,
+    new Animator( enemySpriteSheets[ 0 ] ),
+    [ MoveTypes.Cower, MoveTypes.PuppyEyes ] )
+]
+
 
 export function getEnemy( index: number ) {
     return new Pawn( vector( 520, 80 ), 15, new Animator( enemySpriteSheets[ index ] ) )

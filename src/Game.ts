@@ -34,7 +34,7 @@ export default class Game {
     background = new Background()
     melter = new Melter( 325, 375 )
     ledger = new Ledger(100, 390)
-    enemy = getEnemy( 6 )
+    enemy = getEnemy( 0 )
     player = new Pawn(
         vector( 100, 80 ),
         60,
@@ -48,8 +48,8 @@ export default class Game {
         )
     )
 
-    ambience = audioInstance( getAudio( "DungeonAmbience" ), { volume: 0.025 } )
-    tunes = audioInstance( getAudio( "SomberTune.wav" ), { volume: 0.75 } )
+    ambience = audioInstance( getAudio( "DungeonAmbience" ), { volume: 0.025 * 0 } )
+    tunes = audioInstance( getAudio( "SomberTune.wav" ), { volume: 0.75 * 0 } )
 
     canvas: Canvas
 
@@ -98,7 +98,7 @@ export default class Game {
             this.enemy = newEncounter( this.enemyCount )
         }
 
-        player.heal -= Math.sign( player.heal )
+        // player.heal -= Math.sign( player.heal )
 
         if ( enemy.animator )
             enemy.animator.play( 1000 )

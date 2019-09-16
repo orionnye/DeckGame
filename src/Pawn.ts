@@ -5,6 +5,8 @@ import Scene from "geode/lib/gameobject/Scene";
 import GMath from "geode/lib/math/GMath";
 import Color from "geode/lib/graphics/Color";
 import Animator from "geode/lib/graphics/Animator";
+import MoveType from "./MoveType"
+import MoveTypes from "./MoveTypes"
 
 export default class Pawn extends GameObject {
 
@@ -18,10 +20,11 @@ export default class Pawn extends GameObject {
     heal: number
     main: boolean
     animator: Animator
+    moveList?: MoveType[]
 
     layer = -50
 
-    constructor( position, health, animator ) {
+    constructor( position, health, animator, moveList? ) {
         super( position, 100, 140 )
         this.maxHealth = health
         this.pHealth = health
@@ -29,6 +32,7 @@ export default class Pawn extends GameObject {
         this.heal = 2
         this.main = false
         this.animator = animator
+        this.moveList = moveList
     }
 
     get health() { return this.pHealth }
@@ -54,6 +58,7 @@ export default class Pawn extends GameObject {
     }
 
     onEndTurn() {
+        //Add enemyturn here, and select random move from move list to use
         if ( this.health > 0 )
             this.health += this.heal
     }
@@ -95,6 +100,7 @@ export default class Pawn extends GameObject {
         let healthPos = vector( 0, this.height )
         let healthNumPos = healthPos.addXY( healthWidth / 3 - textWidth / 4, healthHeight - 2 )
         let damageWidth = this.recentDamage * healthChunk
+        let healSign = this.heal < 0 ? "-" : "+"
 
         canvas.vrect( healthPos, vector( this.width, healthHeight ) ).fillStyle( Color.black ).fill()
         canvas.vrect( healthPos, vector( healthWidth, healthHeight ) ).fillStyle( Color.red ).fill()
@@ -106,20 +112,24 @@ export default class Pawn extends GameObject {
                 healthNumPos.x, healthNumPos.y,
                 textWidth, "20px pixel"
             )
+        if ( this.heal !== 0 && this.health > 0) {
+            canvas.fillStyle( "green" )
+                .text(
+                    healSign + this.heal,
+                    healthNumPos.x + textWidth + 5, healthNumPos.y,
+                    textWidth, "20px pixel"
+                )
+        }
     }
 
     drawIntent( canvas: Canvas ) {
-        canvas.fillStyle( "orange" )
-            .text(
-                "Attack  " + this.damage + "",
-                0, -20,
-                120, "25px pixel"
-            )
-        canvas.fillStyle( "green" )
-            .text(
-                "Regenerate  " + this.heal + "",
-                0, 0,
-                120, "20px pixel"
-            )
+        if ( this.damage !== 0 ) {
+            canvas.fillStyle( "orange" )
+                .text(
+                    "Attack " + this.damage + "",
+                    0, -10,
+                    120, "25px pixel"
+                )
+        }
     }
 }
