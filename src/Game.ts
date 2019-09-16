@@ -17,6 +17,7 @@ import SpriteSheet from "geode/lib/graphics/SpriteSheet";
 import { getEnemy, newEncounter } from "./enemies";
 import { GameClock } from "geode/lib/Clock";
 import Animator from "geode/lib/graphics/Animator";
+import Ledger from "./Ledger";
 
 export default class Game {
 
@@ -32,6 +33,7 @@ export default class Game {
 
     background = new Background()
     melter = new Melter( 325, 375 )
+    ledger = new Ledger(100, 390)
     enemy = getEnemy( 6 )
     player = new Pawn(
         vector( 100, 80 ),
@@ -131,7 +133,7 @@ export default class Game {
     update() {
         let { canvas, deck, hand, discard, enemy, player, melter, background } = this
 
-        let scene = new Scene( canvas, this.cameraTransform(), [ player, enemy, deck, hand, discard, melter, background ] )
+        let scene = new Scene( canvas, this.cameraTransform(), [ player, enemy, deck, hand, discard, melter, background, this.ledger] )
         this.render( scene )
         scene.update()
 
