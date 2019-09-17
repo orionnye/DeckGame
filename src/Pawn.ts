@@ -57,7 +57,7 @@ export default class Pawn extends GameObject {
             this.dizziness = 0
     }
 
-    onEndTurn() {
+    onEndTurn( Target?: Pawn ) {
         //Add enemyturn here, and select random move from move list to use
         if ( this.health > 0 )
             this.health += this.heal

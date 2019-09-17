@@ -43,6 +43,11 @@ const enemySpriteSheets = [
         image: getImage( "OcculentAustin" ),
         frameWidth: 100,
         scale: 2.3
+    } ),
+    new SpriteSheet( {
+        image: getImage( "MaskedMaggot" ),
+        frameWidth: 100,
+        scale: 1.5
     } )
 ] as SpriteSheet[]
 
