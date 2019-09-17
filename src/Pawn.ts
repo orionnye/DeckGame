@@ -61,6 +61,8 @@ export default class Pawn extends GameObject {
         //Add enemyturn here, and select random move from move list to use
         if ( this.health > 0 )
             this.health += this.heal
+        if ( this.heal !== 0 )
+            this.heal += Math.sign(this.heal) * -1
     }
 
     onRender( canvas: Canvas, scene: Scene ) {
