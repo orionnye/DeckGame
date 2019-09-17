@@ -100,7 +100,7 @@ export default class Pawn extends GameObject {
         let healthPos = vector( 0, this.height )
         let healthNumPos = healthPos.addXY( healthWidth / 3 - textWidth / 4, healthHeight - 2 )
         let damageWidth = this.recentDamage * healthChunk
-        let healSign = this.heal < 0 ? "-" : "+"
+        let healSign = this.heal < 0 ? "" : "+"
 
         canvas.vrect( healthPos, vector( this.width, healthHeight ) ).fillStyle( Color.black ).fill()
         canvas.vrect( healthPos, vector( healthWidth, healthHeight ) ).fillStyle( Color.red ).fill()
@@ -112,7 +112,7 @@ export default class Pawn extends GameObject {
                 healthNumPos.x, healthNumPos.y,
                 textWidth, "20px pixel"
             )
-        if ( this.heal !== 0 && this.health > 0) {
+        if ( this.heal !== 0 && this.health > 0 && this.health !== this.maxHealth) {
             canvas.fillStyle( "green" )
                 .text(
                     healSign + this.heal,
