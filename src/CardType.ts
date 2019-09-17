@@ -26,9 +26,6 @@ export default class CardType {
         if ( this.onApply != null )
             this.onApply( receiver, dealer )
         playSound( Card.randomFlipSound(), { volume: 1 / 4 } )
-        let randomSound = "glassBreak_" + Math.floor(Math.random() * 3).toString() + ".wav"
-        if ( !receiver.main )
-            setTimeout( () => playSound( randomSound, { volume: 0.09 } ), 600 )
     }
 
     get imagePath() {

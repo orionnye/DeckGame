@@ -86,8 +86,11 @@ export default class Card extends GameObject {
                     this.apply( player, hand, discard, enemy )
                 else if ( pawn !== player ) {
                     this.apply( pawn, hand, discard, player )
-                    if ( player.animator )
+                    if ( player.animator ) {
+                        let randomSound = "glassBreak_" + Math.floor( Math.random() * 3 ).toString() + ".wav"
+                        setTimeout( () => playSound( randomSound, { volume: 0.09 } ), 600 )
                         player.animator.play( 900 )
+                    }
                 }
             }
         }
