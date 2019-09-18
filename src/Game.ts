@@ -84,15 +84,12 @@ export default class Game {
 
         let { enemy, player, melter, deck } = this
 
-        player.onEndTurn()
-        enemy.onEndTurn()
+        player.statDecay()
+        enemy.onEndTurn(player, enemy)
 
         //if enemy health is alive
         if ( enemy.health > 0 ) {
-            player.health -= enemy.damage
             playSound( "slap.wav", { volume: 0.1 } )
-            enemy.damage += 2
-            enemy.heal += 1
         } else {
             this.enemyCount += 1
             this.enemy = newEncounter( this.enemyCount )

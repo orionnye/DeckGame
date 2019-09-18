@@ -11,7 +11,31 @@ const MoveTypes = {
     } ),
     PuppyEyes: new EnemyType( {
         onApply( reciever: Pawn, dealer: Pawn ) {
-            dealer.health -= 5
+            dealer.health += 2
+            dealer.heal += 2
+        }
+    } ),
+    WeakAttack: new EnemyType( {
+        onApply( reciever: Pawn, dealer: Pawn ) {
+            reciever.health -= 3
+        }
+    } ),
+    FireBreath: new EnemyType( {
+        onApply( reciever: Pawn, dealer: Pawn ) {
+            reciever.health -= 20
+            dealer.damage += 3
+        }
+    } ),
+    Smolder: new EnemyType( {
+        onApply( reciever: Pawn, dealer: Pawn ) {
+            reciever.heal -= 1
+            dealer.heal += 3
+        }
+    } ),
+    Bite: new EnemyType( {
+        onApply( reciever: Pawn, dealer: Pawn ) {
+            reciever.health -= 10
+            dealer.health += 10
         }
     } )
 }

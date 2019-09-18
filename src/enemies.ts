@@ -10,7 +10,7 @@ const enemySpriteSheets = [
     new SpriteSheet( {
         image: getImage( "Chadwick" ),
         frameWidth: 500,
-        scale: 2 / 7
+        scale: 1 / 4
     } ),
     new SpriteSheet( {
         image: getImage( "Archlizard" ),
@@ -50,16 +50,23 @@ const enemySpriteSheets = [
         scale: 1.5
     } )
 ] as SpriteSheet[]
-
+let { WeakAttack, Bite } = MoveTypes
 const enemies: Pawn[] = [
-    new Pawn( vector( 520, 80 ), 15,
-    new Animator( enemySpriteSheets[ 0 ] ),
-    [ MoveTypes.Cower, MoveTypes.PuppyEyes ] )
+    new Pawn(
+        vector( 520, 80 ), 15,
+        new Animator( enemySpriteSheets[ 0 ] ),
+        [ MoveTypes.Cower, MoveTypes.PuppyEyes, WeakAttack ]
+    ),
+    new Pawn(
+        vector( 520, 80 ), 25,
+        new Animator( enemySpriteSheets[ 1 ] ),
+        [ MoveTypes.FireBreath, MoveTypes.Smolder, Bite ]
+    )
 ]
 
 
 export function getEnemy( index: number ) {
-    return new Pawn( vector( 520, 80 ), 15, new Animator( enemySpriteSheets[ index ] ) )
+    return new Pawn( vector( 520, 80 ), 15, new Animator( enemySpriteSheets[ index ] ), [MoveTypes.Cower] )
 }
 
 export function newEncounter( enemyCount: number ) {

@@ -20,7 +20,7 @@ export default class Pawn extends GameObject {
     heal: number
     main: boolean
     animator: Animator
-    moveList?: MoveType[]
+    moveList: MoveType[]
 
     layer = -50
 
@@ -34,6 +34,12 @@ export default class Pawn extends GameObject {
         this.animator = animator
         this.moveList = moveList
     }
+    get randomMove() {
+        let randomIndex = Math.floor(Math.random() * this.moveList.length)
+        let randomMove = this.moveList[randomIndex]
+        return randomMove
+    }
+
 
     get health() { return this.pHealth }
     set health( value: number ) {
@@ -57,12 +63,19 @@ export default class Pawn extends GameObject {
             this.dizziness = 0
     }
 
-    onEndTurn( Target?: Pawn ) {
-        //Add enemyturn here, and select random move from move list to use
+    statDecay() {
+        //Where stat decrease over turns is applied
         if ( this.health > 0 )
             this.health += this.heal
         if ( this.heal !== 0 )
             this.heal += Math.sign(this.heal) * -1
+    }
+
+    onEndTurn( target: Pawn, dealer: Pawn) {
+        this.randomMove.apply(target, dealer)
+        
+        //Stat decay
+        this.statDecay()
     }
 
     onRender( canvas: Canvas, scene: Scene ) {
