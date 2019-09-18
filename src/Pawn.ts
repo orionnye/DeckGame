@@ -65,17 +65,18 @@ export default class Pawn extends GameObject {
 
     statDecay() {
         //Where stat decrease over turns is applied
-        if ( this.health > 0 )
-            this.health += this.heal
         if ( this.heal !== 0 )
             this.heal += Math.sign(this.heal) * -1
     }
 
     onEndTurn( target: Pawn, dealer: Pawn) {
-        this.randomMove.apply(target, dealer)
         
-        //Stat decay
-        this.statDecay()
+        if ( this.health > 0 ) {
+            this.randomMove.apply(target, dealer)
+            this.health += this.heal
+            //Stat decay
+            this.statDecay()
+        }
     }
 
     onRender( canvas: Canvas, scene: Scene ) {
@@ -127,7 +128,7 @@ export default class Pawn extends GameObject {
                 healthNumPos.x, healthNumPos.y,
                 textWidth, "20px pixel"
             )
-        if ( this.heal !== 0 && this.health > 0 && this.health !== this.maxHealth) {
+        if ( this.heal !== 0 && this.health > 0 ) {
             canvas.fillStyle( "green" )
                 .text(
                     healSign + this.heal,

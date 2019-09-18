@@ -95,8 +95,6 @@ export default class Game {
             this.enemy = newEncounter( this.enemyCount )
         }
 
-        // player.heal -= Math.sign( player.heal )
-
         if ( enemy.animator )
             enemy.animator.play( 1000 )
 

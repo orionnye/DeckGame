@@ -50,7 +50,7 @@ const enemySpriteSheets = [
         scale: 1.5
     } )
 ] as SpriteSheet[]
-let { WeakAttack, Bite } = MoveTypes
+let { WeakAttack, Bite, HealBuff, DamageBuff, HeavyAttack, MaxHealthBuff, HealthSteal } = MoveTypes
 const enemies: Pawn[] = [
     new Pawn(
         vector( 520, 80 ), 15,
@@ -58,23 +58,51 @@ const enemies: Pawn[] = [
         [ MoveTypes.Cower, MoveTypes.PuppyEyes, WeakAttack ]
     ),
     new Pawn(
-        vector( 520, 80 ), 25,
+        vector( 520, 80 ), 35,
         new Animator( enemySpriteSheets[ 1 ] ),
-        [ MoveTypes.FireBreath, MoveTypes.Smolder, Bite ]
+        [ MoveTypes.FireBreath, MoveTypes.Smolder, Bite, HeavyAttack ]
+    ),
+    new Pawn(
+        vector( 520, 80 ), 25,
+        new Animator( enemySpriteSheets[ 2 ] ),
+        [ MoveTypes.Smolder, Bite, HeavyAttack ]
+    ),
+    new Pawn(
+        vector( 520, 80 ), 21,
+        new Animator( enemySpriteSheets[ 3 ] ),
+        [ MaxHealthBuff, DamageBuff, DamageBuff, WeakAttack, WeakAttack ]
+    ),
+    new Pawn(
+        vector( 520, 80 ), 5,
+        new Animator( enemySpriteSheets[ 4 ] ),
+        [ MoveTypes.SoulStare, HealthSteal ]
+    ),
+    new Pawn(
+        vector( 520, 80 ), 25,
+        new Animator( enemySpriteSheets[ 5 ] ),
+        [ MoveTypes.SoulStare, DamageBuff, DamageBuff, WeakAttack ]
+    ),
+    new Pawn(
+        vector( 520, 80 ), 50,
+        new Animator( enemySpriteSheets[ 6 ] ),
+        [ MoveTypes.SoulStare, HealthSteal, HealthSteal, HealthSteal, HealthSteal, HealthSteal ]
+    ),
+    new Pawn(
+        vector( 520, 80 ), 25,
+        new Animator( enemySpriteSheets[ 7 ] ),
+        [ HealBuff, DamageBuff, WeakAttack ]
     )
 ]
 
 
 export function getEnemy( index: number ) {
-    return new Pawn( vector( 520, 80 ), 15, new Animator( enemySpriteSheets[ index ] ), [MoveTypes.Cower] )
+    let enemy  = enemies[index]
+
+    return enemy
 }
 
 export function newEncounter( enemyCount: number ) {
-    let newHealth = ( enemyCount + 1 ) * 10
-    let enemy = getEnemy( Math.floor( enemySpriteSheets.length * Math.random() ) )
-    enemy.heal = enemyCount * 2
-    enemy.maxHealth = newHealth
+    let enemy = enemies[Math.floor( enemies.length * Math.random() )]
     enemy.health = enemy.maxHealth
-    enemy.damage = enemyCount * 4
     return enemy
 }
