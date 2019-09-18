@@ -21,6 +21,7 @@ export default class Pawn extends GameObject {
     main: boolean
     animator: Animator
     moveList: MoveType[]
+    moveThisTurn?: MoveType
 
     layer = -50
 
@@ -33,13 +34,20 @@ export default class Pawn extends GameObject {
         this.main = false
         this.animator = animator
         this.moveList = moveList
+        if (moveList)
+            this.moveThisTurn = moveList[0]
     }
     get randomMove() {
         let randomIndex = Math.floor(Math.random() * this.moveList.length)
-        let randomMove = this.moveList[randomIndex]
+        let randomMove: MoveType = this.moveList[randomIndex]
+        console.log(randomMove.name)
         return randomMove
     }
-
+    setNewMove() {
+        let randomIndex = Math.floor(Math.random() * this.moveList.length)
+        let randomMove: MoveType = this.moveList[randomIndex]
+        this.moveThisTurn = randomMove
+    }
 
     get health() { return this.pHealth }
     set health( value: number ) {
@@ -70,13 +78,16 @@ export default class Pawn extends GameObject {
     }
 
     onEndTurn( target: Pawn, dealer: Pawn) {
-        
+
         if ( this.health > 0 ) {
-            this.randomMove.apply(target, dealer)
+            if (this.moveThisTurn) {
+                this.moveThisTurn.apply(target, dealer)
+            }
             this.health += this.heal
             //Stat decay
             this.statDecay()
         }
+        this.setNewMove()
     }
 
     onRender( canvas: Canvas, scene: Scene ) {
@@ -142,8 +153,16 @@ export default class Pawn extends GameObject {
         if ( this.damage !== 0 ) {
             canvas.fillStyle( "orange" )
                 .text(
-                    "Attack " + this.damage + "",
+                    "Strength " + this.damage + "",
                     0, -10,
+                    120, "25px pixel"
+                )
+        }
+        if (this.moveThisTurn) {
+            canvas.fillStyle( "white" )
+                .text(
+                    this.moveThisTurn.name,
+                    0, -30,
                     120, "25px pixel"
                 )
         }

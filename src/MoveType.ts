@@ -2,9 +2,13 @@ import Pawn from "./Pawn";
 
 
 type ApplyFunction = ( receiver: Pawn, dealer: Pawn ) => void
-export default class CardType {
+export default class MoveType {
+    strengthBuff?: Number = 0
+    maxHealthBuff?: Number = 0
+    healBuff?: Number = 0
     damage?: Number = 0
     heal?: Number = 0
+    name?: string
     onApply?: ApplyFunction
 
     constructor( { onApply = (receiver, dealer) => { } } ) {
