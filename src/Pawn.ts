@@ -5,7 +5,6 @@ import Scene from "geode/lib/gameobject/Scene";
 import GMath from "geode/lib/math/GMath";
 import Color from "geode/lib/graphics/Color";
 import Animator from "geode/lib/graphics/Animator";
-import CardType from "./CardType";
 import Deck from "./Deck";
 import Card from "./Card";
 
@@ -21,12 +20,12 @@ export default class Pawn extends GameObject {
     heal: number
     main: boolean
     animator: Animator
-    deck: CardType[]
-    hand?: CardType
+    deck: Deck = new Deck(0, 0, 0, 0, 10,0, false)
+    hand?: Deck = new Deck(0, 0, 0, 0, 10,0, false)
 
     layer = -50
 
-    constructor( position, health, animator, deck? ) {
+    constructor( position, health, animator, startCards? ) {
         super( position, 100, 140 )
         this.maxHealth = health
         this.pHealth = health
@@ -34,20 +33,27 @@ export default class Pawn extends GameObject {
         this.heal = 2
         this.main = false
         this.animator = animator
-        this.deck = deck
-        if (this.deck)
-            this.hand = this.deck[0]
+        if ( startCards ) {
+            this.deck = new Deck(startCards.length, 0, this.position.x, this.position.y, 0, 0, false, startCards )
+            startCards.forEach(CardType => {
+                this.deck.insertAtRandom(new Card(this.position, CardType))
+            })
+        }
     }
 
     get randomCard() {
         let randomIndex = Math.floor(Math.random() * this.deck.length)
-        let randomMove = this.deck[randomIndex]
-        console.log(randomMove)
+        console.log("deck:", this.deck)
+        console.log("index:", randomIndex)
+        let randomMove = this.deck.cards[randomIndex]
+        console.log("Card:", randomMove.type)
         return randomMove
     }
 
     setNewHand() {
-        this.hand = this.randomCard
+        if (this.hand)
+            this.hand.insertAtRandom( this.randomCard )
+        else return Error("No hand on Pawn")
     }
 
     get health() { return this.pHealth }
@@ -82,8 +88,8 @@ export default class Pawn extends GameObject {
     onEndTurn( target: Pawn, dealer: Pawn) {
         if ( this.health > 0 ) {
             if ( this.hand ) {
-                this.hand.apply(target, dealer)
-                this.hand = this.randomCard
+                this.randomCard.type.apply(target, dealer)
+                // this.hand = this.randomCard
             }
             this.health += this.heal
             //Stat decay
