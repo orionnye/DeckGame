@@ -45,9 +45,11 @@ export default class Pawn extends GameObject {
         console.log(randomMove)
         return randomMove
     }
+
     setNewHand() {
         this.hand = this.randomCard
     }
+
     get health() { return this.pHealth }
     set health( value: number ) {
         let increase = value - this.pHealth
@@ -58,11 +60,12 @@ export default class Pawn extends GameObject {
 
     onDamage( amount: number ) {
         this.recentDamage += amount
+        this.recentDamage = Math.min( this.maxHealth - this.health, this.recentDamage )
         this.damageTime += amount * 2
     }
 
     onUpdate() {
-        this.recentDamage = Math.max( 0, this.recentDamage - 0.15 )
+        // this.recentDamage = Math.max( 0, this.recentDamage - 0.15 )
         this.damageTime = Math.max( 0, this.damageTime - 1 )
         this.dizzyTime = Math.max( 0, this.dizzyTime - 1 )
 
