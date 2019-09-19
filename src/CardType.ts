@@ -5,7 +5,7 @@ import Canvas from "geode/lib/graphics/Canvas";
 import Vector from "geode/lib/math/Vector";
 import Card from "./Card";
 
-type ApplyFunction = ( receiver: Pawn, dealer?: Pawn ) => void
+type ApplyFunction = ( receiver: Pawn, dealer: Pawn ) => void
 export default class CardType {
 
     name!: string
@@ -14,14 +14,14 @@ export default class CardType {
     onApply?: ApplyFunction
     craftQuantity: number = 1
 
-    constructor( { imageName = "", damage = 0, craftQuanity = 1, onApply = receiver => { } } ) {
+    constructor( { imageName = "", damage = 0, craftQuanity = 1, onApply = ( receiver, dealer )=> { } } ) {
         this.imageName = imageName
         this.damage = damage
         this.onApply = onApply
         this.craftQuantity = 1
     }
 
-    apply( receiver: Pawn, dealer?: Pawn ) {
+    apply( receiver: Pawn, dealer: Pawn ) {
         receiver.health -= this.damage
         if ( this.onApply != null )
             this.onApply( receiver, dealer )

@@ -5,8 +5,7 @@ import Scene from "geode/lib/gameobject/Scene";
 import GMath from "geode/lib/math/GMath";
 import Color from "geode/lib/graphics/Color";
 import Animator from "geode/lib/graphics/Animator";
-import MoveType from "./MoveType"
-import MoveTypes from "./MoveTypes"
+import CardType from "./CardType"
 
 export default class Pawn extends GameObject {
 
@@ -20,12 +19,12 @@ export default class Pawn extends GameObject {
     heal: number
     main: boolean
     animator: Animator
-    moveList: MoveType[]
-    moveThisTurn?: MoveType
+    deck: CardType[]
+    hand?: CardType[]
 
     layer = -50
 
-    constructor( position, health, animator, moveList? ) {
+    constructor( position, health, animator, deck? ) {
         super( position, 100, 140 )
         this.maxHealth = health
         this.pHealth = health
@@ -33,20 +32,13 @@ export default class Pawn extends GameObject {
         this.heal = 2
         this.main = false
         this.animator = animator
-        this.moveList = moveList
-        if (moveList)
-            this.moveThisTurn = moveList[0]
+        this.deck = deck
     }
-    get randomMove() {
-        let randomIndex = Math.floor(Math.random() * this.moveList.length)
-        let randomMove: MoveType = this.moveList[randomIndex]
+    get randomCard() {
+        let randomIndex = Math.floor(Math.random() * this.deck.length)
+        let randomMove: CardType = this.deck[randomIndex]
         console.log(randomMove.name)
         return randomMove
-    }
-    setNewMove() {
-        let randomIndex = Math.floor(Math.random() * this.moveList.length)
-        let randomMove: MoveType = this.moveList[randomIndex]
-        this.moveThisTurn = randomMove
     }
 
     get health() { return this.pHealth }
@@ -80,14 +72,11 @@ export default class Pawn extends GameObject {
     onEndTurn( target: Pawn, dealer: Pawn) {
 
         if ( this.health > 0 ) {
-            if (this.moveThisTurn) {
-                this.moveThisTurn.apply(target, dealer)
-            }
+            this.randomCard.apply(target, dealer)
             this.health += this.heal
             //Stat decay
             this.statDecay()
         }
-        this.setNewMove()
     }
 
     onRender( canvas: Canvas, scene: Scene ) {
@@ -155,14 +144,6 @@ export default class Pawn extends GameObject {
                 .text(
                     "Strength " + this.damage + "",
                     0, -10,
-                    120, "25px pixel"
-                )
-        }
-        if (this.moveThisTurn) {
-            canvas.fillStyle( "white" )
-                .text(
-                    this.moveThisTurn.name,
-                    0, -30,
                     120, "25px pixel"
                 )
         }

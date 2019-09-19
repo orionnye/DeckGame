@@ -34,7 +34,7 @@ export default class Card extends GameObject {
         return Game.instance.grabbing == this
     }
 
-    apply( receiver: Pawn, hand: Deck, discard: Deck, dealer?: Pawn ) {
+    apply( receiver: Pawn, hand: Deck, discard: Deck, dealer: Pawn ) {
         this.type.apply( receiver, dealer )
         hand.remove( this )
         let random = ( discard.length == 0 ) ? 0 : Math.floor( Math.random() * discard.length )

@@ -3,8 +3,7 @@ import { getImage } from "geode/lib/assets";
 import { vector } from "geode/lib/math/Vector";
 import Pawn from "./Pawn";
 import Animator from "geode/lib/graphics/Animator";
-import MoveType from "./MoveType";
-import MoveTypes from "./MoveTypes";
+import CardTypes from "./CardTypes";
 
 const enemySpriteSheets = [
     new SpriteSheet( {
@@ -50,22 +49,22 @@ const enemySpriteSheets = [
         scale: 1.5
     } )
 ] as SpriteSheet[]
-let { WeakAttack, Bite, HealBuff, DamageBuff, HeavyAttack, MaxHealthBuff, HealthSteal } = MoveTypes
+let { WeakAttack, Bite, HealBuff, DamageBuff, HeavyAttack, MaxHealthBuff, HealthSteal } = CardTypes
 const enemies: Pawn[] = [
     new Pawn(
         vector( 520, 80 ), 15,
         new Animator( enemySpriteSheets[ 0 ] ),
-        [ MoveTypes.Cower, MoveTypes.PuppyEyes, WeakAttack ]
+        [ CardTypes.Cower, CardTypes.PuppyEyes, WeakAttack ]
     ),
     new Pawn(
         vector( 520, 80 ), 35,
         new Animator( enemySpriteSheets[ 1 ] ),
-        [ MoveTypes.FireBreath, MoveTypes.Smolder, Bite, HeavyAttack ]
+        [ CardTypes.FireBreath, CardTypes.Smolder, Bite, HeavyAttack ]
     ),
     new Pawn(
         vector( 520, 80 ), 25,
         new Animator( enemySpriteSheets[ 2 ] ),
-        [ MoveTypes.Smolder, Bite, HeavyAttack ]
+        [ CardTypes.Smolder, Bite, HeavyAttack ]
     ),
     new Pawn(
         vector( 520, 80 ), 21,
@@ -75,17 +74,17 @@ const enemies: Pawn[] = [
     new Pawn(
         vector( 520, 80 ), 5,
         new Animator( enemySpriteSheets[ 4 ] ),
-        [ MoveTypes.SoulStare, HealthSteal ]
+        [ CardTypes.SoulStare, HealthSteal ]
     ),
     new Pawn(
         vector( 520, 80 ), 25,
         new Animator( enemySpriteSheets[ 5 ] ),
-        [ MoveTypes.SoulStare, DamageBuff, DamageBuff, WeakAttack ]
+        [ CardTypes.SoulStare, DamageBuff, DamageBuff, WeakAttack ]
     ),
     new Pawn(
         vector( 520, 80 ), 50,
         new Animator( enemySpriteSheets[ 6 ] ),
-        [ MoveTypes.SoulStare, HealthSteal, HealthSteal, HealthSteal, HealthSteal, HealthSteal ]
+        [ CardTypes.SoulStare, HealthSteal, HealthSteal, HealthSteal, HealthSteal, HealthSteal ]
     ),
     new Pawn(
         vector( 520, 80 ), 25,
