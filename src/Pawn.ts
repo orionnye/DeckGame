@@ -5,7 +5,9 @@ import Scene from "geode/lib/gameobject/Scene";
 import GMath from "geode/lib/math/GMath";
 import Color from "geode/lib/graphics/Color";
 import Animator from "geode/lib/graphics/Animator";
-import CardType from "./CardType"
+import CardType from "./CardType";
+import Deck from "./Deck";
+import Card from "./Card";
 
 export default class Pawn extends GameObject {
 
@@ -20,7 +22,7 @@ export default class Pawn extends GameObject {
     main: boolean
     animator: Animator
     deck: CardType[]
-    hand?: CardType[]
+    hand?: CardType
 
     layer = -50
 
@@ -33,14 +35,19 @@ export default class Pawn extends GameObject {
         this.main = false
         this.animator = animator
         this.deck = deck
-    }
-    get randomCard() {
-        let randomIndex = Math.floor(Math.random() * this.deck.length)
-        let randomMove: CardType = this.deck[randomIndex]
-        console.log(randomMove.name)
-        return randomMove
+        if (this.deck)
+            this.hand = this.deck[0]
     }
 
+    get randomCard() {
+        let randomIndex = Math.floor(Math.random() * this.deck.length)
+        let randomMove = this.deck[randomIndex]
+        console.log(randomMove)
+        return randomMove
+    }
+    setNewHand() {
+        this.hand = this.randomCard
+    }
     get health() { return this.pHealth }
     set health( value: number ) {
         let increase = value - this.pHealth
@@ -70,9 +77,11 @@ export default class Pawn extends GameObject {
     }
 
     onEndTurn( target: Pawn, dealer: Pawn) {
-
         if ( this.health > 0 ) {
-            this.randomCard.apply(target, dealer)
+            if ( this.hand ) {
+                this.hand.apply(target, dealer)
+                this.hand = this.randomCard
+            }
             this.health += this.heal
             //Stat decay
             this.statDecay()
