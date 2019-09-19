@@ -65,7 +65,7 @@ export default class Pawn extends GameObject {
     }
 
     onUpdate() {
-        // this.recentDamage = Math.max( 0, this.recentDamage - 0.15 )
+        this.recentDamage = Math.max( 0, this.recentDamage - 0.15 )
         this.damageTime = Math.max( 0, this.damageTime - 1 )
         this.dizzyTime = Math.max( 0, this.dizzyTime - 1 )
 
