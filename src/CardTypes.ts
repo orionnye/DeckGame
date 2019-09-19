@@ -2,10 +2,11 @@ import CardType from "./CardType";
 import Pawn from "./Pawn";
 
 const CardTypes = {
-    //Offensive
+    //OFFENSIVE
     Attack1: new CardType( { imageName: "Attack", damage: 5 } ),
     Attack2: new CardType( { imageName: "Attack", damage: 10 } ),
     Acid: new CardType( { imageName: "Acid2", damage: 15 } ),
+        //DAMAGE OVER TIME
     Molotov: new CardType( {
         damage: 5,
         onApply( receiver: Pawn ) {
@@ -20,11 +21,10 @@ const CardTypes = {
         }
     } ),
     Blood: new CardType( {
-        damage: 25,
+        damage: 15,
         onApply( receiver: Pawn, dealer: Pawn ) {
-            if ( dealer )
-                dealer.health -= 5
-            receiver.damage += 3
+            dealer.health -= 5
+            receiver.damage += 5
         }
     } ),
     Pact: new CardType( {
@@ -47,6 +47,12 @@ const CardTypes = {
                 dealer.heal -= 10
             }
             receiver.health -= damage
+        }
+    } ),
+    Roids: new CardType( {
+        onApply( receiver: Pawn, dealer: Pawn) {
+            receiver.damage += 10
+            receiver.heal -= 15
         }
     } ),
     //Mix
@@ -87,8 +93,8 @@ const CardTypes = {
     Dread: new CardType( {
         onApply( receiver: Pawn ) {
             let potency = Math.floor( Math.random() * 10 )
-            let damage = ( Math.random() > 0.5 ) ? potency : -potency
-            receiver.damage -= 3
+            let damage = ( Math.random() > 0.2 ) ? potency : -potency
+            receiver.damage -= potency
             receiver.health -= damage
         }
     } ),
