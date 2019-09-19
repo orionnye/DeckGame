@@ -4,104 +4,122 @@ import { vector } from "geode/lib/math/Vector";
 import Pawn from "./Pawn";
 import Animator from "geode/lib/graphics/Animator";
 import CardTypes from "./CardTypes";
+import CardType from "./CardType";
 
-const enemySpriteSheets = [
-    new SpriteSheet( {
-        image: getImage( "Chadwick" ),
-        frameWidth: 500,
-        scale: 1 / 4
-    } ),
-    new SpriteSheet( {
-        image: getImage( "Archlizard" ),
-        center: vector( 48, 21 ),
-        frameWidth: 100,
-        scale: 2.4
-    } ),
-    new SpriteSheet( {
-        image: getImage( "BoneDragon" ),
-        center: vector( 30, 48 ),
-        frameWidth: 84,
-        scale: 1.4
-    } ),
-    new SpriteSheet( {
-        image: getImage( "Noodle" ),
-        frameWidth: 100,
-        scale: 1.4
-    } ),
-    new SpriteSheet( {
-        image: getImage( "EyeSlug" ),
-        frameWidth: 100,
-        scale: 0.25
-    } ),
-    new SpriteSheet( {
-        image: getImage( "TribalTimmy" ),
-        frameWidth: 100,
-        scale: 1.5
-    } ),
-    new SpriteSheet( {
-        image: getImage( "OcculentAustin" ),
-        frameWidth: 100,
-        scale: 2.3
-    } ),
-    new SpriteSheet( {
-        image: getImage( "MaskedMaggot" ),
-        frameWidth: 100,
-        scale: 1.5
-    } )
-] as SpriteSheet[]
-let { WeakAttack, Bite, HealBuff, DamageBuff, HeavyAttack, MaxHealthBuff, HealthSteal } = CardTypes
-const enemies: Pawn[] = [
-    new Pawn(
-        vector( 520, 80 ), 15,
-        new Animator( enemySpriteSheets[ 0 ] ),
-        [ CardTypes.Cower, CardTypes.PuppyEyes, WeakAttack ]
+class EnemyType {
+
+    health: number
+    cardTypes: CardType[]
+    spriteSheet: SpriteSheet
+
+    constructor(
+        health: number,
+        cardTypes: CardType[],
+        spriteSheet: SpriteSheet
+    ) {
+        this.health = health
+        this.cardTypes = cardTypes
+        this.spriteSheet = spriteSheet
+    }
+
+    create() {
+        return new Pawn(
+            vector( 520, 80 ), this.health,
+            new Animator( this.spriteSheet ),
+            this.cardTypes
+        )
+    }
+
+}
+
+let { 
+    WeakAttack, Bite, HealBuff, DamageBuff, HeavyAttack, MaxHealthBuff, 
+    HealthSteal, Cower, Smolder, FireBreath, SoulStare, PuppyEyes
+    } = CardTypes
+const enemyTypes = [
+    new EnemyType(
+        15, [ Cower, PuppyEyes, WeakAttack ],
+        new SpriteSheet( {
+            image: getImage( "Chadwick" ),
+            frameWidth: 500,
+            scale: 1 / 4
+        } )
     ),
-    new Pawn(
-        vector( 520, 80 ), 35,
-        new Animator( enemySpriteSheets[ 1 ] ),
-        [ CardTypes.FireBreath, CardTypes.Smolder, Bite, HeavyAttack ]
+
+    new EnemyType(
+        35, [ FireBreath, Smolder, Bite, HeavyAttack ],
+        new SpriteSheet( {
+            image: getImage( "Archlizard" ),
+            center: vector( 48, 21 ),
+            frameWidth: 100,
+            scale: 2.4
+        } )
     ),
-    new Pawn(
-        vector( 520, 80 ), 25,
-        new Animator( enemySpriteSheets[ 2 ] ),
-        [ CardTypes.Smolder, Bite, HeavyAttack ]
+
+    new EnemyType(
+        25, [ Smolder, Bite, HeavyAttack ],
+        new SpriteSheet( {
+            image: getImage( "BoneDragon" ),
+            center: vector( 30, 48 ),
+            frameWidth: 84,
+            scale: 1.4
+        } )
     ),
-    new Pawn(
-        vector( 520, 80 ), 21,
-        new Animator( enemySpriteSheets[ 3 ] ),
-        [ MaxHealthBuff, DamageBuff, DamageBuff, WeakAttack, WeakAttack ]
+
+    new EnemyType(
+        21, [ MaxHealthBuff, DamageBuff, DamageBuff, WeakAttack, WeakAttack ],
+        new SpriteSheet( {
+            image: getImage( "Noodle" ),
+            frameWidth: 100,
+            scale: 1.4
+        } )
     ),
-    new Pawn(
-        vector( 520, 80 ), 5,
-        new Animator( enemySpriteSheets[ 4 ] ),
-        [ CardTypes.SoulStare, HealthSteal ]
+
+    new EnemyType(
+        5, [ SoulStare, HealthSteal ],
+        new SpriteSheet( {
+            image: getImage( "EyeSlug" ),
+            frameWidth: 100,
+            scale: 0.25
+        } )
     ),
-    new Pawn(
-        vector( 520, 80 ), 25,
-        new Animator( enemySpriteSheets[ 5 ] ),
-        [ CardTypes.SoulStare, DamageBuff, DamageBuff, WeakAttack ]
+
+    new EnemyType(
+        25, [ SoulStare, DamageBuff, DamageBuff, WeakAttack ],
+        new SpriteSheet( {
+            image: getImage( "TribalTimmy" ),
+            frameWidth: 100,
+            scale: 1.5
+        } )
     ),
-    new Pawn(
-        vector( 520, 80 ), 50,
-        new Animator( enemySpriteSheets[ 6 ] ),
-        [ CardTypes.SoulStare, HealthSteal, HealthSteal, HealthSteal, HealthSteal, HealthSteal ]
+
+    new EnemyType(
+        50, [ SoulStare, HealthSteal, HealthSteal, HealthSteal, HealthSteal, HealthSteal ],
+        new SpriteSheet( {
+            image: getImage( "OcculentAustin" ),
+            frameWidth: 100,
+            scale: 2.3
+        } )
     ),
-    new Pawn(
-        vector( 520, 80 ), 25,
-        new Animator( enemySpriteSheets[ 7 ] ),
-        [ HealBuff, DamageBuff, WeakAttack ]
+    
+    new EnemyType(
+        25, [ HealBuff, DamageBuff, WeakAttack ],
+        new SpriteSheet( {
+            image: getImage( "MaskedMaggot" ),
+            frameWidth: 100,
+            scale: 1.5
+        } )
     )
 ]
 
-
 export function getEnemy( index: number ) {
-    let enemy  = enemies[index]
-
+    let enemyType = enemyTypes[ index ]
+    let enemy = enemyType.create()
     return enemy
 }
 
 export function newEncounter( enemyCount: number ) {
-    let enemy = enemies[Math.floor( enemies.length * Math.random() )]
-    enemy.health = enemy.maxHealth
+    let enemyType = enemyTypes[ Math.floor( enemyTypes.length * Math.random() ) ]
+    let enemy = enemyType.create()
     return enemy
 }
