@@ -1,5 +1,5 @@
-import CardType from "./CardType";
-import Pawn from "./Pawn";
+import CardType from "./CardType"
+import Pawn from "./Pawn"
 
 const CardTypes = {
     //OFFENSIVE

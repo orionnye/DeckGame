@@ -1,8 +1,8 @@
-import GameObject from "geode/lib/gameobject/GameObject";
-import Canvas from "geode/lib/graphics/Canvas";
-import { rgb } from "geode/lib/graphics/Color";
-import { getImage } from "geode/lib/assets";
-import Game from "./Game";
+import GameObject from "geode/lib/gameobject/GameObject"
+import Canvas from "geode/lib/graphics/Canvas"
+import { rgb } from "geode/lib/graphics/Color"
+import { getImage } from "geode/lib/assets"
+import Game from "./Game"
 
 export default class Background extends GameObject {
     layer = -100

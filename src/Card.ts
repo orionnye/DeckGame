@@ -1,15 +1,15 @@
-import { getImage } from "geode/lib/assets";
-import Canvas from "geode/lib/graphics/Canvas";
-import GameObject from "geode/lib/gameobject/GameObject";
-import Input from "geode/lib/Input";
-import Vector, { vector } from "geode/lib/math/Vector";
-import CardType from "./CardType";
-import Deck from "./Deck";
-import Game from "./Game";
-import Pawn from "./Pawn";
-import Scene from "geode/lib/gameobject/Scene";
-import Melter from "./Melter";
-import { playSound } from "geode/lib/audio";
+import { getImage } from "geode/lib/assets"
+import Canvas from "geode/lib/graphics/Canvas"
+import GameObject from "geode/lib/gameobject/GameObject"
+import Input from "geode/lib/Input"
+import Vector, { vector } from "geode/lib/math/Vector"
+import CardType from "./CardType"
+import Deck from "./Deck"
+import Game from "./Game"
+import Pawn from "./Pawn"
+import Scene from "geode/lib/gameobject/Scene"
+import Melter from "./Melter"
+import { playSound } from "geode/lib/audio"
 
 export default class Card extends GameObject {
 

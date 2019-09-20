@@ -1,9 +1,9 @@
-import Pawn from "./Pawn";
-import { playSound } from "geode/lib/audio";
-import { getImage, isFontLoaded } from "geode/lib/assets";
-import Canvas from "geode/lib/graphics/Canvas";
-import Vector from "geode/lib/math/Vector";
-import Card from "./Card";
+import Pawn from "./Pawn"
+import { playSound } from "geode/lib/audio"
+import { getImage, isFontLoaded } from "geode/lib/assets"
+import Canvas from "geode/lib/graphics/Canvas"
+import Vector from "geode/lib/math/Vector"
+import Card from "./Card"
 
 type ApplyFunction = ( receiver: Pawn, dealer: Pawn ) => void
 export default class CardType {

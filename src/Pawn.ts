@@ -1,13 +1,13 @@
-import Canvas from "geode/lib/graphics/Canvas";
-import GameObject from "geode/lib/gameobject/GameObject";
-import Vector, { vector } from "geode/lib/math/Vector";
-import Scene from "geode/lib/gameobject/Scene";
-import GMath from "geode/lib/math/GMath";
-import Color from "geode/lib/graphics/Color";
-import Animator from "geode/lib/graphics/Animator";
-import Deck from "./Deck";
-import Card from "./Card";
-import CardTypes from "./CardTypes";
+import Canvas from "geode/lib/graphics/Canvas"
+import GameObject from "geode/lib/gameobject/GameObject"
+import Vector, { vector } from "geode/lib/math/Vector"
+import Scene from "geode/lib/gameobject/Scene"
+import GMath from "geode/lib/math/GMath"
+import Color from "geode/lib/graphics/Color"
+import Animator from "geode/lib/graphics/Animator"
+import Deck from "./Deck"
+import Card from "./Card"
+import CardTypes from "./CardTypes"
 
 export default class Pawn extends GameObject {
 

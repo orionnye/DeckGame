@@ -1,10 +1,10 @@
-import SpriteSheet from "geode/lib/graphics/SpriteSheet";
-import { getImage } from "geode/lib/assets";
-import { vector } from "geode/lib/math/Vector";
-import Pawn from "./Pawn";
-import Animator from "geode/lib/graphics/Animator";
-import CardTypes from "./CardTypes";
-import CardType from "./CardType";
+import SpriteSheet from "geode/lib/graphics/SpriteSheet"
+import { getImage } from "geode/lib/assets"
+import { vector } from "geode/lib/math/Vector"
+import Pawn from "./Pawn"
+import Animator from "geode/lib/graphics/Animator"
+import CardTypes from "./CardTypes"
+import CardType from "./CardType"
 
 class EnemyType {
 

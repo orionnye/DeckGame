@@ -1,5 +1,5 @@
-import CardType from "./CardType";
-import CardTypes from "./CardTypes";
+import CardType from "./CardType"
+import CardTypes from "./CardTypes"
 
 class CookBook {
     static recipes: { [ name: string ]: CardType } = {}
