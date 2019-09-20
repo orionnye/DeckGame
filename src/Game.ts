@@ -48,8 +48,8 @@ export default class Game {
         )
     )
 
-    ambience = audioInstance( getAudio( "DungeonAmbience" ), { volume: 0.025 * 0 } )
-    tunes = audioInstance( getAudio( "SomberTune.wav" ), { volume: 0.75 * 0 } )
+    ambience = audioInstance( getAudio( "DungeonAmbience" ), { volume: 0.025 * 1 } )
+    tunes = audioInstance( getAudio( "SomberTune.wav" ), { volume: 0.75 * 1 } )
 
     canvas: Canvas
 

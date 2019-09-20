@@ -36,6 +36,7 @@ let {
     WeakAttack, Bite, HealBuff, DamageBuff, HeavyAttack, MaxHealthBuff, 
     HealthSteal, Cower, Smolder, FireBreath, SoulStare, PuppyEyes
     } = CardTypes
+    
 const enemyTypes = [
     new EnemyType(
         15, [ Cower, PuppyEyes, WeakAttack ],
