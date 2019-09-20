@@ -17,7 +17,7 @@ export default class Pawn extends GameObject {
     damageTime = 0
     private pHealth: number = 10
     maxHealth: number
-    damage: number
+    damage: number = 10
     heal: number
     main: boolean
     animator: Animator
@@ -26,11 +26,11 @@ export default class Pawn extends GameObject {
 
     layer = -50
 
-    constructor( position, health, animator, startCards? ) {
+    constructor( position, health, animator, startCards?, damage? ) {
         super( position, 100, 140 )
         this.maxHealth = health
         this.pHealth = health
-        this.damage = 10
+        this.damage = damage
         this.heal = 2
         this.main = false
         this.animator = animator
@@ -88,14 +88,14 @@ export default class Pawn extends GameObject {
 
     onEndTurn( target: Pawn, dealer: Pawn) {
         if ( this.health > 0 ) {
-            if ( !this.main ) {
+            this.health += this.heal
+            if ( !this.main && this.health > 0 ) {
                 this.hand.type.apply( target, dealer )
                 this.setNewHand()
             }
-            this.health += this.heal
-            //Stat decay
-            this.statDecay()
         }
+        //Stat decay
+        this.statDecay()
     }
 
     onRender( canvas: Canvas, scene: Scene ) {

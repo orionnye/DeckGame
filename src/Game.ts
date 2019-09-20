@@ -84,9 +84,9 @@ export default class Game {
 
         let { enemy, player, melter, deck } = this
 
-        player.statDecay()
         enemy.onEndTurn(player, enemy)
-
+        player.statDecay()
+        
         //if enemy health is alive
         if ( enemy.health > 0 ) {
             playSound( "slap.wav", { volume: 0.1 } )

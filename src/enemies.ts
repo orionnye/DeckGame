@@ -9,15 +9,18 @@ import CardType from "./CardType";
 class EnemyType {
 
     health: number
+    strength: number = 100
     cardTypes: CardType[]
     spriteSheet: SpriteSheet
 
     constructor(
         health: number,
+        strength: number,
         cardTypes: CardType[],
         spriteSheet: SpriteSheet
     ) {
         this.health = health
+        this.strength = strength
         this.cardTypes = cardTypes
         this.spriteSheet = spriteSheet
     }
@@ -26,7 +29,8 @@ class EnemyType {
         return new Pawn(
             vector( 520, 80 ), this.health,
             new Animator( this.spriteSheet ),
-            this.cardTypes
+            this.cardTypes,
+            this.strength 
         )
     }
 
@@ -38,7 +42,8 @@ let {
     } = CardTypes
 const enemyTypes = [
     new EnemyType(
-        15, [ Cower, PuppyEyes, WeakAttack ],
+        15, -3,
+        [ Cower, PuppyEyes, WeakAttack ],
         new SpriteSheet( {
             image: getImage( "Chadwick" ),
             frameWidth: 500,
@@ -47,7 +52,8 @@ const enemyTypes = [
     ),
 
     new EnemyType(
-        35, [ FireBreath, Smolder, Bite, HeavyAttack ],
+        35, 10, 
+        [ FireBreath, Smolder, Bite, HeavyAttack ],
         new SpriteSheet( {
             image: getImage( "Archlizard" ),
             center: vector( 48, 21 ),
@@ -57,7 +63,8 @@ const enemyTypes = [
     ),
 
     new EnemyType(
-        25, [ Smolder, Bite, HeavyAttack ],
+        25, 15, 
+        [ Smolder, Bite, HeavyAttack ],
         new SpriteSheet( {
             image: getImage( "BoneDragon" ),
             center: vector( 30, 48 ),
@@ -67,7 +74,8 @@ const enemyTypes = [
     ),
 
     new EnemyType(
-        21, [ MaxHealthBuff, DamageBuff, DamageBuff, WeakAttack, WeakAttack ],
+        21, 5, 
+        [ MaxHealthBuff, DamageBuff, DamageBuff, WeakAttack, WeakAttack ],
         new SpriteSheet( {
             image: getImage( "Noodle" ),
             frameWidth: 100,
@@ -76,7 +84,8 @@ const enemyTypes = [
     ),
 
     new EnemyType(
-        5, [ SoulStare, HealthSteal ],
+        5, 0, 
+        [ SoulStare, HealthSteal ],
         new SpriteSheet( {
             image: getImage( "EyeSlug" ),
             frameWidth: 100,
@@ -85,7 +94,8 @@ const enemyTypes = [
     ),
 
     new EnemyType(
-        25, [ SoulStare, DamageBuff, DamageBuff, WeakAttack ],
+        25, 15,
+        [ SoulStare, DamageBuff, DamageBuff, WeakAttack ],
         new SpriteSheet( {
             image: getImage( "TribalTimmy" ),
             frameWidth: 100,
@@ -94,7 +104,8 @@ const enemyTypes = [
     ),
 
     new EnemyType(
-        50, [ SoulStare, HealthSteal, HealthSteal, HealthSteal, HealthSteal, HealthSteal ],
+        50, 5,
+        [ SoulStare, HealthSteal, HealthSteal, HealthSteal, HealthSteal, HealthSteal ],
         new SpriteSheet( {
             image: getImage( "OcculentAustin" ),
             frameWidth: 100,
@@ -103,7 +114,8 @@ const enemyTypes = [
     ),
     
     new EnemyType(
-        25, [ HealBuff, DamageBuff, WeakAttack ],
+        25, 5,
+        [ HealBuff, DamageBuff, WeakAttack ],
         new SpriteSheet( {
             image: getImage( "MaskedMaggot" ),
             frameWidth: 100,
