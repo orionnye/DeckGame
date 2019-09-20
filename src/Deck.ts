@@ -3,6 +3,7 @@ import Card from "./Card";
 import Canvas from "geode/lib/graphics/Canvas";
 import GameObject from "geode/lib/gameobject/GameObject";
 import CardTypes from "./CardTypes";
+import CardType from "./CardType";
 import { getImage } from "geode/lib/assets";
 import Scene from "geode/lib/gameobject/Scene";
 
@@ -11,18 +12,20 @@ export default class Deck extends GameObject {
     cards: Card[]
     capacity: number
     isHand: boolean
+    types: CardType[] = [ CardTypes.Attack1, CardTypes.Heal1 ]
 
-    constructor( count, capacity, x, y, spreadX, spreadY, isHand: boolean ) {
+    constructor( count, capacity, x, y, spreadX, spreadY, isHand: boolean, types?: CardType[] ) {
         super( vector( x, y ), 0, 0 )
         this.capacity = capacity
         this.spread = vector( spreadX, spreadY )
         this.isHand = isHand
+        if ( types )
+            this.types = types
 
         let cards: Card[] = []
         for ( let i = 0; i < count; i++ ) {
             let deckPos = vector( x + spreadX * i, y + spreadY * i )
-            let types = [ CardTypes.Attack1, CardTypes.Heal1 ]
-            let type = types[ Math.floor( Math.random() * types.length ) ]
+            let type = this.types[ Math.floor( Math.random() * this.types.length ) ]
             let card = new Card( deckPos, type )
             cards.push( card )
         }

@@ -27,7 +27,8 @@ class CookBook {
         Attack1, Attack2, Acid, Molotov,
         Poison, Heal1, Heal2, Karma,
         Volatile, Dread, Blood, Leeches,
-        Infusion, Meds, Dissect, Pact
+        Infusion, Meds, Dissect, Pact, 
+        Roids
     } = CardTypes
 
     //Offensive
@@ -37,7 +38,8 @@ class CookBook {
     add( Acid, [ Attack1, Attack2 ] )
     add( Poison, [ Volatile, Heal1 ] )
     add( Molotov, [ Poison, Attack1 ] )
-    add( Blood, [ Dread, Attack1 ] )
+    add( Blood, [ Leeches, Heal1 ] )
+    add( Roids, [ Acid, Blood ])
     add( Pact, [ Blood, Karma ] )
     add( Leeches, [ Attack1, Heal1 ] )
     add( Dissect, [ Leeches, Karma ] )

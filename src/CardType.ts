@@ -22,7 +22,8 @@ export default class CardType {
     }
 
     apply( receiver: Pawn, dealer: Pawn ) {
-        receiver.health -= this.damage
+        if ( this.damage !== 0 )
+            receiver.health -= this.damage + dealer.damage
         if ( this.onApply != null )
             this.onApply( receiver, dealer )
         playSound( Card.randomFlipSound(), { volume: 1 / 4 } )

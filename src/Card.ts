@@ -83,7 +83,7 @@ export default class Card extends GameObject {
         for ( let pawn of pawns ) {
             if ( pawn.overlaps( this ) ) {
                 if ( pawn == player )
-                    this.apply( player, hand, discard, enemy )
+                    this.apply( player, hand, discard, player )
                 else if ( pawn !== player ) {
                     this.apply( pawn, hand, discard, player )
                     if ( player.animator ) {

@@ -2,10 +2,11 @@ import CardType from "./CardType";
 import Pawn from "./Pawn";
 
 const CardTypes = {
-    //Offensive
+    //OFFENSIVE
     Attack1: new CardType( { imageName: "Attack", damage: 5 } ),
     Attack2: new CardType( { imageName: "Attack", damage: 10 } ),
     Acid: new CardType( { imageName: "Acid2", damage: 15 } ),
+        //DAMAGE OVER TIME
     Molotov: new CardType( {
         damage: 5,
         onApply( receiver: Pawn ) {
@@ -20,11 +21,10 @@ const CardTypes = {
         }
     } ),
     Blood: new CardType( {
-        damage: 25,
+        damage: 15,
         onApply( receiver: Pawn, dealer: Pawn ) {
-            if ( dealer )
-                dealer.health -= 5
-            receiver.damage += 3
+            dealer.health -= 5
+            receiver.damage += 5
         }
     } ),
     Pact: new CardType( {
@@ -49,13 +49,19 @@ const CardTypes = {
             receiver.health -= damage
         }
     } ),
+    Roids: new CardType( {
+        onApply( receiver: Pawn, dealer: Pawn) {
+            receiver.damage += 10
+            receiver.heal -= 15
+        }
+    } ),
     //Mix
     Leeches: new CardType( {
         imageName: "Leeches",
         craftQuanity: 2,
+        damage: 5,
         onApply( receiver: Pawn, dealer: Pawn ) {
                 dealer.health += 5
-                receiver.health -= 5
         }
     } ),
     Meds: new CardType( {
@@ -68,8 +74,18 @@ const CardTypes = {
         }
     } ),
     //Defensive
-    Heal1: new CardType( { imageName: "Heal", damage: -5 } ),
-    Heal2: new CardType( { imageName: "Heal", damage: -10 } ),
+    Heal1: new CardType( {
+        imageName: "Heal", 
+        onApply( receiver: Pawn ) {
+            receiver.health += 5
+        }
+    } ),
+    Heal2: new CardType( {
+        imageName: "Heal", 
+        onApply( receiver: Pawn ) {
+            receiver.health += 10
+        }
+    } ),
     Infusion: new CardType( {
         imageName: "Infusion",
         onApply( receiver: Pawn ) {
@@ -87,8 +103,8 @@ const CardTypes = {
     Dread: new CardType( {
         onApply( receiver: Pawn ) {
             let potency = Math.floor( Math.random() * 10 )
-            let damage = ( Math.random() > 0.5 ) ? potency : -potency
-            receiver.damage -= 3
+            let damage = ( Math.random() > 0.2 ) ? potency : -potency
+            receiver.damage -= potency
             receiver.health -= damage
         }
     } ),
@@ -101,45 +117,40 @@ const CardTypes = {
         }
     } ),
     // Enemy Moves
-    // Tier1 Moves
     Cower: new CardType( {
+        damage: 10,
         onApply( reciever: Pawn, dealer: Pawn ) {
-            reciever.health -= 1
             dealer.health -= 3
         }
     } ),
     PuppyEyes: new CardType( {
         onApply( reciever: Pawn, dealer: Pawn ) {
-            dealer.health += 2
-            dealer.heal += 2
+            dealer.health += 3
+            dealer.heal += 10
         }
     } ),
-    WeakAttack: new CardType( {
-        onApply( reciever: Pawn, dealer: Pawn ) {
-            reciever.health -= 8
-        }
-    } ),
+    WeakAttack: new CardType( { damage: 5 } ),
     FireBreath: new CardType( {
+        damage: 20,
         onApply( reciever: Pawn, dealer: Pawn ) {
-            reciever.health -= 20 + dealer.damage
-            dealer.damage += 3
+            dealer.damage += 5
         }
     } ),
     Smolder: new CardType( {
+        damage: 5,
         onApply( reciever: Pawn, dealer: Pawn ) {
-            reciever.heal -= 1
-            dealer.heal += 3
+            dealer.heal += 5
         }
     } ),
     Bite: new CardType( {
+        damage: 15,
         onApply( reciever: Pawn, dealer: Pawn ) {
-            reciever.health -= 10 + dealer.damage
             dealer.health += 10
         }
     } ),
     DamageBuff: new CardType( {
         onApply( reciever: Pawn, dealer: Pawn ) {
-            dealer.damage += 3
+            dealer.damage += 10
         }
     } ),
     HealBuff: new CardType( {
@@ -149,14 +160,10 @@ const CardTypes = {
     } ),
     MaxHealthBuff: new CardType( {
         onApply( reciever: Pawn, dealer: Pawn ) {
-            dealer.maxHealth += 3
+            dealer.maxHealth += 15
         }
     } ),
-    HeavyAttack: new CardType( {
-        onApply( reciever: Pawn, dealer: Pawn ) {
-            reciever.health -= 25 + dealer.damage
-        }
-    } ),
+    HeavyAttack: new CardType( { damage: 25 } ),
     SoulStare: new CardType( {
         onApply( reciever: Pawn, dealer: Pawn ) {
             reciever.maxHealth -= 10
@@ -165,8 +172,8 @@ const CardTypes = {
         }
     } ),
     HealthSteal: new CardType( {
+        damage: 10,
         onApply( reciever: Pawn, dealer: Pawn ) {
-            reciever.health -= 10
             dealer.health += 10
         }
     } )

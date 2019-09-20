@@ -5,9 +5,9 @@ import Scene from "geode/lib/gameobject/Scene";
 import GMath from "geode/lib/math/GMath";
 import Color from "geode/lib/graphics/Color";
 import Animator from "geode/lib/graphics/Animator";
-import CardType from "./CardType";
 import Deck from "./Deck";
 import Card from "./Card";
+import CardTypes from "./CardTypes";
 
 export default class Pawn extends GameObject {
 
@@ -17,32 +17,38 @@ export default class Pawn extends GameObject {
     damageTime = 0
     private pHealth: number = 10
     maxHealth: number
-    damage: number
+    damage: number = 10
     heal: number
     main: boolean
     animator: Animator
-    deck: CardType[]
-    hand?: CardType
+    deck: Deck = new Deck(0, 0, 0, 0, 10,0, false)
+    hand: Card = new Card(new Vector(0, 0), CardTypes.Heal1)
 
     layer = -50
 
-    constructor( position, health, animator, deck? ) {
+    constructor( position, health, animator, startCards?, damage? ) {
         super( position, 100, 140 )
         this.maxHealth = health
         this.pHealth = health
-        this.damage = 10
+        this.damage = damage
         this.heal = 2
         this.main = false
         this.animator = animator
-        this.deck = deck
-        if (this.deck)
-            this.hand = this.deck[0]
+        if ( startCards ) {
+            this.hand = new Card(new Vector(0, 0), startCards[0])
+            this.deck = new Deck(startCards.length, 0, this.position.x, this.position.y, 0, 0, false, startCards )
+            startCards.forEach(CardType => {
+                this.deck.insertAtRandom(new Card(this.position, CardType))
+            })
+        }
     }
 
     get randomCard() {
         let randomIndex = Math.floor(Math.random() * this.deck.length)
-        let randomMove = this.deck[randomIndex]
-        console.log(randomMove)
+        console.log("deck:", this.deck)
+        console.log("index:", randomIndex)
+        let randomMove = this.deck.cards[randomIndex]
+        console.log("Card:", randomMove.type)
         return randomMove
     }
 
@@ -68,7 +74,8 @@ export default class Pawn extends GameObject {
         this.recentDamage = Math.max( 0, this.recentDamage - 0.15 )
         this.damageTime = Math.max( 0, this.damageTime - 1 )
         this.dizzyTime = Math.max( 0, this.dizzyTime - 1 )
-
+        if ( this.health > this.maxHealth )
+            this.health = this.maxHealth
         if ( this.dizzyTime == 0 )
             this.dizziness = 0
     }
@@ -81,14 +88,14 @@ export default class Pawn extends GameObject {
 
     onEndTurn( target: Pawn, dealer: Pawn) {
         if ( this.health > 0 ) {
-            if ( this.hand ) {
-                this.hand.apply(target, dealer)
-                this.hand = this.randomCard
-            }
             this.health += this.heal
-            //Stat decay
-            this.statDecay()
+            if ( !this.main && this.health > 0 ) {
+                this.hand.type.apply( target, dealer )
+                this.setNewHand()
+            }
         }
+        //Stat decay
+        this.statDecay()
     }
 
     onRender( canvas: Canvas, scene: Scene ) {
@@ -140,23 +147,30 @@ export default class Pawn extends GameObject {
                 healthNumPos.x, healthNumPos.y,
                 textWidth, "20px pixel"
             )
-        if ( this.heal !== 0 && this.health > 0 ) {
-            canvas.fillStyle( "green" )
-                .text(
-                    healSign + this.heal,
-                    healthNumPos.x + textWidth + 5, healthNumPos.y,
-                    textWidth, "20px pixel"
-                )
-        }
     }
 
     drawIntent( canvas: Canvas ) {
-        if ( this.damage !== 0 ) {
-            canvas.fillStyle( "orange" )
+        let edge = this.main ? - 100 : 100
+        canvas.fillStyle( "red" )
+            .text(
+                "Str:" + this.damage,
+                edge, 25,
+                80, "25px pixel"
+            )
+        if ( this.health > 0 ) {
+            canvas.fillStyle( "green" )
                 .text(
-                    "Strength " + this.damage + "",
-                    0, -10,
-                    120, "25px pixel"
+                    "Res:" + this.heal,
+                    edge, 45,
+                    80, "25px pixel"
+                )
+        }
+        if ( !this.main ) {
+            canvas.fillStyle( "rgb(200, 0, 200)" )
+                .text(
+                    this.hand!.type.name,
+                    0, -30,
+                    100, "25px pixel"
                 )
         }
     }
