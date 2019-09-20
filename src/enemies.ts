@@ -122,6 +122,16 @@ const enemyTypes = [
             frameWidth: 100,
             scale: 1.5
         } )
+    ),
+
+    new EnemyType(
+        35, 5,
+        [ SoulStare, HealBuff, DamageBuff ],
+        new SpriteSheet( {
+            image: getImage( "Headsman" ),
+            frameWidth: 88,
+            scale: 2.2
+        } )
     )
 ]
 
