@@ -84,8 +84,9 @@ export default class Game {
 
         let { enemy, player, melter, deck } = this
 
-        enemy.onEndTurn(player, enemy)
-        player.statDecay()
+        enemy.onEndTurn()
+        enemy.UseHand(player, enemy)
+        player.onEndTurn()
         
         //if enemy health is alive
         if ( enemy.health > 0 ) {

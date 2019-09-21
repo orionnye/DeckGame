@@ -37,14 +37,15 @@ class EnemyType {
 }
 
 let { 
-    WeakAttack, Bite, HealBuff, DamageBuff, HeavyAttack, MaxHealthBuff, 
-    HealthSteal, Cower, Smolder, FireBreath, SoulStare, PuppyEyes, Karma
+    Attack1, Bite, Fortify, DamageBuff, HeavyAttack, MaxHealthBuff, 
+    LifeSteal, Cower, Smolder, FireBreath, SoulStare, PuppyEyes, Karma,
+    Blood, Pact, Roids, Poison, Meds, Molotov, Dread
     } = CardTypes
     
 const enemyTypes = [
     new EnemyType(
         15, -3,
-        [ Cower, PuppyEyes, WeakAttack ],
+        [ Cower, PuppyEyes, Attack1 ],
         new SpriteSheet( {
             image: getImage( "Chadwick" ),
             frameWidth: 500,
@@ -76,7 +77,7 @@ const enemyTypes = [
 
     new EnemyType(
         40, 5,
-        [ MaxHealthBuff, DamageBuff, DamageBuff, WeakAttack, WeakAttack ],
+        [ MaxHealthBuff, DamageBuff, DamageBuff, Blood, Attack1 ],
         new SpriteSheet( {
             image: getImage( "Noodle" ),
             frameWidth: 100,
@@ -86,7 +87,7 @@ const enemyTypes = [
 
     new EnemyType(
         20, 0,
-        [ SoulStare ],
+        [ SoulStare, SoulStare, SoulStare, SoulStare, SoulStare, Pact ],
         new SpriteSheet( {
             image: getImage( "EyeSlug" ),
             frameWidth: 100,
@@ -96,7 +97,7 @@ const enemyTypes = [
 
     new EnemyType(
         50, 15,
-        [ DamageBuff, DamageBuff, WeakAttack ],
+        [ DamageBuff, DamageBuff, Attack1, Poison, Molotov ],
         new SpriteSheet( {
             image: getImage( "TribalTimmy" ),
             frameWidth: 100,
@@ -106,7 +107,7 @@ const enemyTypes = [
 
     new EnemyType(
         60, 5,
-        [ SoulStare, HealthSteal, HealthSteal, HealthSteal, HealthSteal, HealthSteal, Karma ],
+        [ SoulStare, LifeSteal, LifeSteal, Blood, LifeSteal, LifeSteal, Karma ],
         new SpriteSheet( {
             image: getImage( "OcculentAustin" ),
             frameWidth: 100,
@@ -116,7 +117,7 @@ const enemyTypes = [
     
     new EnemyType(
         35, 5,
-        [ HealBuff, DamageBuff, WeakAttack ],
+        [ Fortify, DamageBuff, Attack1, Dread, Dread ],
         new SpriteSheet( {
             image: getImage( "MaskedMaggot" ),
             frameWidth: 100,
@@ -126,7 +127,7 @@ const enemyTypes = [
 
     new EnemyType(
         45, 5,
-        [ SoulStare, HealBuff, DamageBuff ],
+        [ SoulStare, Fortify, DamageBuff ],
         new SpriteSheet( {
             image: getImage( "Headsman" ),
             frameWidth: 88,
@@ -136,7 +137,7 @@ const enemyTypes = [
 
     new EnemyType(
         135, 20,
-        [ SoulStare, HealBuff, SoulStare ],
+        [ SoulStare, Fortify, SoulStare ],
         new SpriteSheet( {
             image: getImage( "EyeDemon" ),
             frameWidth: 101,

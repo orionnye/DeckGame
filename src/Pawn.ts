@@ -85,14 +85,16 @@ export default class Pawn extends GameObject {
         if ( this.heal !== 0 )
             this.heal += Math.sign(this.heal) * -1
     }
+    UseHand( target: Pawn, dealer: Pawn ) {
+        if ( !this.main && this.health > 0 ) {
+            this.hand.type.apply( target, dealer )
+            this.setNewHand()
+        }
+    }
 
-    onEndTurn( target: Pawn, dealer: Pawn) {
+    onEndTurn() {
         if ( this.health > 0 ) {
-            this.health += this.heal
-            if ( !this.main && this.health > 0 ) {
-                this.hand.type.apply( target, dealer )
-                this.setNewHand()
-            }
+            this.health += this.heal         
         }
         //Stat decay
         this.statDecay()
@@ -135,7 +137,6 @@ export default class Pawn extends GameObject {
         let healthPos = vector( 0, this.height )
         let healthNumPos = healthPos.addXY( healthWidth / 3 - textWidth / 4, healthHeight - 2 )
         let damageWidth = this.recentDamage * healthChunk
-        let healSign = this.heal < 0 ? "" : "+"
 
         canvas.vrect( healthPos, vector( this.width, healthHeight ) ).fillStyle( Color.black ).fill()
         canvas.vrect( healthPos, vector( healthWidth, healthHeight ) ).fillStyle( Color.red ).fill()

@@ -5,6 +5,7 @@ const CardTypes = {
     //OFFENSIVE
     Attack1: new CardType( { imageName: "Attack", damage: 5 } ),
     Attack2: new CardType( { imageName: "Attack", damage: 10 } ),
+    Bash: new CardType( { imageName: "Attack", damage: 20 } ),
     Acid: new CardType( { imageName: "Acid2", damage: 15 } ),
         //DAMAGE OVER TIME
     Molotov: new CardType( {
@@ -14,17 +15,16 @@ const CardTypes = {
         }
     } ),
     Poison: new CardType( {
-        damage: -10,
         onApply( receiver: Pawn ) {
-            receiver.heal -= 5
+            receiver.health += 10,
+            receiver.heal -= 3
             // receiver.dizzyTime += 1000
         }
     } ),
     Blood: new CardType( {
-        damage: 15,
         onApply( receiver: Pawn, dealer: Pawn ) {
-            dealer.health -= 5
-            receiver.damage += 5
+            receiver.health -= 20
+            receiver.damage += 3
         }
     } ),
     Pact: new CardType( {
@@ -86,6 +86,13 @@ const CardTypes = {
             receiver.health += 10
         }
     } ),
+    Chaol: new CardType( {
+        imageName: "Heal", 
+        onApply( receiver: Pawn ) {
+            let potency = Math.floor( Math.random() * 50 )
+            receiver.health += potency
+        }
+    } ),
     Infusion: new CardType( {
         imageName: "Infusion",
         onApply( receiver: Pawn ) {
@@ -95,9 +102,9 @@ const CardTypes = {
         }
     } ),
     Karma: new CardType( {
-        damage: 5,
         onApply( receiver: Pawn ) {
-            receiver.maxHealth += 5
+            receiver.health -= 5,
+            receiver.maxHealth += 10
         }
     } ),
     Dread: new CardType( {
@@ -116,11 +123,26 @@ const CardTypes = {
             receiver.health -= damage
         }
     } ),
+    Chaos: new CardType( {
+        damage: 0,
+        onApply( receiver: Pawn ) {
+            let potency = Math.floor( Math.random() * 40 )
+            let damage = ( Math.random() > 0.5 ) ? potency : -potency
+            receiver.health -= damage
+        }
+    } ),
+    Charma: new CardType( {
+        onApply( receiver: Pawn ) {
+            let potency = Math.floor( Math.random() * 30 )
+            receiver.maxHealth += potency
+        }
+    } ),
     // Enemy Moves
     Cower: new CardType( {
         damage: 10,
         onApply( reciever: Pawn, dealer: Pawn ) {
             dealer.health -= 3
+            dealer.heal += 3
         }
     } ),
     PuppyEyes: new CardType( {
@@ -129,16 +151,16 @@ const CardTypes = {
             dealer.heal += 10
         }
     } ),
-    WeakAttack: new CardType( { damage: 5 } ),
     FireBreath: new CardType( {
-        damage: 20,
+        damage: 10,
         onApply( reciever: Pawn, dealer: Pawn ) {
-            dealer.damage += 5
+            dealer.damage += 3
+            reciever.heal -= 3
         }
     } ),
     Smolder: new CardType( {
-        damage: 5,
         onApply( reciever: Pawn, dealer: Pawn ) {
+            dealer.health += 10
             dealer.heal += 5
         }
     } ),
@@ -153,7 +175,7 @@ const CardTypes = {
             dealer.damage += 10
         }
     } ),
-    HealBuff: new CardType( {
+    Fortify: new CardType( {
         onApply( reciever: Pawn, dealer: Pawn ) {
             dealer.heal += 10
         }
@@ -171,7 +193,7 @@ const CardTypes = {
             dealer.health += 5
         }
     } ),
-    HealthSteal: new CardType( {
+    LifeSteal: new CardType( {
         damage: 10,
         onApply( reciever: Pawn, dealer: Pawn ) {
             dealer.health += 10
