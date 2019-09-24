@@ -82,6 +82,9 @@ export default class Pawn extends GameObject {
 
     statDecay() {
         //Where stat decrease over turns is applied
+        if ( this.damage != 0 ) {
+            this.damage -= Math.sign(this.damage)
+        }
         if ( this.heal !== 0 )
             this.heal += Math.sign(this.heal) * -1
     }

@@ -2,6 +2,18 @@ import CardType from "./CardType"
 import Pawn from "./Pawn"
 
 const CardTypes = {
+    //THEWINCARDS
+    PlaneShift: new CardType( {
+        onApply( reciever: Pawn, dealer: Pawn ) {
+            let dealMax = dealer.maxHealth
+            let dealHealth = dealer.health
+            dealer.maxHealth = reciever.maxHealth
+            dealer.health = reciever.health
+            reciever.maxHealth = dealMax
+            reciever.health = dealHealth
+            console.log("You Win")
+        }
+    } ),
     //OFFENSIVE
     Attack1: new CardType( { imageName: "Attack", damage: 5 } ),
     Attack2: new CardType( { imageName: "Attack", damage: 10 } ),
@@ -15,9 +27,10 @@ const CardTypes = {
         }
     } ),
     Poison: new CardType( {
+        craftQuanity: 2,
         onApply( receiver: Pawn ) {
             receiver.health += 10,
-            receiver.heal -= 3
+            receiver.heal -= 5
             // receiver.dizzyTime += 1000
         }
     } ),
@@ -66,6 +79,7 @@ const CardTypes = {
     } ),
     Meds: new CardType( {
         imageName: "Meds",
+        craftQuanity: 2,
         onApply( receiver: Pawn ) {
             if ( receiver.heal < 0 )
                 receiver.heal += 10
@@ -108,15 +122,14 @@ const CardTypes = {
         }
     } ),
     Dread: new CardType( {
+        craftQuanity: 2,
         onApply( receiver: Pawn ) {
-            let potency = Math.floor( Math.random() * 10 )
-            let damage = ( Math.random() > 0.2 ) ? potency : -potency
-            receiver.damage -= potency
-            receiver.health -= damage
+            receiver.damage -= 4
         }
     } ),
     Volatile: new CardType( {
         damage: 0,
+        craftQuanity: 2,
         onApply( receiver: Pawn ) {
             let potency = Math.floor( Math.random() * 10 )
             let damage = ( Math.random() > 0.5 ) ? potency : -potency
@@ -139,8 +152,8 @@ const CardTypes = {
     } ),
     // Enemy Moves
     Cower: new CardType( {
-        damage: 10,
         onApply( reciever: Pawn, dealer: Pawn ) {
+            dealer.damage += 10
             dealer.health -= 3
             dealer.heal += 3
         }
@@ -196,7 +209,7 @@ const CardTypes = {
     LifeSteal: new CardType( {
         damage: 10,
         onApply( reciever: Pawn, dealer: Pawn ) {
-            dealer.health += 10
+            dealer.health += 10 + dealer.damage
         }
     } )
 }

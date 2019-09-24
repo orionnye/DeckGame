@@ -34,7 +34,7 @@ export default class Game {
     background = new Background()
     melter = new Melter( 325, 375 )
     ledger = new Ledger(100, 390)
-    enemy = getEnemy( 0 )
+    enemy = getEnemy( 10 )
     player = new Pawn(
         vector( 100, 80 ),
         60,
@@ -93,7 +93,16 @@ export default class Game {
             playSound( "slap.wav", { volume: 0.1 } )
         } else {
             this.enemyCount += 1
-            this.enemy = newEncounter( this.enemyCount )
+            //GAME SWITCH
+            //ENDLESS MODE
+            // this.enemy = newEncounter( this.enemyCount )
+            if (this.enemyCount == 11 ) {
+                console.log("You Win")
+                this.win = true
+            }
+            else {
+                this.enemy = getEnemy(this.enemyCount)
+            }
         }
 
         if ( enemy.animator )
@@ -104,8 +113,9 @@ export default class Game {
         else
             this.refillHand()
 
-        for ( let product of melter.products )
+        for ( let product of melter.products ) {
             deck.cards.push( product )
+        }
 
         melter.base = new Card( melter.position, CardTypes.Volatile )
         melter.ingredients = []

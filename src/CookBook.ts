@@ -30,8 +30,10 @@ class CookBook {
         Infusion, Meds, Dissect, Pact, 
         Roids, Chaos, Bash, Charma, Smolder,
         FireBreath, Fortify, LifeSteal,
-        Bite, SoulStare, Chaol
+        Bite, SoulStare, Chaol, PlaneShift
     } = CardTypes
+    //TheWin
+    add( PlaneShift, [Karma, Chaos, Pact] )
 
     //Offensive
     add( Attack1, [ Volatile, Volatile ] )

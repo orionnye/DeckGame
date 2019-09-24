@@ -45,7 +45,7 @@ let {
 const enemyTypes = [
     new EnemyType(
         15, -3,
-        [ Cower, PuppyEyes, Attack1 ],
+        [ Cower, Cower, Cower, Cower, Cower, Cower, Cower, Cower, Attack1 ],
         new SpriteSheet( {
             image: getImage( "Chadwick" ),
             frameWidth: 500,
@@ -117,7 +117,7 @@ const enemyTypes = [
     
     new EnemyType(
         35, 5,
-        [ Fortify, DamageBuff, Attack1, Dread, Dread ],
+        [ Fortify, DamageBuff, Attack1, Dread ],
         new SpriteSheet( {
             image: getImage( "MaskedMaggot" ),
             frameWidth: 100,
@@ -136,14 +136,24 @@ const enemyTypes = [
     ),
 
     new EnemyType(
-        135, 20,
+        30, 5,
+        [ Fortify, LifeSteal, LifeSteal, Dread, Poison, Poison ],
+        new SpriteSheet( {
+            image: getImage( "Pterry" ),
+            frameWidth: 100,
+            scale: 2.0
+        } )
+    ),
+
+    new EnemyType(
+        999, 20,
         [ SoulStare, Fortify, SoulStare ],
         new SpriteSheet( {
             image: getImage( "EyeDemon" ),
             frameWidth: 101,
             scale: 2.0
         } )
-    )
+    ),
 ]
 
 export function getEnemy( index: number ) {
@@ -153,7 +163,8 @@ export function getEnemy( index: number ) {
 }
 
 export function newEncounter( enemyCount: number ) {
-    let enemyType = enemyTypes[ Math.floor( enemyTypes.length * Math.random() ) ]
+    let enemyType = enemyTypes[ Math.floor( (enemyTypes.length - 1) * Math.random() ) ]
     let enemy = enemyType.create()
+    enemy.damage += enemyCount
     return enemy
 }
