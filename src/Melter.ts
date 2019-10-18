@@ -18,7 +18,7 @@ import { playSound } from "geode/lib/audio"
 export default class Melter extends GameObject {
     ingredients: CardType[]
     base: Card
-    sprite?: Sprite
+    sprite: Sprite
     multiplier: number
 
     preview = 0
@@ -30,9 +30,9 @@ export default class Melter extends GameObject {
         this.ingredients = []
         this.multiplier = 1
         this.base = new Card( this.position, CardTypes.Volatile )
-        this.sprite = new Sprite( getImage( "BrewStation" ) )
+        this.sprite = new Sprite( getImage( "Melter" ) )
             .setSource( { x: 0, y: 0, w: 100, h: 100 } )
-            .setDimensions( vector( 200, 200 ) )
+            .setDimensions( vector( 110, 100 ) )
     }
 
     get products() {
@@ -91,10 +91,7 @@ export default class Melter extends GameObject {
         this.products.forEach( product => {
             this.drawProduct( canvas, scene, this.potentialProduct || product )
         } )
-
-        if ( sprite ) {
-            let margin = vector( 32, 45 )
-            sprite.draw( canvas, margin.x, margin.y, true )
-        }
+        let margin = vector( 32, 45 )
+        sprite.draw( canvas, margin.x, margin.y, true )
     }
 }

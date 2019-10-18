@@ -16,10 +16,7 @@ import Color, { rgba } from "geode/lib/graphics/Color"
 import { playSound } from "geode/lib/audio"
 
 export default class Ledger extends GameObject {
-    history?: string
-    sprite?: Sprite
-
-    preview = 0
+    sprite: Sprite
 
     layer = 60
 
@@ -33,18 +30,29 @@ export default class Ledger extends GameObject {
     onRender( canvas: Canvas, scene: Scene ) {
         let { sprite } = this
         let mouse = scene.mousePosition
-        let text = "OOOF"
-
+        
         let previewTarget = 0
         if ( this.contains( mouse ) ) {
-            //check here for mouse click then display game
+            //check here for mouse click then display game details
+            let text = `
+            \nCombine Cards
+            \nIn the Boiler
+            \nTo craft new Cards`
+            let textHeight = 55
+            let textWidth = 35
+            let font = textHeight.toString() + "px pixel"
+            let lines = text.split("\n")
+            for ( let i = 0; i < lines.length; i++) {
+                canvas.fillStyle( "white" )
+                canvas.text(lines[i], -450, (-lines.length + i) * textHeight, lines[i].length * textWidth, font)
+                canvas.fillStyle( "blue" )
+                canvas.text(lines[i], -445, (-lines.length + i) * textHeight + 5, lines[i].length * textWidth, font)
+            }
         }
 
-        if ( sprite ) {
-            let margin = vector( 32, 45 )
-            sprite.draw( canvas, margin.x, margin.y, true )
-            canvas.fillStyle( "rgba( 0, 0, 0, 0.9 )" )
-            canvas.text("Menu", 2, 50, 60, "20px pixel")
-        }
+        let margin = vector( 32, 45 )
+        sprite.draw( canvas, margin.x, margin.y, true )
+        canvas.fillStyle( "rgba( 0, 0, 0, 0.9 )" )
+        canvas.text("Manual", 2, 50, 60, "20px pixel")
     }
 }

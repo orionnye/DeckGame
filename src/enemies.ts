@@ -55,7 +55,7 @@ const enemyTypes = [
 
     new EnemyType(
         65, 10,
-        [ Smolder, Smolder, Smolder, Bite, Smolder ],
+        [ Smolder, Smolder, Bite ],
         new SpriteSheet( {
             image: getImage( "Archlizard" ),
             center: vector( 48, 21 ),

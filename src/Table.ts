@@ -15,36 +15,29 @@ import GMath from "geode/lib/math/GMath"
 import Color, { rgba } from "geode/lib/graphics/Color"
 import { playSound } from "geode/lib/audio"
 
-export default class Ledger extends GameObject {
-    history?: string
-    sprite?: Sprite
+export default class Melter extends GameObject {
+    equipment: Melter[]
+    sprite: Sprite
 
-    preview = 0
+    layer = 50
 
-    layer = 60
-
-    constructor( x: number, y: number ) {
-        super( vector( x, y ), 100, 400 )
-        this.sprite = new Sprite( getImage( "Ledger" ) )
+    constructor( x: number, y: number , width: number, height: number) {
+        super( vector( x, y ), width, height )
+        this.equipment = []
+        this.sprite = new Sprite( getImage( "Table" ) )
             .setSource( { x: 0, y: 0, w: 100, h: 100 } )
-            .setDimensions( vector( 100, 60 ) )
+            .setDimensions( vector( width, height ) )
     }
 
     onRender( canvas: Canvas, scene: Scene ) {
         let { sprite } = this
         let mouse = scene.mousePosition
-        let text = "OOOF"
 
         let previewTarget = 0
-        if ( this.contains( mouse ) ) {
-            //check here for mouse click then display game
-        }
+        // if ( this.contains( mouse ) )
 
-        if ( sprite ) {
-            let margin = vector( 32, 45 )
-            sprite.draw( canvas, margin.x, margin.y, true )
-            canvas.fillStyle( "rgba( 0, 0, 0, 0.9 )" )
-            canvas.text("Menu", 2, 50, 60, "20px pixel")
-        }
+        // } )
+        let margin = vector( 32, 45 )
+        sprite.draw( canvas, margin.x, margin.y, true )
     }
 }

@@ -18,6 +18,8 @@ import { getEnemy, newEncounter } from "./enemies"
 import { GameClock } from "geode/lib/Clock"
 import Animator from "geode/lib/graphics/Animator"
 import Ledger from "./Ledger"
+import Table from "./Table"
+import Manual from "./Manual"
 
 export default class Game {
 
@@ -32,9 +34,11 @@ export default class Game {
     discard = new Deck( 0, Infinity, 600, 250, 1, 1, false )
 
     background = new Background()
-    melter = new Melter( 325, 375 )
-    ledger = new Ledger(100, 390)
-    enemy = getEnemy( 10 )
+    table = new Table(330, 210, 515, 600)
+    melter = new Melter( 275, 350 )
+    ledger = new Ledger(180, 370)
+    manual = new Manual(480, 370)
+    enemy = getEnemy( 0 )
     player = new Pawn(
         vector( 100, 80 ),
         60,
@@ -92,8 +96,9 @@ export default class Game {
         if ( enemy.health > 0 ) {
             playSound( "slap.wav", { volume: 0.1 } )
         } else {
-            this.enemyCount += 1
             //GAME SWITCH
+            this.enemyCount += 1
+            //SCRIPTED
             //ENDLESS MODE
             // this.enemy = newEncounter( this.enemyCount )
             if (this.enemyCount == 11 ) {
@@ -139,7 +144,10 @@ export default class Game {
     update() {
         let { canvas, deck, hand, discard, enemy, player, melter, background } = this
 
-        let scene = new Scene( canvas, this.cameraTransform(), [ player, enemy, deck, hand, discard, melter, background, this.ledger] )
+        let scene = new Scene( canvas, this.cameraTransform(), [
+            player, enemy, deck, hand, discard, this.table,
+            melter, background, this.ledger, this.manual
+        ] )
         this.render( scene )
         scene.update()
 
