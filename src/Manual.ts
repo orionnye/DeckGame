@@ -32,6 +32,11 @@ export default class Ledger extends GameObject {
         let mouse = scene.mousePosition
         
         let previewTarget = 0
+
+        let margin = vector( 32, 45 )
+        sprite.draw( canvas, margin.x, margin.y, true )
+        canvas.fillStyle( "rgba( 0, 0, 0, 0.9 )" )
+        canvas.text("Manual", 2, 50, 60, "20px pixel")
         if ( this.contains( mouse ) ) {
             //check here for mouse click then display game details
             let text = `
@@ -42,6 +47,9 @@ export default class Ledger extends GameObject {
             let textWidth = 35
             let font = textHeight.toString() + "px pixel"
             let lines = text.split("\n")
+            canvas.fillStyle( "rgba(222, 194, 128, 0.8)" )
+            canvas.rect(-500, -500, 1000, 1000).fill()
+
             for ( let i = 0; i < lines.length; i++) {
                 canvas.fillStyle( "white" )
                 canvas.text(lines[i], -450, (-lines.length + i) * textHeight, lines[i].length * textWidth, font)
@@ -50,9 +58,5 @@ export default class Ledger extends GameObject {
             }
         }
 
-        let margin = vector( 32, 45 )
-        sprite.draw( canvas, margin.x, margin.y, true )
-        canvas.fillStyle( "rgba( 0, 0, 0, 0.9 )" )
-        canvas.text("Manual", 2, 50, 60, "20px pixel")
     }
 }

@@ -21,6 +21,8 @@ export default class Ledger extends GameObject {
 
     preview = 0
 
+    
+
     layer = 60
 
     constructor( x: number, y: number ) {
