@@ -1,1 +1,0 @@
-[link to Game!](./www/index.html)
