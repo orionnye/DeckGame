@@ -11,7 +11,8 @@
         "watch": "tsc -w",
         "webpack": "webpack-dev-server",
         "watchall": "node watchall.js",
-        "test": "ava --watch --verbose"
+        "test": "ava --watch --verbose",
+        "githpage": "webpack && rm -rf githubpage && cp -r www githubpage"
     },
     "private": true,
     "devDependencies": {
