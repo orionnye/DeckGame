@@ -3,7 +3,7 @@
         "src"
     ],
     "compilerOptions": {
-        "target": "ESNEXT",
+        "target": "ES2019",
         "module": "commonjs",
         // "declaration": true,
         "outDir": "lib",
