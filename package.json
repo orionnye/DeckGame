@@ -6,7 +6,7 @@
     "license": "none",
     "scripts": {
         "dev": "yarn build && yarn link geode",
-        "postinstall": "yarn dev",
+        "postinstall": "yarn build",
         "clean": "rm -f yarn.lock && rm -rf lib && rm -rf node_modules",
         "build": "tsc",
         "watch": "tsc -w",
